@@ -1,10 +1,56 @@
 {
   "quests": [
     {
+      "_id": "1",
       "displayName": "Граффити",
       "cityName": "Екатеринбург",
-      "description": "",
-      "tags": ""
+      "author": "1",
+      "titleImage": "http://risovat-legko.com/wp-content/uploads/Kartinki-graffiti-foto-ulichnoe-iskusstvo-1.jpg",
+      "description": "Поиск граффити в Екатеринбурге",
+      "tags": [
+        {"slug": "graffitiEkb", "name": "Graffiti Ekb"},
+        {"slug": "graffiti", "name": "Graffiti"}
+      ],
+      "complexity": {"value": 2, "votes": [2, 2, 2]},
+      "rating" : {"value": 5, "votes": [5, 5, 5]},
+      "duration": 3600000,
+      "date": "2016-03-13T11:51:29.580Z",
+      "photos": [
+        {"geolocation": {"latitude": 35, "longitude": 25}, "number": 1,
+          "url": "http://vivacity.ru/blog/wp-content/uploads/2011/11/Colorfull-Graffiti-Bubble-Letters.jpg",
+          "description": "Граффити"
+      },
+        {"geolocation": {"latitude": 25, "longitude": 20}, "number": 2,
+          "url": "http://cs4289.vk.me/u39027052/100287970/x_ca9b7ba6.jpg",
+          "description": "Граффити2"
+        }
+      ]
+    },
+    {
+      "_id": "2",
+      "displayName": "Котики",
+      "cityName": "Екатеринбург",
+      "author": "1",
+      "titleImage": "http://img1.1tv.ru/imgsize640x360/PR20121231152131.JPG",
+      "description": "Поиск котиков в Екатеринбурге",
+      "tags": [
+        {"slug": "graffitiEkb", "name": "Graffiti Ekb"},
+        {"slug": "graffiti", "name": "Graffiti"}
+      ],
+      "complexity": {"value": 2, "votes": [2, 2, 2]},
+      "rating" : {"value": 4, "votes": [4, 4, 4]},
+      "duration": 3600000,
+      "date": "2016-03-13T12:02:15.185Z",
+      "photos": [
+        {"geolocation": {"latitude": 30, "longitude": 15}, "number": 1,
+          "url": "http://zabaka.com.ua/upload/2015/11/raznoe/9507761540806260_6222d0c3.jpg",
+          "description": "Котик"
+        },
+        {"geolocation": {"latitude": 45, "longitude": 20}, "number": 2,
+          "url": "http://slon.ru/images3/213/700000/464/771316.jpg",
+          "description": "Котик2"
+        }
+      ]
     }
   ],
   "users": [
