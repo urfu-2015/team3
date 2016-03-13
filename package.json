@@ -1,0 +1,23 @@
+{
+  "name": "team3",
+  "version": "1.0.0",
+  "description": "photo quest",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urfu-2015/team3.git"
+  },
+  "keywords": [
+    "photo",
+    "quest"
+  ],
+  "author": "team3",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/urfu-2015/team3/issues"
+  },
+  "homepage": "https://github.com/urfu-2015/team3#readme"
+}
