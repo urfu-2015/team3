@@ -6,5 +6,75 @@
       "description": "",
       "tags": ""
     }
+  ],
+  "users": [
+    {
+        "_id": "56e554ec2253a45a4fae039a",
+        "login": "kolobok@mail.ru",
+        "password": "1234",
+        "nickname": "kolobok",
+        "avatar": "http://tickery.ru/uploads/events/event_40373_small.png",
+        "gender": "male",
+        "passedQuests": [1, 2],
+        "myQuests": [1],
+        "wishList": [],
+        "isBanned": false,
+        "photos": [
+            {
+                "geolocation": {
+                    "latitude": 32,
+                    "longitude": 56
+                },
+                "url": "http://www.curdsnack.com/logo/kolobok.jpg",
+                "quest": 2,
+                "number": 1
+            },
+            {
+                "geolocation": {
+                    "latitude": 57,
+                    "longitude": 62
+                },
+                "url": "http://deti-online.com/images/russkie-narodnye-skazki--kolobok.jpg",
+                "quest": 1,
+                "number": 1
+            }
+        ]
+    },
+    {
+        "_id": "56e554ec2253a45a4fae040b",
+        "login": "komar@mail.ru",
+        "password": "12345",
+        "nickname": "komar",
+        "avatar": "",
+        "gender": "female",
+        "passedQuests": [1],
+        "myQuests": [],
+        "wishList": [],
+        "isBanned": false,
+        "photos": [
+            {
+                "geolocation": {
+                    "latitude": 85,
+                    "longitude": 24
+                },
+                "url": "https://i.ytimg.com/vi/nbjAUx0K-XQ/maxresdefault.jpg",
+                "quest": 1,
+                "number": 1
+            }
+        ]
+    },
+    {
+        "_id": "56e554ec2253a45a4fae041c",
+        "login": "victor@mail.ru",
+        "password": "12345",
+        "nickname": "victor",
+        "avatar": "",
+        "gender": "male",
+        "passedQuests": [],
+        "myQuests": [],
+        "wishList": [1, 2],
+        "isBanned": false,
+        "photos": []
+    }
   ]
 }
