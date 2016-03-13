@@ -2,8 +2,12 @@
 
 const express = require('express');
 const app = express();
+const path = require('path');
 
 const morgan = require('morgan');
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
 
 app.use(morgan('dev'));
 
@@ -16,7 +20,12 @@ app.use((err, req, res, next) => {
 
 app.use((req, res, next) => {
     req.commonData = {
-        isDev: process.env.NODE_ENV === 'development'
+        isDev: process.env.NODE_ENV === 'development',
+        title: 'PhotoQuest',
+        meta: {
+            description: 'PhotoQuest by Kafkatist',
+            charset: 'utf-8'
+        }
     };
     next();
 });
