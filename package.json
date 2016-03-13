@@ -9,7 +9,6 @@
     "lint": "npm-run-all lint:*",
     "precommit": "npm run lint",
     "prepush": "npm run lint",
-    "prepush": "npm run lint",
     "deploy:static": "surge -p ./public -d kafkatist.surge.sh",
     "build": "webpack",
     "start": "NODE_ENV=development node app.js",
@@ -52,6 +51,7 @@
     "style-loader": "^0.13.0",
     "stylus-loader": "^1.5.1",
     "supertest": "^1.2.0",
+    "surge": "^0.17.7",
     "webpack": "^1.12.14"
   },
   "engines": {
