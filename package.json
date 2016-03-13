@@ -9,6 +9,11 @@
     "lint": "npm-run-all lint:*",
     "precommit": "npm run lint",
     "prepush": "npm run lint"
+    "prepush": "npm run lint",
+    "deploy:static": "surge -p ./public -d kafkatist.surge.sh",
+    "build": "webpack",
+    "start": "NODE_ENV=development node app.js",
+    "dev": "webpack --config webpack.dev.config.js && npm start"
   },
   "repository": {
     "type": "git",
@@ -36,12 +41,18 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "mocha": "^2.4.5",
-    "supertest": "^1.2.0",
+    "autoprefixer": "^6.3.3",
+    "css-loader": "^0.23.1",
     "eslint": "^2.4.0",
     "eslint-config-xo": "^0.12.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "husky": "^0.11.3",
-    "npm-run-all": "^1.5.3"
+    "mocha": "^2.4.5",
+    "npm-run-all": "^1.5.3",
+    "style-loader": "^0.13.0",
+    "stylus-loader": "^1.5.1",
+    "supertest": "^1.2.0",
+    "webpack": "^1.12.14"
   },
   "engines": {
     "node": "4.4.0"
