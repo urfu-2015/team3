@@ -8,7 +8,7 @@
     "lint:js": "eslint --fix .",
     "lint": "npm-run-all lint:*",
     "precommit": "npm run lint",
-    "prepush": "npm run lint"
+    "prepush": "npm run lint",
     "prepush": "npm run lint",
     "deploy:static": "surge -p ./public -d kafkatist.surge.sh",
     "build": "webpack",
