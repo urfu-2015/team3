@@ -9,7 +9,6 @@
     "lint": "npm-run-all lint:*",
     "precommit": "npm run lint",
     "prepush": "npm run lint"
-
   },
   "repository": {
     "type": "git",
@@ -26,9 +25,15 @@
   },
   "homepage": "https://github.com/urfu-2015/team3#readme",
   "dependencies": {
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "hbs": "^4.0.0",
+    "lodash": "^4.6.1",
     "morgan": "^1.7.0",
-    "hbs": "^4.0.0"
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "mocha": "^2.4.5",
