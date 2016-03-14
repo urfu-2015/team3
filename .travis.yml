@@ -13,7 +13,6 @@ after_success:
 deploy:
     skip_cleanup: true
     provider: heroku
-    api_key:
-      secure: "${TRAVIS_HEROKU_TOKEN}"
+    api_key: "${HEROKU_TOKEN}"
     on: master
     app: kafkatist
