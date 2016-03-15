@@ -45,4 +45,3 @@ $ npm run watch # сборка статики на лету
 ### База данных
   MongoDB: 
     mongodb://Anna.Smith:cr5jhj7hfccd15tn@ds064718.mlab.com:64718/kafkatist
-    
