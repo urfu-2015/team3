@@ -1,11 +1,48 @@
+# Kafkatist (Фото квест) 
+
 [![Build Status](https://travis-ci.org/urfu-2015/team3.svg?branch=master)](https://travis-ci.org/urfu-2015/team3)
-"mimimi" 
-##Быстрый старт:
+
+## Мы используем:
+1. [Waffle](https://waffle.io/urfu-2015/team3) для задач
+2. [mLab](https://mlab.com) (MongoDB) для базы данных
+3. [Heroku](https://www.heroku.com) для деплоя
+4. [TravisCI](https://travis-ci.org) для CI
+5. [Stylus](http://stylus-lang.com/) для препроцессинга
+6. [Mocha] (https://mochajs.org/) для тестов
+7. [ESLint] (http://eslint.org/) для анализа кода 
+
+### Структура проекта
 ```
-// установка зависимостей
-node i
-// запуск приложения
-node app
+blocks/                Блоки статики (Stylus)
+controllers/           Логика
+generator/             Создание базы данных
+lib/                   Локальные модули
+tests/                 Тесты
+views/                 Шаблоны
+app.js                 Стартовое приложение
+routes.js              Пути (urls)
+webpack.config.js      Production конфиг
+webpack.dev.config.js  Dev конфиг
 ```
-// открыть страницу
-http://localhost:5000
+
+### Запуск сервера локально:
+
+```bash
+$ npm run dev # сборка статики и запуск
+```
+### Доступные команды:
+
+```bash
+$ npm run test # запуск тестов
+$ npm run build # собрать статику с production конфигом
+$ npm run start # запуск сервера с dev конфигом
+$ npm run lint # запуск линтеров
+$ npm run watch # сборка статики на лету
+```
+### Деплой:
+  Автоматическое разворачивание сервера при изменениях в основном репозитории urfu-2015/team3
+  
+### База данных
+  MongoDB: 
+    mongodb://Anna.Smith:cr5jhj7hfccd15tn@ds064718.mlab.com:64718/kafkatist
+    
