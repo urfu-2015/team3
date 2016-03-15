@@ -12,7 +12,8 @@
     "deploy:static": "surge -p ./public -d kafkatist.surge.sh",
     "build": "webpack",
     "start": "NODE_ENV=development node app.js",
-    "dev": "webpack --config webpack.dev.config.js && npm start"
+    "dev": "webpack --config webpack.dev.config.js && npm start",
+    "watch": "webpack --progress --colors --watch"
   },
   "repository": {
     "type": "git",
