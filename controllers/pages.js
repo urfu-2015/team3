@@ -1,8 +1,6 @@
-// const url = 'mongodb://Anna.Smith:cr5jhj7hfccd15tn@ds064718.mlab.com:64718/kafkatist';
-
 const _ = require('lodash');
 exports.index = (req, res) => {
-    res.render('index', Object.assign({
+    res.render('main/main', Object.assign({
         message: `Hello, ${_.get(req, 'user.login', 'User')}!`
     }, req.commonData));
 };

@@ -1,10 +1,56 @@
 {
   "quests": [
     {
+      "_id": "56e51868bb111620b67eec3c",
       "displayName": "Граффити",
       "cityName": "Екатеринбург",
-      "description": "",
-      "tags": ""
+      "author": "56e554ec2253a45a4fae041c",
+      "titleImage": "http://risovat-legko.com/wp-content/uploads/Kartinki-graffiti-foto-ulichnoe-iskusstvo-1.jpg",
+      "description": "Поиск граффити в Екатеринбурге",
+      "tags": [
+        {"slug": "graffitiEkb", "name": "Graffiti Ekb"},
+        {"slug": "graffiti", "name": "Graffiti"}
+      ],
+      "complexity": {"value": 2, "votes": [2, 2, 2]},
+      "rating" : {"value": 5, "votes": [5, 5, 5]},
+      "duration": 3600000,
+      "date": "2016-03-13T11:51:29.580Z",
+      "photos": [
+        {"geolocation": {"latitude": 35, "longitude": 25}, "number": 1,
+          "url": "http://vivacity.ru/blog/wp-content/uploads/2011/11/Colorfull-Graffiti-Bubble-Letters.jpg",
+          "description": "Граффити"
+      },
+        {"geolocation": {"latitude": 25, "longitude": 20}, "number": 2,
+          "url": "http://cs4289.vk.me/u39027052/100287970/x_ca9b7ba6.jpg",
+          "description": "Граффити2"
+        }
+      ]
+    },
+    {
+      "_id": "56e55afb3cc0569ea1173a45",
+      "displayName": "Котики",
+      "cityName": "Екатеринбург",
+      "author": "56e554ec2253a45a4fae040b",
+      "titleImage": "http://img1.1tv.ru/imgsize640x360/PR20121231152131.JPG",
+      "description": "Поиск котиков в Екатеринбурге",
+      "tags": [
+        {"slug": "catsEkb", "name": "Cats Ekb"},
+        {"slug": "cats", "name": "Cats"}
+      ],
+      "complexity": {"value": 2, "votes": [2, 2, 2]},
+      "rating" : {"value": 4, "votes": [4, 4, 4]},
+      "duration": 3600000,
+      "date": "2016-03-13T12:02:15.185Z",
+      "photos": [
+        {"geolocation": {"latitude": 30, "longitude": 15}, "number": 1,
+          "url": "http://zabaka.com.ua/upload/2015/11/raznoe/9507761540806260_6222d0c3.jpg",
+          "description": "Котик"
+        },
+        {"geolocation": {"latitude": 45, "longitude": 20}, "number": 2,
+          "url": "http://slon.ru/images3/213/700000/464/771316.jpg",
+          "description": "Котик2"
+        }
+      ]
     }
   ],
   "users": [
@@ -15,8 +61,8 @@
         "nickname": "kolobok",
         "avatar": "http://tickery.ru/uploads/events/event_40373_small.png",
         "gender": "male",
-        "passedQuests": [1, 2],
-        "myQuests": [1],
+        "passedQuests": ["56e55afb3cc0569ea1173a45"],
+        "myQuests": ["56e51868bb111620b67eec3c"],
         "wishList": [],
         "isBanned": false,
         "photos": [
@@ -47,8 +93,8 @@
         "nickname": "komar",
         "avatar": "",
         "gender": "female",
-        "passedQuests": [1],
-        "myQuests": [],
+        "passedQuests": ["56e51868bb111620b67eec3c"],
+        "myQuests": ["56e55afb3cc0569ea1173a45"],
         "wishList": [],
         "isBanned": false,
         "photos": [
@@ -72,9 +118,15 @@
         "gender": "male",
         "passedQuests": [],
         "myQuests": [],
-        "wishList": [1, 2],
+        "wishList": ["56e51868bb111620b67eec3c", "56e55afb3cc0569ea1173a45"],
         "isBanned": false,
         "photos": []
     }
+  ],
+  "tags": [
+    {"_id": "56e516f1ee0c7dd812193f0d", "slug": "catsEkb", "name": "Cats Ekb"},
+    {"_id": "56e51768c57f239418199a55", "slug": "cats", "name": "Cats"},
+    {"_id": "56e517fb156b69880cc11eeb", "slug": "graffitiEkb", "name": "Graffiti Ekb"},
+    {"_id": "56e518171fe0ded00d42fa41", "slug": "graffiti", "name": "Graffiti"}
   ]
 }

@@ -6,6 +6,7 @@ const path = require('path');
 const passport = require('./lib/passport');
 
 const morgan = require('morgan');
+const publicDir = path.join(__dirname, 'public');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -19,6 +20,7 @@ app.use(require('express-session')({
     saveUninitialized: false}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(publicDir));
 
 app.set('port', (process.env.PORT || 5000));
 
