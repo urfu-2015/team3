@@ -1,6 +1,8 @@
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
+const cssnano = require('cssnano');
+const webpack = require('webpack');
 
 var stylusLoader = ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader");
 
@@ -18,15 +20,22 @@ module.exports = {
         publicPath: '/'
     },
     module: {
-        loaders: [{
-            test: /\.styl$/,
-            loader: stylusLoader
-        }]
+        loaders: [
+            {
+                test: /\.styl$/,
+                loader: stylusLoader
+            },
+            {
+                test: /(\.png$)|(\.jpg$)|(\.jpeg$)|(\.gif$)/,
+                loader: 'file-loader'
+            }
+        ]
     },
     plugins: [
-        new ExtractTextPlugin('[name].css')
+        new ExtractTextPlugin('[name].css'),
+        new webpack.optimize.UglifyJsPlugin()
     ],
     postcss: () => {
-        return [autoprefixer];
+        return [autoprefixer, cssnano];
     }
 };

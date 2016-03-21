@@ -18,10 +18,16 @@ module.exports = {
         publicPath: '/'
     },
     module: {
-        loaders: [{
-            test: /\.styl$/,
-            loader: stylusLoader
-        }]
+        loaders: [
+            {
+                test: /\.styl$/,
+                loader: stylusLoader
+            },
+            {
+                test: /(\.png$)|(\.jpg$)|(\.jpeg$)|(\.gif$)/,
+                loader: 'file-loader'
+            }
+        ]
     },
     plugins: [
         new ExtractTextPlugin('[name].css')
