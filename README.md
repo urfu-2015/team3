@@ -1,5 +1,5 @@
 # Kafkatist (Фото квест) 
-### Сайт: [kafkatist.herokuapp.com](kafkatist.herokuapp.com)
+### Сайт: [kafkatist.herokuapp.com](http://kafkatist.herokuapp.com)
 [![Build Status](https://travis-ci.org/urfu-2015/team3.svg?branch=master)](https://travis-ci.org/urfu-2015/team3)
 
 ## Мы используем:
@@ -44,4 +44,6 @@ $ npm run watch # сборка статики на лету
   
 ### База данных
   MongoDB: 
+  
     mongodb://<dbuser>:<dbpassword>@ds064718.mlab.com:64718/kafkatist
+
