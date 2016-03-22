@@ -1,8 +1,4 @@
 const passport = require('../lib/passport');
-const apiKey = require('../apiKey').apiKey;
-const mLab = require('mongolab-data-api')(apiKey);
-const dbName = 'kafkatist';
-const collection = 'users';
 
 exports.register = (req, res) => {
     res.render('register', req.commonData);
@@ -17,25 +13,16 @@ exports.registerAction = (req, res, next) => {
         login: req.body.email,
         password: req.body.password
     };
-    mLab.listDocuments({
-        database: dbName,
-        collectionName: collection,
-        query: '{ "login": "' + user.login + '" }'
-    }, (err, result) => {
-        if (!err && !result.length) {
-            passport.addUser(user, next);
+    passport
+        .registerUser(user, next)
+        .then(() => {
             req.login(user, err => {
-                if (err) {
-                    next(err);
-                } else {
-                    res.redirect('/');
-                }
-                // err ? next(err) : res.redirect('/');
+                err ? next(err) : res.redirect('/');
             });
-        } else {
-            next('this login exists');
-        }
-    });
+        })
+        .catch(err => {
+            res.redirect('/register?error=duplicate');
+        });
 };
 
 exports.logout = (req, res) => {
