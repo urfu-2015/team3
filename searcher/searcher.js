@@ -5,20 +5,20 @@ const url = 'mongodb://localhost:27017/kafkatist';
 const natural = require('natural');
 
 module.exports = {
-    getAllTags: function () {
-        return getTags('tags');
+    getAllTags: function (cb) {
+        return getTags('tags', cb);
     },
 
-    getSimilarTags: function (query) {
-        return getTags('tags', query);
+    getSimilarTags: function (cb, query) {
+        return getTags('tags', cb, query);
     },
 
-    getQuests: function (tag) {
-        return getAllQuests('quests', tag);
+    getQuests: function (cb, tag) {
+        return getAllQuests('quests', cb, tag);
     }
 };
 
-function getTags(name, query) {
+function getTags(name, callback, query) {
     var cb = function (tags) {
         var tagsList = [];
         for (var i = 0; i < tags.length; i++) {
@@ -26,15 +26,15 @@ function getTags(name, query) {
         }
         if (query) {
             tagsList = tagsList.filter(function (elem) {
-                return natural.JaroWinklerDistance(query, elem) > 0.8;
+                return natural.JaroWinklerDistance(query, elem) > 0.7;
             });
         }
-        console.log(tagsList);
+        callback(tagsList);
     };
     getList(name, cb);
 }
 
-function getAllQuests(name, tag) {
+function getAllQuests(name, mainCb, tag) {
     var cb = function (quests) {
         if (tag) {
             quests = quests.filter(function (quest) {
@@ -43,7 +43,7 @@ function getAllQuests(name, tag) {
                 });
             });
         }
-        console.log(quests);
+        mainCb(quests);
     }
     getList(name, cb);
 }
