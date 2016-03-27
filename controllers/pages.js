@@ -14,6 +14,7 @@ exports.index = (req, res) => {
             'banana'
         ]
     }, req.commonData)));
+};
 
 const _ = require('lodash');
 exports.index = (req, res) => {
@@ -22,4 +23,6 @@ exports.index = (req, res) => {
     }, req.commonData));
 };
 
-exports.error404 = (req, res) => res.sendStatus(404);
+exports.error404 = (req, res) => {
+    res.sendStatus(404);
+};
