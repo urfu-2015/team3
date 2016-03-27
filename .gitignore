@@ -4,3 +4,5 @@ node_modules
 npm-debug.log
 public/
 /*.env
+apiKey.json
+.node-xmlhttprequest-sync-9160
