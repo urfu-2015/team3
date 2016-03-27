@@ -48,6 +48,7 @@
     "lodash": "^4.6.1",
     "minimist": "^1.2.0",
     "mongolab-data-api": "^1.1.4",
+    "mongodb": "^2.1.11",
     "morgan": "^1.7.0",
     "multer": "^1.1.0",
     "nodemailer": "^2.3.2",
