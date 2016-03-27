@@ -15,14 +15,9 @@ function removeCollections() {
             collectionName: collection
         };
         mLab.deleteDocuments(options, (err, result) => {
-            /* err ?
+            err ?
                 console.error('There is an error! ' + err) :
-                console.log('Removed ' + result.removed + ' records from ' + collection);*/
-            if (err) {
-                console.error('There is an error! ' + err);
-            } else {
                 console.log('Removed ' + result.removed + ' records from ' + collection);
-            }
         });
     });
 }
@@ -35,14 +30,9 @@ function insertCollections() {
             documents: data[collection]
         };
         mLab.insertDocuments(options, (err, result) => {
-            if (err) {
-                console.error('There is an error! ' + err);
-            } else {
-                console.log('Inserted ' + result.n + ' records to ' + collection);
-            }
-            /* err ?
+            err ?
                 console.error('There is an error! ' + err) :
-                console.log('Inserted ' + result.n + ' records to ' + collection);*/
+                console.log('Inserted ' + result.n + ' records to ' + collection);
         });
     });
 }

@@ -4,9 +4,12 @@ node_js:
 - '5'
 install:
 - npm install
+- npm run build
 script:
 - npm run lint
 - mocha --recursive tests/
+after_success:
+- '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && npm run deploy:static'
 deploy:
     skip_cleanup: true
     provider: heroku

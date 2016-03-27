@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const passport = require('./lib/passport');
+const hbs = require('hbs');
 
 const morgan = require('morgan');
 const publicDir = path.join(__dirname, 'public');
@@ -42,6 +43,8 @@ app.use((req, res, next) => {
 });
 
 require('./routes')(app);
+
+hbs.registerPartials(path.join(__dirname, 'blocks'));
 
 app.listen(app.get('port'),
     () => console.log(`Listening on port ${app.get('port')}`));

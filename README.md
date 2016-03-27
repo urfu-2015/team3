@@ -8,9 +8,20 @@
 3. [Heroku](https://www.heroku.com) для деплоя
 4. [TravisCI](https://travis-ci.org) для CI
 5. [Stylus](http://stylus-lang.com/) для препроцессинга
+<<<<<<< HEAD
 6. [Mocha](https://mochajs.org/) для тестов
 7. [ESLint](http://eslint.org/) для анализа кода 
 8. [Mongolab-data-api](https://www.npmjs.com/package/mongolab-data-api) для подключения к базе данных
+=======
+<<<<<<< 8073f672ee63f10563e0417eb60faa5aa21ffd4f
+6. [Mocha](https://mochajs.org/) для тестов
+7. [ESLint](http://eslint.org/) для анализа кода 
+=======
+6. [Mocha](https://mochajs.org/) для тестов
+7. [ESLint](http://eslint.org/) для анализа кода 
+8. [Mongolab-data-api](https://www.npmjs.com/package/mongolab-data-api) для подключения к базе данных
+>>>>>>> Черновой вариант
+>>>>>>> auth
 
 ### Структура проекта
 ```
