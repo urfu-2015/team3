@@ -2,24 +2,19 @@
 
 const mongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017/kafkatist';
-// const natural = require('natural');
+const natural = require('natural');
 
 module.exports = {
-    collectionName: '',
     getAllTags: function () {
-        return getTags(this.collectionName);
+        return getTags('tags');
     },
 
     getSimilarTags: function (query) {
-        return getTags(this.collectionName, query);
+        return getTags('tags', query);
     },
 
     getQuests: function (tag) {
-        return getAllQuests(this.collectionName, tag);
-    },
-
-    connectTo: function (name) {
-        this.collectionName = name;
+        return getAllQuests('quests', tag);
     }
 };
 
@@ -31,8 +26,7 @@ function getTags(name, query) {
         }
         if (query) {
             tagsList = tagsList.filter(function (elem) {
-                // return natural.JaroWinklerDistance(query, elem) > 0.8;
-                return elem.indexOf(query);
+                return natural.JaroWinklerDistance(query, elem) > 0.8;
             });
         }
         console.log(tagsList);
