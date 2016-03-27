@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 const mongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017/kafkatist';
