@@ -1,7 +1,6 @@
 'use strict';
 
 const pages = require('./controllers/pages');
-const auth = require('./controllers/auth');
 
 module.exports = function (app, passport) {
     app.get('/', pages.index);

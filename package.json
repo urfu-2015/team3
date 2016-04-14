@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/urfu-2015/team3#readme",
   "dependencies": {
+    "async": "^1.5.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.0",
     "cookie-parser": "^1.4.1",
