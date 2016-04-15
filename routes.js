@@ -5,7 +5,7 @@ const passport = require('./controllers/passport');
 
 module.exports = function (app) {
     app.get('/', pages.index);
-    app.get('/login', passport.login);
+    app.get('/login', pages.login);
     app.post('/login', passport.loginAction);
     app.get('/logout', passport.logout);
     app.get('/register', passport.register);
