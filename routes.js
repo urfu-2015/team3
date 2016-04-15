@@ -1,6 +1,7 @@
 'use strict';
 
 const pages = require('./controllers/pages');
+const auth = require('./controllers/auth');
 
 module.exports = function (app, passport) {
     app.get('/', pages.index);
@@ -79,3 +80,11 @@ module.exports = function (app, passport) {
         res.sendStatus(500);
     });
 };
+
+// будет использоваться, когда появится страница профиля
+/*function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/');
+}*/
