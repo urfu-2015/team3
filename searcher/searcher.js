@@ -31,7 +31,7 @@ function getTags(name, callback, query) {
         }
         callback(tagsList);
     };
-    getList(name, cb);
+    return getList(name, cb);
 }
 
 function getAllQuests(name, mainCb, tag) {
@@ -45,16 +45,15 @@ function getAllQuests(name, mainCb, tag) {
         }
         mainCb(quests);
     }
-    getList(name, cb);
+    return getList(name, cb);
 }
 
 function getList(name, cb) {
-    mongoClient.connect(url, function (err, db) {
-        if (err) {
-            console.log(err);
-        } else {
+    return mongoClient
+        .connect(url)
+        .then(function (db) {
             var collection = db.collection(name);
-            collection.find({}).toArray(function (error, objects) {
+            return collection.find({}).toArray(function (error, objects) {
                 if (error) {
                     console.log(error);
                 } else {
@@ -62,6 +61,8 @@ function getList(name, cb) {
                 }
                 db.close();
             });
-        }
-    });
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
