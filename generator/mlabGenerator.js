@@ -2,7 +2,7 @@
 
 const apiKey = require('../apiKey').apiKey;
 const mLab = require('mongolab-data-api')(apiKey);
-const data = require('./data/test.json');
+const data = require('./data/data.json');
 const dbName = 'kafkatist';
 
 removeCollections();

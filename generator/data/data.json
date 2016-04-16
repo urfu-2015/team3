@@ -87,6 +87,42 @@
                 "number": 1
             }
         ]
+    },
+    {
+        "_id": "56e554ec2253a45a4fae040b",
+        "login": "komar@mail.ru",
+        "password": "12345",
+        "nickname": "komar",
+        "avatar": "",
+        "gender": "female",
+        "passedQuests": ["56e51868bb111620b67eec3c"],
+        "myQuests": ["56e55afb3cc0569ea1173a45"],
+        "wishList": [],
+        "isBanned": false,
+        "photos": [
+            {
+                "geolocation": {
+                    "latitude": 85,
+                    "longitude": 24
+                },
+                "url": "https://i.ytimg.com/vi/nbjAUx0K-XQ/maxresdefault.jpg",
+                "quest": 1,
+                "number": 1
+            }
+        ]
+    },
+    {
+        "_id": "56e554ec2253a45a4fae041c",
+        "login": "victor@mail.ru",
+        "password": "12345",
+        "nickname": "victor",
+        "avatar": "",
+        "gender": "male",
+        "passedQuests": [],
+        "myQuests": [],
+        "wishList": ["56e51868bb111620b67eec3c", "56e55afb3cc0569ea1173a45"],
+        "isBanned": false,
+        "photos": []
     }
   ],
   "tags": [

@@ -82,7 +82,7 @@ module.exports = function (app, passport) {
 };
 
 // будет использоваться, когда появится страница профиля
-/*function isLoggedIn(req, res, next) {
+/* function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
