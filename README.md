@@ -29,7 +29,7 @@ webpack.dev.config.js  Dev конфиг
 ### Запуск сервера локально:
 
 ```bash
-$ npm run dev # сборка статики и запуск
+$ API_KEY="our_api_key" npm run dev # сборка статики и запуск
 ```
 ### Доступные команды:
 
