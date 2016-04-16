@@ -55,12 +55,14 @@
   ],
   "users": [
     {
-        "_id": "56e554ec2253a45a4fae039a",
-        "login": "kolobok@mail.ru",
-        "password": "1234",
-        "nickname": "kolobok",
-        "avatar": "http://tickery.ru/uploads/events/event_40373_small.png",
-        "gender": "male",
+        "_id": {
+            "$oid": "56e554ec2253a45a4fae039a"
+        },
+        "login": "22.12p.m@gmail.com",
+        "password": "$2a$08$3k0r0gSkbh4YrTo./F/UzOqr651yHSBXn1iFR.go04/LUo6joEA6q",
+        "nickname": "Kafkatist",
+        "avatar": "https://pbs.twimg.com/profile_images/721227680260038656/Y7ojrNKr.jpg",
+        "gender": "female",
         "passedQuests": ["56e55afb3cc0569ea1173a45"],
         "myQuests": ["56e51868bb111620b67eec3c"],
         "wishList": [],
@@ -85,42 +87,6 @@
                 "number": 1
             }
         ]
-    },
-    {
-        "_id": "56e554ec2253a45a4fae040b",
-        "login": "komar@mail.ru",
-        "password": "12345",
-        "nickname": "komar",
-        "avatar": "",
-        "gender": "female",
-        "passedQuests": ["56e51868bb111620b67eec3c"],
-        "myQuests": ["56e55afb3cc0569ea1173a45"],
-        "wishList": [],
-        "isBanned": false,
-        "photos": [
-            {
-                "geolocation": {
-                    "latitude": 85,
-                    "longitude": 24
-                },
-                "url": "https://i.ytimg.com/vi/nbjAUx0K-XQ/maxresdefault.jpg",
-                "quest": 1,
-                "number": 1
-            }
-        ]
-    },
-    {
-        "_id": "56e554ec2253a45a4fae041c",
-        "login": "victor@mail.ru",
-        "password": "12345",
-        "nickname": "victor",
-        "avatar": "",
-        "gender": "male",
-        "passedQuests": [],
-        "myQuests": [],
-        "wishList": ["56e51868bb111620b67eec3c", "56e55afb3cc0569ea1173a45"],
-        "isBanned": false,
-        "photos": []
     }
   ],
   "tags": [

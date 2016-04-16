@@ -3,11 +3,13 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const passport = require('./lib/passport');
+const passport = require('passport');
 const hbs = require('hbs');
-
+const flash = require('connect-flash');
 const morgan = require('morgan');
 const publicDir = path.join(__dirname, 'public');
+
+require('./lib/auth/passport')(passport);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -22,6 +24,7 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(publicDir));
+app.use(flash());
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -42,7 +45,7 @@ app.use((req, res, next) => {
     next();
 });
 
-require('./routes')(app);
+require('./routes')(app, passport);
 
 hbs.registerPartials(path.join(__dirname, 'blocks'));
 
