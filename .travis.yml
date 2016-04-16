@@ -15,6 +15,6 @@ deploy:
     skip_cleanup: true
     provider: heroku
     api_key:
-      secure: $$HEROKU_TOKEN
+      secure: isb8mYdZS23/IxjXtjR2gHHf4gBVf2phcl3mBIDUfiyTi7TlzyEjxWsqxz1Aa4PYXnQM1tQPejBNQn34RtBazjo8rIUXvNm9WuI97+GEbKZmXyisrnIl+a/EuRKC0ijKBNMuQ+Ig56MKDXY+QFhaQO+cAY1B4NkBp5+hComciaskgUuG4NpO78N01V7FdMlMkBWfwSmyZxOhxM78kEuo/OvDJP+KvwAQIdjQAvba52SVPngh7y8ooMLBoxZiUFjlCAdEJmOs7DyNb9pzWOn2oSni5vrjOyKnE5vmntD0Fz6kVjrNgsWpFMaei1zE9ty9WUNXz8xFOhia4jvW1U+7Dgrei9dBVMVCRXV1a5G6lONEFMe16P4cEZ/d/avtygcnyhDuvsrw0XACeZ6QAsCf0eE3hbCY9nxWHvTOMY9V2vFq61Rem1Z7cj5E2SyBVDucQ2UmJ8U0O+DYzESYwQBVcEdxxirUHZDqVDSHgVCIe2C/rysQzvdiv2xarRpo0W1jziYjDcGv74ZSGKFqec0xPUEYYENgxg6yPEsGbFecOXH+J0V58onTNpKoaOmtMF36M5ZDVftLDqh8RSnugjYSkJ7EYrx1KH3EFjGaDXjIan6peWNrokJWFpO4OQegB0h70dJGCD+ZaZulQyaCwEnqlsAquxXEH+rRYR0CTSgc/pQ=
     on: master
     app: kafkatist
