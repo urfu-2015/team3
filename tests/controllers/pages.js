@@ -32,33 +32,34 @@ describe('Registration and authorization', () => {
             supertest(app)
                 .post('/login')
                 .set('Content-type', 'application/x-www-form-urlencoded')
-                .send({username: 'kolobok@mail.ru', password: '123'})
+                .send({username: 'kolobok@mail.ru',
+                    password: '123'})
                 .expect('Location', '/login')
                 .end(done);
         });
     });
-    describe.skip('Register', () => {
+    describe('Register', () => {
         it('should get registration page', done => {
             supertest(app)
-                .get('/register')
+                .get('/signup')
                 .expect(200)
                 .end(done);
         });
         it('should redirect to the main page if data is correct', done => {
             supertest(app)
-                .post('/register')
+                .post('/signup')
                 .set('Content-type', 'application/x-www-form-urlencoded')
-                .send({username: 'newUser', password: '1234'})
+                .send({username: 'newUser', password: '123'})
                 .expect(302)
-                .expect('Location', '/')
                 .end(done);
         });
         it('should redirect to the login page if login already exists', done => {
             supertest(app)
-                .post('/register')
+                .post('/signup')
                 .set('Content-type', 'application/x-www-form-urlencoded')
-                .send({username: 'kolobok@mail.ru', password: '123'})
-                .expect('Location', '/register')
+                .send({username: 'kolobok@mail.ru',
+                    password: '123'})
+                .expect('Location', '/signup')
                 .end(done);
         });
     });
