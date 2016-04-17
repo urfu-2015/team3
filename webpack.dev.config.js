@@ -8,7 +8,8 @@ module.exports = {
     context: path.join(__dirname, 'views'),
     entry: {
         main: './main/main.js',
-        mainPage: './mainPage.js'
+        mainPage: './mainPage.js',
+        navbar: './navbar/navbar.js'
     },
     devtool: 'source-map',
     output: {
