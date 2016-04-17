@@ -1,1 +1,1 @@
-require ('./navbar.styl');
+require('./navbar.styl');
