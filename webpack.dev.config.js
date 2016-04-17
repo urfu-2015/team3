@@ -8,6 +8,7 @@ module.exports = {
     context: path.join(__dirname, 'views'),
     entry: {
         main: './main/main.js',
+        questslist: './questslist/questslist.js',
         mainPage: './mainPage.js',
         navbar: './partials/navbar/navbar.js',
         addQuest: './quest/addQuest.js',
