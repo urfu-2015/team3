@@ -87,6 +87,19 @@
                 "number": 1
             }
         ]
+    },
+    {
+        "_id": "56e554ec2253a45a4fae041c",
+        "login": "victor@mail.ru",
+        "password": "$2a$08$3k0r0gSkbh4YrTo./F/UzOqr651yHSBXn1iFR.go04/LUo6joEA6q",
+        "nickname": "victor",
+        "avatar": "",
+        "gender": "male",
+        "passedQuests": [],
+        "myQuests": [],
+        "wishList": ["56e51868bb111620b67eec3c", "56e55afb3cc0569ea1173a45"],
+        "isBanned": false,
+        "photos": []
     }
   ],
   "tags": [

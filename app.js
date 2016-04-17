@@ -8,7 +8,9 @@ const hbs = require('hbs');
 const flash = require('connect-flash');
 const morgan = require('morgan');
 const publicDir = path.join(__dirname, 'public');
+
 var argv = require('minimist')(process.argv.slice(2));
+
 require('./lib/auth/passport')(passport);
 
 app.set('views', path.join(__dirname, 'views'));
