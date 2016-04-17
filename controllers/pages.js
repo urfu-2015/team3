@@ -19,6 +19,13 @@ exports.index = (req, res) => {
     }, req.commonData)));
 };
 
-exports.error404 = (req, res) => {
-    res.sendStatus(404);
+exports.error404 = (req, res) => res.sendStatus(404);
+
+exports.searchWord = (req, res) => {
+    var cb = function (objects) {
+        res.send(objects);
+    };
+    if (req.query.word.length > 0) {
+        searcher.getSimilarTags(cb, req.query.word);
+    }
 };
