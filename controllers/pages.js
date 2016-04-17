@@ -3,6 +3,8 @@
 const fs = require('fs');
 const handlebars = require('hbs').handlebars;
 const layouts = require('handlebars-layouts');
+const searcher = require('../searcher/searcher.js')
+
 handlebars.registerHelper(layouts(handlebars));
 handlebars.registerPartial('base', fs.readFileSync('./views/base.hbs', 'utf8'));
 
