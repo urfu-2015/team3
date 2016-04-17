@@ -2,7 +2,7 @@
 
 const searcher = require('../../searcher/searcher.js');
 const assert = require('assert');
-const url = 'mongodb://localhost/test';
+const url = 'mongodb://<dbuser>:<dbpassword>@ds064718.mlab.com:64718/kafkatist';
 const sinon = require('sinon');
 const mongoClient = require('mongodb').MongoClient;
 const tags = [
