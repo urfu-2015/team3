@@ -74,8 +74,17 @@ module.exports = function (app, passport) {
     }));
 
     app.all('*', pages.error404);
+
     app.use((err, req, res) => {
         console.error(err);
         res.sendStatus(500);
     });
 };
+
+// будет использоваться, когда появится страница профиля
+/* function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/');
+}*/
