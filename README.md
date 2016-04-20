@@ -16,6 +16,7 @@
 ```
 blocks/                Блоки статики (Stylus)
 controllers/           Логика
+models/                Модели данных
 generator/             Создание базы данных
 lib/                   Локальные модули
 tests/                 Тесты
