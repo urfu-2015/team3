@@ -4,6 +4,50 @@ const mLab = require('mongolab-data-api')(apiKey);
 const dbName = 'kafkatist';
 
 class quest {
+    /*
+        Документация по модели quest:
+            const Quest = require(./quest) // подключение модели
+            1) Создание квеста:
+                var myQuest = new Quest({
+                    displayName: "Old schools",
+                    cityName: "Ekaterinburg"
+                });
+
+                // одно обязательное поле - displayName
+                // slug генерируется автоматические, передавать его нельзя
+                // displayName уникален
+                // После создания сохраняем квест в базе:
+
+                myQuest.save((err, message, result) => {
+                    // обрабатываем ошибку и результат
+                });
+            2) Получение квестов:
+                 Quest.getQuests({
+                      cityName: "Ekaterinburg"
+                  }, (err, result) => {
+                      // в result при успешном запросе вернется
+                      // массив объектов у которых город Екатеринбург
+                      // можно передавать любое количество полей в запрос
+                  });
+            3) Удаление квестов:
+                 Quest.getQuests({
+                    cityName: "Ekaterinburg"
+                 }, (err, result) => {
+                     // удалятся все квесты у которых город Екатеринбург
+                 });
+            4) Обновление квестов:
+                 Quest.getQuests(
+                 {
+                    cityName: "Moscow"
+                 },
+                 {
+                    cityName: "Ekaterinburg"
+                 }, (err, result) => {
+                    // первый объект - новые поля для объектов
+                    // второй объект - поля, по которым выбираются объекты
+                    // все поля со значением города Екатеринбург заменятся на Москву
+                 });
+     */
 
     constructor(questObject) {
         this.questObject = questObject;
@@ -97,14 +141,15 @@ class quest {
         var titleImage = this.questObject.titleImage || "";
         var description = this.questObject.description || "";
         var tags = this.questObject.tags || [];
-        var complexity = this.questObject.complexity || {};
-        var rating = this.questObject.rating || {};
+        var complexity = this.questObject.complexity || {value: 0, votes: []};
+        var rating = this.questObject.rating || {value: 0, votes: []};
         var duration = this.questObject.duration || "";
         var date = this.questObject.date || "";
         var photos = this.questObject.photos || [];
         var slug = this.slugify(this.questObject.displayName);
 
         // Проверяем что slug уникальный, если true добавляем
+
         if (!error) {
             quest.getQuests({
                 slug: slug
