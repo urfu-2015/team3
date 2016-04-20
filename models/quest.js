@@ -30,11 +30,10 @@ class quest {
         };
         mLab.deleteDocuments(options, (err, result) => {
             callback(err, result);
-    });
+        });
     }
 
-    slugify(text)
-    {
+    slugify(text) {
         return text.toString().toLowerCase()
             .replace(/\s+/g, '-')           // Replace spaces with -
             .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
@@ -47,7 +46,7 @@ class quest {
         // проверяем что не хотят добавить лишнее поле
         var error = false;
         for (var key in data) {
-            if (this.fields.indexOf(key) == -1) {
+            if (this.fields.indexOf(key) === -1) {
                 callback(true, []);
             }
         }
@@ -60,7 +59,7 @@ class quest {
         if (!error) {
             mLab.updateDocuments(options, (err, result) => {
                 callback(err, result);
-        });
+            });
         }
     }
 
@@ -72,7 +71,7 @@ class quest {
         };
         mLab.listDocuments(options, (err, result) => {
             callback(err, result);
-    });
+        });
     }
 
     save(callback) {
@@ -83,11 +82,12 @@ class quest {
         }
         // проверим что не передали лишних полей
         for (var key in this.questObject) {
-            if (this.fields.indexOf(key) == -1) {
-                return callback(true, "field '" + key + "' not in fields" , []);
+            if (this.fields.indexOf(key) === -1) {
+                return callback(true, "field '" + key + "' not in fields", []);
             }
-            if (key == "slug") {
-                return callback(true, "you can't set 'slug' field, it will generated automatically", []);
+            if (key === "slug") {
+                return callback(true, "you can't set 'slug' field, it will generated automatically",
+                    []);
             }
         }
 
@@ -109,33 +109,34 @@ class quest {
             quest.getQuests({
                 slug: slug
             }, (err, results) => {
-                if (!results.length) {
-                var options = {
-                    database: dbName,
-                    collectionName: 'quests',
-                    documents: {
-                        displayName,
-                        slug,
-                        cityName,
-                        author,
-                        titleImage,
-                        description,
-                        tags,
-                        complexity,
-                        rating,
-                        duration,
-                        date,
-                        photos
-                    }
-                };
-                mLab.insertDocuments(options, (err, result) => {
-                    callback(err, "", result);
+                if (results.length === 0) {
+                    var options = {
+                        database: dbName,
+                        collectionName: 'quests',
+                        documents: {
+                            displayName,
+                            slug,
+                            cityName,
+                            author,
+                            titleImage,
+                            description,
+                            tags,
+                            complexity,
+                            rating,
+                            duration,
+                            date,
+                            photos
+                        }
+                    };
+                    mLab.insertDocuments(options, (err, result) => {
+                        callback(err, "", result);
+                    });
+                } else {
+                    callback(true, "value of field 'displayName' exist in db, please change it",
+                        []);
+                }
             });
-            } else {
-                callback(true, "value of field 'displayName' exist in db, please change it", []);
-            }
-        });
         }
-    };
+    }
 }
 module.exports = quest;
