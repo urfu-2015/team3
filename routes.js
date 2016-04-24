@@ -78,6 +78,8 @@ module.exports = function (app, passport) {
 
     app.get('/addQuest', quest.addQuest);
 
+    app.get('/questslist', questslist.questslist);
+
     app.all('*', pages.error404);
 
     app.use((err, req, res) => {
