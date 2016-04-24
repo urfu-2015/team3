@@ -13,6 +13,8 @@ require('./lib/auth/passport')(passport);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+hbs.registerPartials(path.join(__dirname, '/views/partials'));
+// hbs.registerPartials(path.join(__dirname, 'blocks'));
 
 app.use(morgan('dev'));
 app.use(require('cookie-parser')());
@@ -20,7 +22,8 @@ app.use(require('body-parser').urlencoded({extended: true}));
 app.use(require('express-session')({
     secret: 'kafkatist',
     resave: false,
-    saveUninitialized: false}));
+    saveUninitialized: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(publicDir));
@@ -46,8 +49,6 @@ app.use((req, res, next) => {
 });
 
 require('./routes')(app, passport);
-
-hbs.registerPartials(path.join(__dirname, 'blocks'));
 
 app.listen(app.get('port'),
     () => console.log(`Listening on port ${app.get('port')}`));

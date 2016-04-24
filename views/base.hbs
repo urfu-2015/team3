@@ -3,23 +3,24 @@
     <head>
         <meta charset="utf-8">
         <title>{{ title }}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="{{ description }}">
-        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
         {{#block "css"}}
-            <link rel="stylesheet"
-            href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
-            <link rel="stylesheet" 
-            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+            <link rel="stylesheet" href="/navbar.css">
             {{#if isDev}}
                 <link rel="stylesheet" href="/main.css">
                 <link rel="stylesheet" href="/navbar.css">
             {{else}}
-                <link rel="stylesheet" href="//kafkatist.surge.sh/main.css">
-                <link rel="stylesheet" href="//kafkatist.surge.sh/navbar.css">
+                <!--<link rel="stylesheet" href="//kafkatist.surge.sh/main.css">-->
+                <!--<link rel="stylesheet" href="//kafkatist.surge.sh/navbar.css">-->
             {{/if}}
-        {{/block}}        
+        {{/block}}
     </head>
     <body>
+        {{> navbar/navbar }}
         {{#block "content"}}{{/block}}
         {{#block "js"}}
             <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
