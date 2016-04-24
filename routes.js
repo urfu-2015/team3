@@ -73,6 +73,8 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
+    app.get('/createquest', pages.createquest);
+
     app.all('*', pages.error404);
 
     app.use((err, req, res) => {
