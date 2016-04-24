@@ -3,7 +3,6 @@
 const pages = require('./controllers/pages');
 const auth = require('./controllers/auth');
 const questslist = require('./controllers/questslist');
-const quest = require('./controllers/quest');
 
 module.exports = function (app, passport) {
     app.get('/', isLoggedIn, pages.index);
