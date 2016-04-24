@@ -1,48 +1,164 @@
 @import '../../blocks/header/header.styl';
 @import '../../blocks/footer/footer.styl';
 
-html, body
+screen-xs-max = 768px;
+screen-md-min = 992px;
+tr-time = .65s; 
+
+html,
+body
 {
     height: 100%;
 }
 
 body
 {
-    padding: 0 0 0 100px;
+    padding-top: 60px;
 }
 
-.navmenu-brand
+.navbar
 {
-    width: 10px;
-    height: 10px;
+    margin: 0;
 }
 
-.inner-wrapper
+.row 
 {
-    padding: 20px;
-    z-index: 9000;
-    color: #fff;
-    text-shadow: 0 0 5px rgba(0,0,0,.5);
-    text-overflow: ellipsis;
+    height: 600px;
+    padding: 0;
 }
 
-.quest-name
+.quest
 {
-    width: 80%;
-    overflow: hidden; 
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    position: absolute;
-    display: block;
-    bottom: 50%;
+    position: relative;
+    background: #008B8B;
+    padding: 0;
+    overflow: hidden;
+
+    &-name
+    {
+        position: relative;
+        font-weight: bold;
+        font-size: 35px;
+        padding: 150px 20px 20px;
+        color: #fff;
+        text-align: left;
+        text-shadow: 0 0 5px rgba(0,0,0,.5);
+        overflow: hidden; 
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        z-index: 1000;
+        transition: tr-time;
+        transform: padding;
+
+        &::after
+        {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #fff;
+            content: '';
+            transition: transform tr-time;
+            transform: translate3d(-100%, 0, 0);
+        }
+    }
+
+    &:hover .quest-name
+    {
+        padding: 20px;
+    }
+}
+
+.small
+{
+
+    height: 50%;
+}
+
+.medium
+{
+    height: 100%;
+}
+
+.large
+{
+    height: 100%;
+}
+
+.description
+{
     z-index: 100;
-    font-size: 30px;
+    padding: 10px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-transform: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
     color: #fff;
+    opacity: 0;
+    background: rgba(0, 0, 0, .6);
+    transition: transform tr-time;
+    transform: background;
+
+    &__small
+    {
+        height: 120px;
+        font-size: 16px;
+        bottom: 3em;
+    }
+
+    &__medium
+    {
+        height: 300px;
+        font-size: 20px;
+        bottom: 4.5em;
+    }
+
+    &__large
+    {
+        height: 300px;
+        font-size: 25px;
+        bottom: 4.5em;
+    }
+}
+
+
+.icons
+{
+    margin: 0;
+    text-align: center;
+    padding: 10px;
+}
+
+.icon
+{
+    display: inline; 
+    margin: 40px 10px; 
+    font-size: 15px;
+    color: #252d31;
+    z-index: 1000;
+    white-space: nowrap;
+}
+
+.addition
+{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    top: auto;
+    background: #fff;
+    color: #3c4a50;
+    height: 50px;
+
 }
 
 .blur
 {
-    z-index: 10;
+    z-index: 0;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -51,7 +167,6 @@ body
     bottom: 0;
     left: 0;
 }
-
 
 .medium .blur 
 {
@@ -71,313 +186,109 @@ body
     background-size: cover;
 }
 
-.quest:hover .blur
+@media (max-width: screen-xs-max)
 {
-    -webkit-filter: url(#blur);
-    filter: url(#blur);
-    -webkit-filter: blur(5px);
-    filter: blur(5px);
-    /*filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='3');*/
-    -webkit-transition: 1s -webkit-filter linear;
-    transition: 1s filter linear;
-}
-
-.row 
-{
-    height: 600px;
-}
-
-.small
-{
-    position: relative;
-    background: url(1.jpg) no-repeat center center;
-    background-size: cover;
-    height: 50%;
-}
-
-.medium
-{
-    background: url(2.jpg) no-repeat center center;
-    background-size: cover;
-    height: 100%;
-}
-
-.large
-{
-    position: relative;
-    background: url(3.jpg) no-repeat center center;
-    background-size: cover;
-    height: 100%;
-}
-
-
-.no-gutter > [class*='col-'] 
-{
-    padding-right:0;
-    padding-left:0;
-}
-
-.container {
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-@media (max-width: 992px) 
-{
-    .small
+    .quest
     {
-        height: 100%;
+        height: 450px;
     }
 
-    figure.effect-zoe p.description 
+    .quest-name
     {
-        margin-left: -20px;
-        background: rgba(0,0,0,0.6);
+        font-size: 24px;
+    }
+
+    .description
+    {
+        height: 200px;
+        opacity: 1;
+        font-size: 16px;
+        bottom: 100px;
+    }
+}
+
+@media (min-width: screen-xs-max) and (max-width: screen-md-min)
+{
+    .quest
+    {
+        height: 600px;
+    }
+
+    .description
+    {
+        height: 300px;
+        bottom: 4.5em;
+        font-size: 24px;
         opacity: 1;
     }
 }
 
-@media (max-width: 992px)
+@media (max-width: screen-md-min) 
 {
-    body 
+    .quest-name
     {
-        padding: 0;
+        padding: 20px;
+
+        &::after
+        {
+            transform: translate3d(0, 0, 0);
+        }
     }
+
+    .addition
+    {
+        transition: transform tr-time;
+        transform: translate3d(0,0,0);
+    }
+
+    .blur
+    {
+        -webkit-filter: url(#blur);
+        filter: url(#blur);
+        -webkit-filter: blur(5px);
+        filter: blur(5px);
+        -webkit-transition: 1s -webkit-filter linear;
+        transition: 1s filter linear;
+    }
+
 }
 
 
-figure
+@media (min-width: screen-md-min)
 {
-    position: relative;
-    float: left;
-    overflow: hidden;
-    width: 48%;
-    background: #3085a3;
-    text-align: center;
-    cursor: pointer;
-}
+    .quest:hover
+    {
+        .quest-name::after
+        {
+            transform: translate3d(0,0,0);
+        }
 
-figure img
-{
-    position: relative;
-    display: block;
-    min-height: 100%;
-    max-width: 100%;
-    opacity: 0.8;
-}
+        .description
+        {
+            background: rgba(0,0,0,.6);
+            opacity: 1;
+        }
 
-figure figcaption
-{
-    position: relative;
-    z-index: 200;
-    padding: 2em;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 1.25em;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
+        .blur
+        {
+            -webkit-filter: url(#blur);
+            filter: url(#blur);
+            -webkit-filter: blur(5px);
+            filter: blur(5px);
+            -webkit-transition: 1s -webkit-filter linear;
+            transition: 1s filter linear;
+        }
 
-figure figcaption::before,
-figure figcaption::after
-{
-    pointer-events: none;
-}
+        .addition
+        {
+            transform: translate3d(0, 0, 0);
+        }
+    } 
 
-figure figcaption,
-figure figcaption > a
-{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
+    .addition
+    {
+        transition: transform tr-time;
+        transform: translate3d(0, 100%, 0);
+    }
 
-
-figure figcaption > a
-{
-    z-index: 1000;
-    text-indent: 200%;
-    white-space: nowrap;
-    font-size: 0;
-    opacity: 0;
-}
-
-figure h2
-{
-    word-spacing: -0.15em;
-    font-weight: 300;
-}
-
-figure h2 span
-{
-    font-weight: 800;
-}
-
-figure h2,
-figure p
-{
-    margin: 0;
-}
-
- figure p
- {
-    letter-spacing: 1px;
-    font-size: 68.5%;
-}
-
-figure.effect-zoe figcaption
-{
-    top: auto;
-    bottom: 0;
-    padding: 1em;
-    height: 3.75em;
-    background: #fff;
-    color: #3c4a50;
-    -webkit-transition: -webkit-transform 0.35s;
-    transition: transform 0.35s;
-    -webkit-transform: translate3d(0,100%,0);
-    transform: translate3d(0,100%,0);
-}
-
-
-figure.effect-zoe p.icon-links a
-{
-    color: #3c4a50;
-}
-
-figure.effect-zoe:hover p.icon-links a:hover,
-figure.effect-zoe:hover p.icon-links a:focus {
-    color: #252d31;
-}
-
-figure.effect-zoe p.description {
-    width: 100%;
-    position: absolute;
-    bottom: 6em;
-    padding: 2em;
-    color: #fff;
-    text-transform: none;
-    font-size: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    opacity: 0;
-    transition: opacity 0.35s;
-    -webkit-backface-visibility: hidden; /* Fix for Chrome 37.0.2062.120 (Mac) */
-}
-
-.large .description
-{
-     height: 350px;
-}
-
-.medium .description
-{
-     height: 300px;
-}
-
-.small .description
-{
-     height: 100px;
-}
-
-figure.effect-zoe h2,
-figure.effect-zoe p.icon-links a
-{
-    transition: transform 0.35s;
-    transform: translate3d(0,200%,0);
-}
-
-
-figure.effect-zoe h2
-{
-    display: inline-block;
-}
-
-figure.effect-zoe:hover p.description
-{
-    margin-left: -20px;
-    background: rgba(0,0,0,0.6);
-    opacity: 1;
-}
-
-figure.effect-zoe:hover figcaption,
-figure.effect-zoe:hover h2,
-figure.effect-zoe:hover p.icon-links a
-{
-    transform: translate3d(0,0,0);
-}
-
-figure.effect-zoe:hover h2
-{
-    transition-delay: 0.05s;
-}
-
-figure.effect-zoe:hover p.icon-links a:nth-child(3)
-{
-    transition-delay: 0.1s;
-}
-
-figure.effect-zoe:hover p.icon-links a:nth-child(2)
-{
-    transition-delay: 0.15s;
-}
-
-figure.effect-zoe:hover p.icon-links a:first-child
-{
-    transition-delay: 0.2s;
-}
-
-figure > .name
-{
-    font-weight: bold;
-    font-size: 2.5em;
-    position: relative;
-    z-index: 1000;
-    padding: 20px;
-    color: #fff;
-    text-align: left;
-    text-shadow: 0 0 5px rgba(0,0,0,.5);
-    overflow: hidden; 
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/*.count
-{
-    display: inline-block;
-    font-size: 20px;
-}*/
-
-li
-{
-    display: inline; 
-    margin-right: 5px; 
-    padding: 3px; 
-}
-
-.icon-link ul
-{
-    margin: 0;
-    padding: 4px;
-}
-
-figure.effect-zoe h3::after
-{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: #fff;
-    content: '';
-    transition: transform 0.35s;
-    transform: translate3d(-100%,0,0);
-}
-
-figure.effect-zoe:hover h3::after
-{
-    transform: translate3d(0,0,0);
 }
