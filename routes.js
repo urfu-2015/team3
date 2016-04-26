@@ -2,6 +2,7 @@
 
 const pages = require('./controllers/pages');
 const auth = require('./controllers/auth');
+const quest = require('./controllers/quest');
 
 module.exports = function (app, passport) {
     app.get('/', pages.index);
@@ -73,7 +74,7 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/createquest', pages.createquest);
+    app.get('/addQuest', quest.addQuest);
 
     app.all('*', pages.error404);
 

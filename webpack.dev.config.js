@@ -9,8 +9,9 @@ module.exports = {
     entry: {
         main: './main/main.js',
         mainPage: './mainPage.js',
-        slider: './slider/slider.js',
-        navbar: './navbar/navbar.js'
+        navbar: './partials/navbar/navbar.js',
+        addQuest: './quest/addQuest.js',
+        slider: './partials/slider/slider.js'
     },
     devtool: 'source-map',
     output: {

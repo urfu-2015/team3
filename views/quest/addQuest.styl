@@ -1,0 +1,102 @@
+//footer styles
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 80px;
+  background: url('symphony.png') repeat;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #18bc9c;
+  border-radius: 4px;
+}
+.footer p {
+  margin: 20px 0;
+  color: #ffffff;
+  text-align: center;
+}
+//end footer styles
+
+.upload-photo-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  border: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+.upload-photo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  padding: 20px;
+  background: repeating-linear-gradient(
+          -45deg,
+          rgba(243, 255, 230, 0.19),
+          rgba(243, 255, 230, 0.19) 0.5%,
+          rgba(24, 188, 156, 0.25) 0.5%,
+          rgba(24, 188, 156, 0.25) 2%,
+          rgba(243, 255, 230, 0.19) 2%
+  );
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.upload-photo-view {
+  text-align: center;
+  margin-top: 25%;
+  margin-bottom: 25%;
+}
+
+.upload-photo-icon {
+  font-size: 120px;
+  text-align: center;
+}
+
+.swiper-slide .upload-photo-icon {
+  font-size: 72px;
+}
+
+.quest-preview-photo {
+  margin-bottom: 10px;
+}
+
+.quest-photos {
+  height: 150px;
+
+  .upload-photo-icon {
+    font-size: 24px;
+  }
+  .upload-photo-text {
+    font-size: 24px;
+  }
+  .upload-photo-view {
+    text-align: center;
+  }
+}
+
+@media (min-width: 768px) {
+  .quest-photos {
+    .upload-photo-icon {
+      font-size: 32px;
+    }
+    .upload-photo-text {
+      font-size: 32px;
+    }
+  }
+}
