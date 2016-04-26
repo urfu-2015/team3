@@ -12,8 +12,9 @@
     "deploy:static": "surge -p ./public -d kafkatist.surge.sh",
     "build": "webpack",
     "generate": "node generator/mlabgenerator.js",
-    "start": "NODE_ENV=development node app.js",
-    "dev": "webpack --config webpack.dev.config.js && npm start",
+    "start": "node app.js",
+    "start:dev": "node app.js --NODE_ENV=development",
+    "dev": "webpack --config webpack.dev.config.js && npm run start:dev",
     "watch": "webpack --progress --colors --watch",
     "defineKeys": "node apiKey.js --API_KEY=$API_KEY"
   },

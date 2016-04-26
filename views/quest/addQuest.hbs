@@ -1,65 +1,99 @@
 {{#extend "base"}}
     {{#content "css" mode="append"}}
-        <link rel="stylesheet" href="/addQuest.css">
+        <!--<link rel="stylesheet" href="/addQuest.css">-->
         {{#if isDev}}
             <link rel="stylesheet" href="/addQuest.css">
         {{else}}
             <link rel="stylesheet" href="//kafkatist.surge.sh/addQuest.css">
         {{/if}}
     {{/content}}
+    {{> slider/slider.css}}
     {{#content "content"}}
-        <div class="main-info container">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="upload-photo quest-preview-photo">
-                        <div class="upload-photo-view">
-                            <span class="upload-photo-icon glyphicon glyphicon-camera"></span>
-                        </div>
-                        <input type="file" size="1" accept="image/*" class="upload-photo-input">
-                    </div>
-                </div>
-                <div class="col-lg-7">
-                    <div class="form-group">
-                        <label for="quest-name">Мой квест</label>
-                        <input type="text" class="form-control" id="quest-name" placeholder="введите название">
-                    </div>
-                    <div class="form-group">
-                        <label for="quest-city">Будет проходить в...</label>
-                        <input type="text" class="form-control" id="quest-city" placeholder="город">
-                    </div>
-                    <div class="form-group">
-                        <label for="quest-duration">Время прохождения</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="quest-duration">
-                            <div class="input-group-addon">часов</div>
+        <form name="addQuestForm">
+            <div class="main-info container">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="upload-photo quest-preview-photo">
+                            <div class="upload-photo-view">
+                                <span class="upload-photo-icon glyphicon glyphicon-camera"></span>
+                            </div>
+                            <input type="file" size="1" accept="image/*" class="upload-photo-input">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="quest-tags">Тэги</label>
-                        <input type="text" class="form-control" id="quest-tags">
+                    <div class="col-lg-8 col-sm-8">
+                        <div class="form-group">
+                            <label for="quest-name">Мой квест</label>
+                            <input type="text" class="form-control" id="quest-name" placeholder="введите название">
+                        </div>
+                        <div class="form-group">
+                            <label for="quest-city">Будет проходить в...</label>
+                            <input type="text" class="form-control" id="quest-city" placeholder="город">
+                        </div>
+                        <div class="form-group">
+                            <label for="quest-duration">Время прохождения</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="quest-duration">
+                                <div class="input-group-addon">часов</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="quest-tags">Тэги</label>
+                            <input type="text" class="form-control" id="quest-tags">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="upload-photo quest-photos">
-                        <div class="upload-photo-view">
-                            <!--<div class="row-fluid">-->
-                                <!--<div class="col-sm-2 col-lg-2">-->
-                                    <!--<span class="upload-photo-icon glyphicon glyphicon-camera"></span>-->
-                                <!--</div>-->
-                                <!--<div class="col-sm-10 col-lg-10">-->
-                                    <p class="upload-photo-text">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="quest-description">Описание</label>
+                            <textarea class="form-control" rows="6" id="quest-description"
+                                      placeholder="Расскажите о своем классном квесте"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="upload-photo quest-photos">
+                            <div class="upload-photo-view">
+                                <!--<div class="row-fluid">-->
+                                    <!--<div class="col-sm-2 col-lg-2">-->
                                         <!--<span class="upload-photo-icon glyphicon glyphicon-camera"></span>-->
-                                        Добавить фотографии квеста</p>
+                                    <!--</div>-->
+                                    <!--<div class="col-sm-10 col-lg-10">-->
+                                        <p class="upload-photo-text">
+                                            <!--<span class="upload-photo-icon glyphicon glyphicon-camera"></span>-->
+                                            Добавить фотографии квеста</p>
+                                    <!--</div>-->
                                 <!--</div>-->
-                            <!--</div>-->
+                            </div>
+                            <input type="file" size="1" accept="image/*" class="upload-photo-input">
                         </div>
-                        <input type="file" size="1" accept="image/*" class="upload-photo-input">
+                    </div>
+                </div>
+                {{> slider/slider}}
+                <div class="row">
+                    <div class="col-lg-5 col-lg-offset-7 col-md-6 col-md-offset-6 col-sm-7
+                            col-sm-offset-5 col-xs-12">
+                        <button type="button" class="btn btn-default">Назад</button>
+                        <button type="reset" class="btn btn-danger">Сбросить форму</button>
+                        <button type="submit" class="btn btn-success">Создать квест</button>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; Kafkatist, 2016</p>
+            </div>
+        </footer>
     {{/content}}
-    {{> slider/slider }}
+    {{#content "js" mode="append"}}
+        <!--<script src="/addQuest.js" type="text/javascript"></script>-->
+        {{#if isDev}}
+            <script src="/addQuest.js" type="text/javascript"></script>
+        {{else}}
+            <script src="//kafkatist.surge.sh/addQuest.js" type="text/javascript"></script>
+        {{/if}}
+    {{/content}}
+    {{> slider/slider.js}}
 {{/extend}}

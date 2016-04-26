@@ -5,7 +5,7 @@ var swiper = new Swiper('.swiper-container', {
     scrollbar: '.swiper-scrollbar',
     scrollbarHide: true,
     slidesPerView: 'auto',
-    spaceBetween: 30,
+    spaceBetween: 20,
     grabCursor: true,
     slideToClickedSlide: true,
     pagination: '.swiper-pagination',

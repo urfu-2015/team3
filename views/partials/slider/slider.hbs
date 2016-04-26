@@ -1,50 +1,27 @@
-
-    {{#content "css" mode="append"}}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
-        <link rel="stylesheet" href="./slider.css">
-        {{#if isDev}}
-            <link rel="stylesheet" href="./slider.css">
-        {{else}}
-            <link rel="stylesheet" href="//kafkatist.surge.sh/slider.css">
-        {{/if}}
-    {{/content}}
-    {{#content "content" mode="append"}}
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="swiper">
-                        <div class="swiper-container">
-                            <div class="swiper-wrapper">
-                                <!--<div class="swiper-slide">-->
-                                    <!--<div class="upload-photo">-->
-                                        <!--<div class="upload-photo-view">-->
-                                            <!--<span class="upload-photo-icon glyphicon glyphicon-camera"></span>-->
-                                        <!--</div>-->
-                                        <!--<input type="file" size="1" accept="image/*" class="upload-photo-input">-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                {{#each photo}}
-                                    <div class="swiper-slide">
-                                        <img src="{{this}}" class="img-rounded">
-                                    </div>
-                                {{else}}
-                                    <div class="swiper-slide">No content</div>
-                                {{/each}}
-                            </div>
-                            <div class="swiper-scrollbar"></div>
-                            <div class="swiper-pagination"></div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="swiper">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <!--<div class="swiper-slide">-->
+                        <!--<div class="upload-photo">-->
+                            <!--<div class="upload-photo-view">-->
+                                <!--<span class="upload-photo-icon glyphicon glyphicon-camera"></span>-->
+                            <!--</div>-->
+                            <!--<input type="file" size="1" accept="image/*" class="upload-photo-input">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    {{#each photo}}
+                        <div class="swiper-slide">
+                            <img src="{{this}}" class="img-rounded">
                         </div>
-                    </div>
+                    {{else}}
+                        <div class="swiper-slide">No content</div>
+                    {{/each}}
                 </div>
+                <div class="swiper-scrollbar"></div>
+                <div class="swiper-pagination"></div>
             </div>
         </div>
-    {{/content}}
-    {{#content "js" mode="append"}}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
-        <script src="./slider.js"></script>
-        {{#if isDev}}
-            <script src="./slider.js"></script>
-        {{else}}
-            <!--<link rel="stylesheet" href="//kafkatist.surge.sh/slider.js">-->
-        {{/if}}
-    {{/content}}
+    </div>
+</div>
