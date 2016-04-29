@@ -90,10 +90,10 @@ exports.reset = (req, res, next) => {
         .checkToken(JSON.stringify(query))
         .then(response => {
             if (response.message.length) {
-                req.flash('error', response.message);
-                res.redirect('/forgot');
+                var data = {message: response.message};
+                res.redirect('/forgot', Object.assign(data, req.commonData));
             } else {
-                res.render('auth/reset');
+                res.render('auth/reset', req.commonData);
             }
         })
         .catch(err => {

@@ -13,7 +13,8 @@ module.exports = function (app, passport) {
     });
 
     app.get('/login', isLoggedIn, (req, res) => {
-        res.render('auth/login', {message: req.flash('loginMessage')});
+        var data = Object.assign({message: req.flash('loginMessage')}, req.commonData);
+        res.render('auth/login', data);
     });
 
     app.post('/login', passport.authenticate('local-login', {
@@ -23,7 +24,8 @@ module.exports = function (app, passport) {
     }));
 
     app.get('/signup', isLoggedIn, (req, res) => {
-        res.render('auth/signup', {message: req.flash('signupMessage')});
+        var data = Object.assign({message: req.flash('signupMessage')}, req.commonData);
+        res.render('auth/signup', data);
     });
 
     app.post('/signup', passport.authenticate('local-signup', {
@@ -86,8 +88,7 @@ module.exports = function (app, passport) {
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
-        res.redirect('/');
-        return;
+        req.url === '/' ? next() : res.redirect('/');
     }
     var data = {isNotLogged: true};
     req.commonData = Object.assign(data, req.commonData);
