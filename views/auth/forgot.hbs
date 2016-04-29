@@ -6,28 +6,26 @@
         <meta name="description" content="{{ meta.description }}">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-        <style>
-            body {padding-top:80px;}
-        </style>
+        <link rel="stylesheet" type="text/css" href="forgot.css">
     </head>
     <body>
         <div class="container">
             <div class="col-sm-6 col-sm-offset-3">
-                <h1><span class="fa fa-key"></span> Reset Password</h1>
+                <h1><span class="fa fa-key"></span> Сброс пароля</h1>
                 {{#if message.length}}
-                    <div class="alert alert-info">{{message}}</div>
+                    <div class='alert alert-info'>{{message}}</div>
                 {{/if}}
                 <form method="post">
                     <div class="form-group">
-                        <label>Email</label>
+                        <label>Почта</label>
                         <input type="text" class="form-control" name="login">
                     </div>
                     <button type="submit" class="btn btn-warning btn-lg">
-                        Reset Password
+                        Сбросить пароль
                     </button>
                 </form>
                 <br>
-                <p>Go <a href="/">home</a>.</p>
+                <p>Передумали? Перейдите на <a href="/">главную</a>.</p>
             </div>
         </div>
     </body>

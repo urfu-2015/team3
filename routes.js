@@ -33,7 +33,7 @@ module.exports = function (app, passport) {
     }));
 
     app.get('/forgot', (req, res) => {
-        res.render('forgot', req.flash('resetPasswordMessage'));
+        res.render('auth/forgot');
     });
 
     app.post('/forgot', auth.forgot);
