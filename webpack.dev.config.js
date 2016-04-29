@@ -11,7 +11,8 @@ module.exports = {
         mainPage: './mainPage.js',
         navbar: './partials/navbar/navbar.js',
         addQuest: './quest/addQuest.js',
-        slider: './partials/slider/slider.js'
+        slider: './partials/slider/slider.js',
+        authForm: './auth/authForm.js'
     },
     devtool: 'source-map',
     output: {

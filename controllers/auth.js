@@ -22,7 +22,7 @@ exports.forgot = (req, res, next) => {
                 .then(response => {
                     if (response.message.length) {
                         var data = {message: response.message};
-                        return res.render('forgot', Object.assign(data, req.commonData));
+                        return res.render('auth/forgot', Object.assign(data, req.commonData));
                     }
                     done(null, response.user, token);
                 })
@@ -57,20 +57,20 @@ exports.forgot = (req, res, next) => {
             var mailOptions = {
                 from: `PhotoQuestTeam3 <${config.emailLogin.email}>`,
                 to: login,
-                subject: 'PhotoQuest - Reset Password',
+                subject: 'PhotoQuest - Сброс пароля',
                 generateTextFromHTML: true,
-                html: '<b>Reset password</b><br/>' +
-                    'If you still want to reset the password of you account, please click on ' +
-                    '<a href=\"' + link.toString() + '\">following link</a>' +
-                    ' to complete the process.<br/>' +
-                    'But if you did not request this, please ignore this email. ' +
-                    'Have a nice day! :)'
+                html: '<b>Сброс пароля</b><br/>' +
+                    'Если вы всё ещё хотите сбросить пароль, пожалуйста, перейдите по ' +
+                    '<a href=\"' + link.toString() + '\">этой ссылке</a>' +
+                    ' чтобы завершить процесс.<br/>' +
+                    'Но если вы не запрашивали сброс пароля, проигнорируйте это письмо. ' +
+                    'Хорошего вам дня! :)'
             };
             transporter.sendMail(mailOptions, err => {
                 var data = {
-                    message: 'An e-mail has been sent to ' + login + ' with further instructions.'
+                    message: 'Письмо с дальнейшими инструкциями было отправлено ' + login
                 };
-                res.render('forgot', Object.assign(data, req.commonData));
+                res.render('auth/forgot', Object.assign(data, req.commonData));
                 done(err);
             });
         }
@@ -93,7 +93,7 @@ exports.reset = (req, res, next) => {
                 req.flash('error', response.message);
                 res.redirect('/forgot');
             } else {
-                res.render('reset');
+                res.render('auth/reset');
             }
         })
         .catch(err => {
@@ -106,8 +106,8 @@ exports.resetAction = (req, res, next) => {
     async.waterfall([
         done => {
             if (req.body.confPassword !== req.body.password) {
-                var data = {message: 'The passwords do not match'};
-                return res.render('reset', Object.assign(data, req.commonData));
+                var data = {message: 'Пароли не совпадают'};
+                return res.render('auth/reset', Object.assign(data, req.commonData));
             }
             done(null);
         },
@@ -155,10 +155,10 @@ exports.resetAction = (req, res, next) => {
             var mailOptions = {
                 from: `PhotoQuestTeam3 <${config.emailLogin.email}>`,
                 to: login,
-                subject: 'PhotoQuest - Your password has been changed',
-                text: 'Hello,\n\n' +
-                        'This is a confirmation that the password for your account ' +
-                        login + ' has just been changed.\n'
+                subject: 'PhotoQuest - Ваш пароль был изменён',
+                text: 'Здравствуйте,\n\n' +
+                        'Мы просто хотим подтвердить, что пароль аккаунта ' +
+                        login + ' был изменён.\n'
             };
             transporter.sendMail(mailOptions, err => {
                 // var data = {message: 'Success! Your password has been changed.'};

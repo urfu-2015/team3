@@ -5,40 +5,40 @@ const auth = require('./controllers/auth');
 const quest = require('./controllers/quest');
 
 module.exports = function (app, passport) {
-    app.get('/', pages.index);
+    app.get('/', isLoggedIn, pages.index);
 
     app.get('/logout', (req, res) => {
         req.logout();
         res.redirect('/');
     });
 
-    app.get('/login', (req, res) => {
-        res.render('login', {message: req.flash('loginMessage')});
+    app.get('/login', isLoggedIn, (req, res) => {
+        res.render('auth/login', {message: req.flash('loginMessage')});
     });
 
     app.post('/login', passport.authenticate('local-login', {
         successRedirect: '/',
-        failureRedirect: '/login',
+        failureRedirect: '/auth/login',
         failureFlash: true
     }));
 
-    app.get('/signup', (req, res) => {
-        res.render('signup', {message: req.flash('signupMessage')});
+    app.get('/signup', isLoggedIn, (req, res) => {
+        res.render('auth/signup', {message: req.flash('signupMessage')});
     });
 
     app.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/',
-        failureRedirect: '/signup',
+        failureRedirect: '/auth/signup',
         failureFlash: true
     }));
 
-    app.get('/forgot', (req, res) => {
-        res.render('auth/forgot');
+    app.get('/forgot', isLoggedIn, (req, res) => {
+        res.render('auth/forgot', req.commonData);
     });
 
     app.post('/forgot', auth.forgot);
 
-    app.get('/reset/:token', auth.reset);
+    app.get('/reset/:token', isLoggedIn, auth.reset);
 
     app.post('/reset/:token', auth.resetAction);
 
@@ -84,8 +84,17 @@ module.exports = function (app, passport) {
     });
 };
 
-// будет использоваться, когда появится страница профиля
-/* function isLoggedIn(req, res, next) {
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        res.redirect('/');
+        return;
+    }
+    var data = {isNotLogged: true};
+    req.commonData = Object.assign(data, req.commonData);
+    next();
+}
+
+/* function canOpenProfile(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }

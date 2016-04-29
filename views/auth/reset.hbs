@@ -11,20 +11,21 @@
             <div class="col-sm-6 col-sm-offset-3">
                 <h1><span class="fa fa-key"></span> Сброс пароля</h1>
                 {{#if message.length}}
-                    <div class='alert alert-warning'>{{message}}</div>
+                    <div class="alert alert-danger">{{message}}</div>
                 {{/if}}
                 <form method="post">
                     <div class="form-group">
-                        <label>Введите адрес почты:</label>
-                        <input type="text" class="form-control" name="login">
+                        <label>Введите новый пароль:</label>
+                        <input type="password" class="form-control" name="password">
+                        <label>Подтвердите пароль:</label>
+                        <input type="password" class="form-control" name="confPassword">
                     </div>
                     <button type="submit" class="btn btn-success">
-                        Сбросить пароль
+                        Обновить пароль
                     </button>
                 </form>
                 <hr>
                 <p>Передумали? Перейдите на <a href="/">главную</a>.</p>
-                <p>Вспомнили пароль? <a href="/login">Авторизуйтесь</a>.</p>
             </div>
         </div>
     {{/content}}

@@ -9,22 +9,24 @@
     {{#content "content"}}
         <div class="container">
             <div class="col-sm-6 col-sm-offset-3">
-                <h1><span class="fa fa-key"></span> Сброс пароля</h1>
+                <h1><span class="fa fa-sign-in"></span> Регистрация</h1>
                 {{#if message.length}}
-                    <div class='alert alert-warning'>{{message}}</div>
+                    <div class="alert alert-danger">{{message}}</div>
                 {{/if}}
-                <form method="post">
+                <form action="/signup" method="post">
                     <div class="form-group">
-                        <label>Введите адрес почты:</label>
+                        <label>Введите почтовый адрес:</label>
                         <input type="text" class="form-control" name="login">
                     </div>
-                    <button type="submit" class="btn btn-success">
-                        Сбросить пароль
-                    </button>
+                    <div class="form-group">
+                        <label>Введите пароль:</label>
+                        <input type="password" class="form-control" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-success">Зарегистрироваться</button>
                 </form>
                 <hr>
+                <p>У вас уже есть аккаунт? <a href="/login">Авторизуйтесь</a>.</p>
                 <p>Передумали? Перейдите на <a href="/">главную</a>.</p>
-                <p>Вспомнили пароль? <a href="/login">Авторизуйтесь</a>.</p>
             </div>
         </div>
     {{/content}}
