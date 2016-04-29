@@ -1,31 +1,25 @@
-'use strict'
+'use strict';
 
-const mongoClient = require('mongodb').MongoClient;
 const natural = require('natural');
-var url = 'mongodb://localhost:27017/kafkatist';
+var getList = require('./requestToMlab.js');
 
 module.exports = {
-    getAllTags: function (cb, localUrl) {
-        setUrl(localUrl);
+    getAllTags: function (cb) {
         return getTags('tags', cb);
     },
 
-    getSimilarTags: function (cb, query, localUrl) {
-        setUrl(localUrl);
+    getSimilarTags: function (cb, query) {
         return getTags('tags', cb, query);
     },
 
-    getQuests: function (cb, localUrl, tag) {
-        setUrl(localUrl);
+    getQuests: function (cb, tag) {
         return getAllQuests('quests', cb, tag);
+    },
+
+    getCities: function (cb, city) {
+        return getSimilarCities('quests', cb, city);
     }
 };
-
-function setUrl(localUrl) {
-    if (localUrl) {
-        url = localUrl;
-    }
-}
 
 /* eslint new-cap: ["error", {"capIsNewExceptions": ["natural.JaroWinklerDistance"]}]*/
 function getTags(name, callback, query) {
@@ -44,6 +38,21 @@ function getTags(name, callback, query) {
     return getList(name, cb);
 }
 
+function getSimilarCities(name, callback, city) {
+    var cb = function (quests) {
+        var cities = quests.map(function (quest) {
+            return quest.cityName;
+        });
+        if (city) {
+            cities = cities.filter(function (cityName) {
+                return cityName.indexOf(city) !== -1;
+            });
+        }
+        callback(cities);
+    };
+    return getList(name, cb);
+}
+
 function getAllQuests(name, mainCb, tag) {
     var cb = function (quests) {
         if (tag) {
@@ -56,27 +65,4 @@ function getAllQuests(name, mainCb, tag) {
         mainCb(quests);
     };
     return getList(name, cb);
-}
-
-function getList(name, cb) {
-    return mongoClient
-        .connect(url)
-        .then(function (db) {
-            return new Promise(function (resolve, reject) {
-                var collection = db.collection(name);
-                collection.find({}).toArray(function (error, objects) {
-                    if (error) {
-                        console.log(error);
-                        reject(error);
-                    } else {
-                        cb(objects);
-                        resolve();
-                    }
-                    db.close();
-                });
-            });
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
 }
