@@ -1,0 +1,38 @@
+{{#extend "base"}}
+    {{#content "css" mode="append"}}
+        {{#if isDev}}
+            <link rel="stylesheet" href="/authForm.css">
+        {{else}}
+            <link rel="stylesheet" href="//kafkatist.surge.sh/authForm.css">
+        {{/if}}
+    {{/content}}
+    {{#content "content"}}
+        <div class="container">
+            <div class="col-sm-6 col-sm-offset-3">
+                <h1><span class="fa fa-key"></span> Сброс пароля</h1>
+                {{#if message.length}}
+                    <div class='alert alert-warning'>{{message}}</div>
+                {{/if}}
+                <form method="post">
+                    <div class="form-group">
+                        <label>Введите адрес электронной почты:</label>
+                        <input type="text" class="form-control" name="login">
+                    </div>
+                    <button type="submit" class="btn btn-success">
+                        Сбросить пароль
+                    </button>
+                </form>
+                <hr>
+                <p>Передумали? Перейдите на <a href="/">главную</a>.</p>
+                <p>Вспомнили пароль? <a href="/login">Авторизуйтесь</a>.</p>
+            </div>
+        </div>
+    {{/content}}
+    {{#content "js" mode="append"}}
+        {{#if isDev}}
+            <script src="/authForm.js" type="text/javascript"></script>
+        {{else}}
+            <script src="//kafkatist.surge.sh/authForm.js" type="text/javascript"></script>
+        {{/if}}
+    {{/content}}
+{{/extend}}

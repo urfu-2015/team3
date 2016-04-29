@@ -5,15 +5,16 @@ const auth = require('./controllers/auth');
 const quest = require('./controllers/quest');
 
 module.exports = function (app, passport) {
-    app.get('/', pages.index);
+    app.get('/', isLoggedIn, pages.index);
 
     app.get('/logout', (req, res) => {
         req.logout();
         res.redirect('/');
     });
 
-    app.get('/login', (req, res) => {
-        res.render('login', {message: req.flash('loginMessage')});
+    app.get('/login', isLoggedIn, (req, res) => {
+        var data = Object.assign({message: req.flash('loginMessage')}, req.commonData);
+        res.render('auth/login', data);
     });
 
     app.post('/login', passport.authenticate('local-login', {
@@ -22,8 +23,9 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/signup', (req, res) => {
-        res.render('signup', {message: req.flash('signupMessage')});
+    app.get('/signup', isLoggedIn, (req, res) => {
+        var data = Object.assign({message: req.flash('signupMessage')}, req.commonData);
+        res.render('auth/signup', data);
     });
 
     app.post('/signup', passport.authenticate('local-signup', {
@@ -32,13 +34,13 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/forgot', (req, res) => {
-        res.render('forgot', req.flash('resetPasswordMessage'));
+    app.get('/forgot', isLoggedIn, (req, res) => {
+        res.render('auth/forgot', req.commonData);
     });
 
     app.post('/forgot', auth.forgot);
 
-    app.get('/reset/:token', auth.reset);
+    app.get('/reset/:token', isLoggedIn, auth.reset);
 
     app.post('/reset/:token', auth.resetAction);
 
@@ -84,8 +86,16 @@ module.exports = function (app, passport) {
     });
 };
 
-// будет использоваться, когда появится страница профиля
-/* function isLoggedIn(req, res, next) {
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        req.url === '/' ? next() : res.redirect('/');
+    }
+    var data = {isNotLogged: true};
+    req.commonData = Object.assign(data, req.commonData);
+    next();
+}
+
+/* function canOpenProfile(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
