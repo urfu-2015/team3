@@ -13,6 +13,9 @@ class User {
         this.wishList = [];
         this.isBanned = false;
         this.photos = [];
+        this.nickname = '';
+        this.avatar = '';
+        this.gender = '';
     }
 
     setNickname(nickname) {
