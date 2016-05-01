@@ -24,7 +24,7 @@ describe('Registration and authorization', () => {
             supertest(app)
                 .post('/login')
                 .set('Content-type', 'application/x-www-form-urlencoded')
-                .send({username: 'kolobok@mail.ru', password: '1234'})
+                .send({username: 'kolobok@mail.ru', password: '123'})
                 .expect(302)
                 .end(done);
         });
@@ -33,7 +33,7 @@ describe('Registration and authorization', () => {
                 .post('/login')
                 .set('Content-type', 'application/x-www-form-urlencoded')
                 .send({username: 'kolobok@mail.ru',
-                    password: '123'})
+                    password: '1234'})
                 .expect('Location', '/login')
                 .end(done);
         });
