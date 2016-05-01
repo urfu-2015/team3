@@ -34,6 +34,17 @@ class User {
         this.photos.push(photo);
     }
 
+    static getUsers(query, callback) {
+        var options = {
+            database: dbName,
+            collectionName: 'users',
+            query: JSON.stringify(query)
+        };
+        mLab.listDocuments(options, (err, result) => {
+            callback(err, result);
+        });
+    }
+
     save() {
         var login = this.login;
         var password = this.password;
