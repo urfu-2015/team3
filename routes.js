@@ -2,6 +2,7 @@
 
 const pages = require('./controllers/pages');
 const auth = require('./controllers/auth');
+const quest = require('./controllers/quest');
 const questslist = require('./controllers/questslist');
 
 module.exports = function (app, passport) {

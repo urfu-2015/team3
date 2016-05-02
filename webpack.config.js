@@ -10,12 +10,12 @@ module.exports = {
     context: path.join(__dirname, 'views'),
     entry: {
         main: './main/main.js',
-        questslist: './questslist/questslist.js',
         mainPage: './mainPage.js',
         navbar: './partials/navbar/navbar.js',
         addQuest: './quest/addQuest.js',
         slider: './partials/slider/slider.js',
-        authForm: './auth/authForm.js'
+        authForm: './auth/authForm.js',
+        questslist: './questslist/questslist.js'
     },
     devtool: 'source-map',
     output: {
