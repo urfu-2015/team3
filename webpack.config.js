@@ -32,6 +32,14 @@ module.exports = {
             {
                 test: /(\.png$)|(\.jpg$)|(\.jpeg$)|(\.gif$)/,
                 loader: 'file-loader'
+            },
+            {
+                test: /\.jsx?$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel',
+                query: {
+                    presets: ['es2015']
+                }
             }
         ]
     },

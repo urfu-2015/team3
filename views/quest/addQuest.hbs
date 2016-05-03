@@ -1,26 +1,25 @@
 {{#extend "base"}}
     {{#content "css" mode="append"}}
-        <!--<link rel="stylesheet" href="/addQuest.css">-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
         {{#if isDev}}
             <link rel="stylesheet" href="/addQuest.css">
         {{else}}
             <link rel="stylesheet" href="//kafkatist.surge.sh/addQuest.css">
         {{/if}}
     {{/content}}
-    {{> slider/slider.css}}
     {{#content "content"}}
         <form name="addQuestForm">
             <div class="main-info container">
                 <div class="row">
-                    <div class="col-lg-4 col-sm-4">
+                    <div class="col-lg-4 col-sm-4 col-xs-4-500">
                         <div class="upload-photo quest-preview-photo">
                             <div class="upload-photo-view">
                                 <span class="upload-photo-icon glyphicon glyphicon-camera"></span>
                             </div>
-                            <input type="file" size="1" accept="image/*" class="upload-photo-input">
+                            <input type="file" size="1" name="preview" accept="image/*" class="upload-photo-input">
                         </div>
                     </div>
-                    <div class="col-lg-8 col-sm-8">
+                    <div class="col-lg-8 col-sm-8 col-xs-8-500">
                         <div class="form-group">
                             <label for="quest-name">Мой квест</label>
                             <input type="text" class="form-control" id="quest-name" placeholder="введите название">
@@ -55,29 +54,30 @@
                     <div class="col-lg-12">
                         <div class="upload-photo quest-photos">
                             <div class="upload-photo-view">
-                                <!--<div class="row-fluid">-->
-                                    <!--<div class="col-sm-2 col-lg-2">-->
-                                        <!--<span class="upload-photo-icon glyphicon glyphicon-camera"></span>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-sm-10 col-lg-10">-->
-                                        <p class="upload-photo-text">
-                                            <!--<span class="upload-photo-icon glyphicon glyphicon-camera"></span>-->
-                                            Добавить фотографии квеста</p>
-                                    <!--</div>-->
-                                <!--</div>-->
+                                <p class="upload-photo-text">Добавить фотографии квеста</p>
                             </div>
-                            <input type="file" size="1" accept="image/*" class="upload-photo-input">
+                            <input type="file" name="photos" size="1" accept="image/*" class="upload-photo-input" multiple>
                         </div>
                     </div>
                 </div>
-                {{> slider/slider}}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="swiper">
+                            <div class="swiper-container">
+                                <div class="swiper-wrapper"></div>
+                                <div class="swiper-pagination"></div>
+                                <!--<span class="upload-photo-text">Фотографии не выбраны</span>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-5 col-lg-offset-7 col-md-6 col-md-offset-6 col-sm-7
                             col-sm-offset-5 col-xs-12">
                         <div class="pull-right">
-                            <button type="button" class="btn btn-default">Назад</button>
-                            <button type="reset" class="btn btn-danger">Сбросить форму</button>
-                            <button type="submit" class="btn btn-success">Создать квест</button>
+                            <button type="button" name="back" class="btn btn-default">Назад</button>
+                            <button type="reset" name="reset" class="btn btn-danger">Сбросить форму</button>
+                            <button type="submit" name="submit" class="btn btn-success">Создать квест</button>
                         </div>
                     </div>
                 </div>
@@ -90,12 +90,11 @@
         </footer>
     {{/content}}
     {{#content "js" mode="append"}}
-        <!--<script src="/addQuest.js" type="text/javascript"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
         {{#if isDev}}
             <script src="/addQuest.js" type="text/javascript"></script>
         {{else}}
             <script src="//kafkatist.surge.sh/addQuest.js" type="text/javascript"></script>
         {{/if}}
     {{/content}}
-    {{> slider/slider.js}}
 {{/extend}}

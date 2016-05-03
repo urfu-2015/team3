@@ -7,6 +7,8 @@ const passport = require('passport');
 const hbs = require('hbs');
 const flash = require('connect-flash');
 const morgan = require('morgan');
+var argv = require('minimist')(process.argv.slice(2));
+
 const publicDir = path.join(__dirname, 'public');
 
 require('./lib/auth/passport')(passport);
@@ -38,7 +40,7 @@ app.use((err, req, res, next) => {
 
 app.use((req, res, next) => {
     req.commonData = {
-        isDev: process.env.NODE_ENV === 'development',
+        isDev: argv.NODE_ENV === 'development',
         title: 'PhotoQuest',
         meta: {
             description: 'PhotoQuest by Kafkatist',
