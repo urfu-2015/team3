@@ -3,6 +3,7 @@
 const pages = require('./controllers/pages');
 const auth = require('./controllers/auth');
 const quest = require('./controllers/quest');
+const questslist = require('./controllers/questslist');
 
 module.exports = function (app, passport) {
     app.get('/', isLoggedIn, pages.index);
@@ -77,6 +78,8 @@ module.exports = function (app, passport) {
     }));
 
     app.get('/addQuest', quest.addQuest);
+
+    app.get('/questslist', questslist.questslist);
 
     app.all('*', pages.error404);
 

@@ -9,6 +9,8 @@ const flash = require('connect-flash');
 const morgan = require('morgan');
 const publicDir = path.join(__dirname, 'public');
 
+var argv = require('minimist')(process.argv.slice(2));
+
 require('./lib/auth/passport')(passport);
 
 app.set('views', path.join(__dirname, 'views'));
@@ -38,7 +40,7 @@ app.use((err, req, res, next) => {
 
 app.use((req, res, next) => {
     req.commonData = {
-        isDev: process.env.NODE_ENV === 'development',
+        isDev: argv.NODE_ENV === 'development',
         title: 'PhotoQuest',
         meta: {
             description: 'PhotoQuest by Kafkatist',
