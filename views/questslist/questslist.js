@@ -1,8 +1,8 @@
 require('./questslist.styl');
-require('./jquery.dotdotdot.js');
+// require('./jquery.dotdotdot.js');
 
-$(document).ready(function() {
+$(document).ready(function () {
     $(".description").dotdotdot({
-        watch: 'window' 
+        watch: 'window'
     });
 });
