@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const handlebars = require('hbs').handlebars;
 const layouts = require('handlebars-layouts');
@@ -20,38 +22,44 @@ exports.addQuest = (req, res) => {
 exports.loadPhoto = upload.fields([{name: 'preview', maxCount: 1}, {name: 'photos'}]);
 
 exports.questPage = (req, res) => {
-    const preview = req.files.preview[0];
-    const dataUri = new Datauri();
-    dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);
-    const reqPhotos = req.files.photos;
+    let promise = Promise.resolve();
+    if (req.files.preview) {
+        const preview = req.files.preview[0];
+        const dataUri = new Datauri();
+        dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);
 
-    /* eslint-disable no-unused-vars*/
-    const promise = new Promise((resolve, reject) => {
-        cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
-            resolve(imageURL);
+        /* eslint-disable no-unused-vars*/
+        promise = new Promise((resolve, reject) => {
+            cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
+                resolve(imageURL);
+            });
         });
-    });
+    }
 
     promise
         .then(previewUrl => {
-            const photos = reqPhotos.map((photo, index) => {
-                const dataUri = new Datauri();
-                dataUri.format(path.extname(photo.originalname).toString(), photo.buffer);
-                const photoAlt = 'Фото ' + index;
-                /* eslint-disable no-unused-vars*/
-                return new Promise((resolve, reject) => {
-                    cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
-                        resolve({
-                            url: imageURL,
-                            alt: photoAlt
+            let photos = [];
+            const reqPhotos = req.files.photos;
+            if (reqPhotos) {
+                photos = reqPhotos.map((photo, index) => {
+                    const dataUri = new Datauri();
+                    dataUri.format(path.extname(photo.originalname).toString(), photo.buffer);
+                    const photoAlt = 'Фото ' + index;
+                    /* eslint-disable no-unused-vars*/
+                    return new Promise((resolve, reject) => {
+                        cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
+                            resolve({
+                                url: imageURL,
+                                alt: photoAlt
+                            });
                         });
                     });
                 });
-            });
+            }
 
             Promise.all(photos)
                 .then(photos => {
-                    const tags = req.body['quest-tags'].split(', ');
+                    const tags = req.body['quest-tags'].split(', ').filter(tag => tag.length > 0);
                     const quest = new Quest({
                         displayName: req.body['quest-name'],
                         cityName: req.body['quest-city'],
