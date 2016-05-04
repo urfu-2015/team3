@@ -5,7 +5,7 @@ handlebars.registerHelper(layouts(handlebars));
 handlebars.registerPartial('base', fs.readFileSync('./views/base.hbs', 'utf8'));
 
 exports.index = (req, res) => {
-    var template = handlebars.compile(fs.readFileSync('./views/main/main.hbs', 'utf8'));
+    var template = handlebars.compile(fs.readFileSync('./views/main.hbs', 'utf8'));
     res.send(template(Object.assign({
         title: 'Layout Test',
         items: [

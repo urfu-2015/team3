@@ -1,4 +1,5 @@
 require('./addQuest.styl');
+require('./footer.styl');
 /* eslint-disable no-unused-expressions*/
 'use strict';
 

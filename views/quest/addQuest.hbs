@@ -8,7 +8,7 @@
         {{/if}}
     {{/content}}
     {{#content "content"}}
-        <form name="addQuestForm">
+        <form name="addQuestForm" method="post" enctype="multipart/form-data">
             <div class="main-info container">
                 <div class="row">
                     <div class="col-lg-4 col-sm-4 col-xs-4-500">
@@ -16,28 +16,33 @@
                             <div class="upload-photo-view">
                                 <span class="upload-photo-icon glyphicon glyphicon-camera"></span>
                             </div>
-                            <input type="file" size="1" name="preview" accept="image/*" class="upload-photo-input">
+                            <input type="file" size="1" name="preview" accept="image/*"
+                                   class="upload-photo-input">
                         </div>
                     </div>
                     <div class="col-lg-8 col-sm-8 col-xs-8-500">
                         <div class="form-group">
                             <label for="quest-name">Мой квест</label>
-                            <input type="text" class="form-control" id="quest-name" placeholder="введите название">
+                            <input type="text" class="form-control" id="quest-name"
+                                   name="quest-name" placeholder="введите название" required>
                         </div>
                         <div class="form-group">
                             <label for="quest-city">Будет проходить в...</label>
-                            <input type="text" class="form-control" id="quest-city" placeholder="город">
+                            <input type="text" class="form-control" id="quest-city"
+                                   name="quest-city" placeholder="город" required>
                         </div>
                         <div class="form-group">
                             <label for="quest-duration">Время прохождения</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="quest-duration">
+                                <input type="number" class="form-control" id="quest-duration"
+                                       name="quest-duration">
                                 <div class="input-group-addon">часов</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="quest-tags">Тэги</label>
-                            <input type="text" class="form-control" id="quest-tags">
+                            <input type="text" class="form-control" id="quest-tags"
+                                   name="quest-tags">
                         </div>
                     </div>
                 </div>
@@ -46,7 +51,8 @@
                         <div class="form-group">
                             <label for="quest-description">Описание</label>
                             <textarea class="form-control" rows="6" id="quest-description"
-                                      placeholder="Расскажите о своем классном квесте"></textarea>
+                                      placeholder="Расскажите о своем классном квесте"
+                                      name="quest-description"></textarea>
                         </div>
                     </div>
                 </div>
@@ -56,7 +62,8 @@
                             <div class="upload-photo-view">
                                 <p class="upload-photo-text">Добавить фотографии квеста</p>
                             </div>
-                            <input type="file" name="photos" size="1" accept="image/*" class="upload-photo-input" multiple>
+                            <input type="file" name="photos" size="1" accept="image/*"
+                                   class="upload-photo-input" multiple>
                         </div>
                     </div>
                 </div>
