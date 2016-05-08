@@ -1,14 +1,35 @@
 'use strict';
 
-// const apiKey = require('../../apiKey').apiKey;
-const apiKey = require('./apiKey').apiKey;
-const mLab = require('mongolab-data-api')(apiKey);
-const bcrypt = require('bcrypt-nodejs');
 const dbName = 'kafkatist';
 const collection = 'users';
+// const apiKey = require('../apiKey').apiKey;
+const mLab = require('mongolab-data-api')('jCBpzUukLGFLZwoR2Uzs2ZcGpFMXYjQD');
+const bcrypt = require('bcrypt-nodejs');
 
-module.exports = {
-    findUser: function (query) {
+class User {
+    constructor(user) {
+        this.user = user;
+        this.fields = [
+            'login',
+            'password',
+            'passedQuests',
+            'myQuests',
+            'wishList',
+            'isBanned',
+            'photos',
+            'nickname',
+            'avatar',
+            'gender',
+            'markers'
+        ];
+    }
+
+    static getCurrentSessionUser(user) {
+        var query = JSON.stringify({_id: {$oid: user}});
+        return this.findUser(query);
+    }
+
+    static findUser(query) {
         var warningMessage = 'Такой пользователь не найден';
         var callback = (resolve, reject, result, response) => {
             if (!result.length) {
@@ -19,8 +40,9 @@ module.exports = {
             resolve(response);
         };
         return getRequest(query, warningMessage, callback);
-    },
-    addUser: function (user) {
+    }
+
+    static addUser(user) {
         var query = {login: user.login};
         var warningMessage = 'Такой логин уже существует';
         var callback = (resolve, reject, result, response) => {
@@ -40,11 +62,13 @@ module.exports = {
             }
         };
         return getRequest(JSON.stringify(query), warningMessage, callback);
-    },
-    addSocialUser: function (user) {
+    }
+
+    static addSocialUser(user) {
         return insertRequest(user);
-    },
-    checkPassword: function (login, password) {
+    }
+
+    static checkPassword(login, password) {
         var query = {login: login};
         var warningMessage = 'Такой пользователь не найден';
         var callback = (resolve, reject, result, response) => {
@@ -62,8 +86,9 @@ module.exports = {
             }
         };
         return getRequest(JSON.stringify(query), warningMessage, callback);
-    },
-    checkToken: function (query) {
+    }
+
+    static checkToken(query) {
         var warningMessage = 'Токен сброса пароля неактивен. Попробуйте сбросить пароль ещё раз.';
         var callback = (resolve, reject, result, response) => {
             if (!result.length) {
@@ -74,22 +99,74 @@ module.exports = {
             resolve(response);
         };
         return getRequest(query, warningMessage, callback);
-    },
-    updateUserInfo: function (updatedUser) {
-        return updateRequest(updatedUser);
-    },
-    getPanorama: function (city) {
-        var callback = (resolve, reject, result) => {
-            var panorama = [];
-            panorama = result.filter(pan => {
-                return pan.city === city;
-            });
-            var def = 'http://res.cloudinary.com/kafkatist/image/upload/v1461940417/1_ygtotf.jpg';
-            panorama.length ? resolve(panorama[0].url) : resolve(def);
-        };
-        return getRequest(JSON.stringify({}), '', 'panorams', callback);
     }
-};
+
+    static updateUserInfo(updatedUser) {
+        return updateRequest(updatedUser);
+    }
+
+    static getUsers(query, callback) {
+        var options = {
+            database: dbName,
+            collectionName: 'users',
+            query: JSON.stringify(query)
+        };
+        mLab.listDocuments(options, (err, result) => {
+            callback(err, result);
+        });
+    }
+
+    static deleteUser(login, callback) {
+        var options = {
+            database: dbName,
+            collectionName: 'users',
+            query: JSON.stringify({login: login})
+        };
+        mLab.deleteDocuments(options, (err, result) => {
+            callback(err, result);
+        });
+    }
+
+    save(callback) {
+        for (var key in this.questObject) {
+            if (this.fields.indexOf(key) === -1) {
+                return callback(true, "field '" + key + "' not in fields", []);
+            }
+        }
+
+        var login = this.user.login;
+        var password = this.user.password;
+        var nickname = this.user.nickname || '';
+        var passedQuests = this.user.passedQuests || [];
+        var myQuests = this.user.myQuests || [];
+        var wishList = this.user.wishList || [];
+        var isBanned = this.user.isBanned || false;
+        var photos = this.user.photos || [];
+        var avatar = this.user.avatar || '';
+        var gender = this.user.gender || '';
+        var options = {
+            database: dbName,
+            collectionName: 'users',
+            documents: {
+                login,
+                password,
+                nickname,
+                passedQuests,
+                myQuests,
+                wishList,
+                isBanned,
+                photos,
+                avatar,
+                gender
+            }
+        };
+        mLab.insertDocuments(options, (err, result) => {
+            callback(err, "", result);
+        });
+    }
+}
+
+module.exports = User;
 
 function getRequest(query, warningMessage, colName, callback) {
     var collectName = colName;

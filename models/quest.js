@@ -1,6 +1,6 @@
 'use strict';
 const apiKey = require('../apiKey').apiKey;
-const mLab = require('mongolab-data-api')(apiKey);
+const mLab = require('mongolab-data-api')('jCBpzUukLGFLZwoR2Uzs2ZcGpFMXYjQD');
 const dbName = 'kafkatist';
 
 class quest {
@@ -60,7 +60,6 @@ class quest {
             'titleImage',
             'description',
             'tags',
-            'complexity',
             'rating',
             'duration',
             'date',
@@ -210,6 +209,7 @@ class quest {
         var slug = this.slugify(this.questObject.displayName);
 
         // Проверяем что slug уникальный, если true добавляем
+
         if (!error) {
             quest.getQuests({
                 slug: slug
@@ -226,7 +226,6 @@ class quest {
                             titleImage,
                             description,
                             tags,
-                            complexity,
                             rating,
                             duration,
                             date,

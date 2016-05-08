@@ -3,6 +3,11 @@
 const fs = require('fs');
 const handlebars = require('hbs').handlebars;
 const layouts = require('handlebars-layouts');
+const questModel = require('../models/quest');
+const userModel = require('../models/user');
+const async = require('async');
+const requestToDB = require('../lib/auth/requestToDB');
+
 handlebars.registerHelper(layouts(handlebars));
 handlebars.registerPartial('base', fs.readFileSync('./views/base.hbs', 'utf8'));
 const multer = require('multer');
@@ -117,4 +122,51 @@ exports.questPage = (req, res) => {
     // заглушка пока нет страниц квестов
     var template = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
     res.send(template(Object.assign({title: 'Страница квеста'}, req.commonData)));
+};
+
+exports.getQuest = (req, res, next) => {
+    var slug = req.params.slug;
+    async.waterfall([
+            done => {
+            questModel.getQuests({slug: slug}, (err, result) => {
+            if (err) {
+        done(err, null);
+    } else {
+        result.length ? done(null, result[0]) : res.redirect('/search');
+    }
+});
+},
+(quest, done) => {
+    requestToDB
+        .getPanorama(quest.cityName)
+        .then(url => {
+        quest.panorama = url;
+    done(null, quest);
+})
+.catch(err => {
+    done(err, null);
+});
+},
+(quest, done) => {
+    userModel
+        .getCurrentSessionUser(req.user)
+        .then(result => {
+        done(null, result.user, quest);
+})
+.catch(err => {
+    done(err);
+});
+},
+(user, quest, done) => {
+    quest = user ? Object.assign(quest, {currentUser: user.login}) : quest;
+    var templ = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
+    res.send(templ(Object.assign(quest, req.commonData)));
+    done(null);
+}
+], err => {
+    if (err) {
+        console.error(err);
+        return next(err);
+    }
+});
 };

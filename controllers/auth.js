@@ -3,11 +3,12 @@
 const async = require('async');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt-nodejs');
-const requestToDB = require('../lib/auth/requestToDB');
+const userModel = require('../models/user');
 const nodemailer = require('nodemailer');
 const config = require('../lib/auth/config');
 
 exports.forgot = (req, res, next) => {
+    console.log(req.commonData);
     async.waterfall([
         done => {
             crypto.randomBytes(20, (err, buf) => {
@@ -17,7 +18,7 @@ exports.forgot = (req, res, next) => {
         },
         (token, done) => {
             var query = {login: req.body.login};
-            requestToDB
+            userModel
                 .findUser(JSON.stringify(query))
                 .then(response => {
                     if (response.message.length) {
@@ -35,7 +36,7 @@ exports.forgot = (req, res, next) => {
             var updatedUser = user;
             updatedUser.resetPasswordToken = token;
             updatedUser.resetPasswordExpires = Date.now() + 3600000;
-            requestToDB
+            userModel
                 .updateUserInfo(updatedUser)
                 .then(updatedUser => {
                     done(null, updatedUser.login, token);
@@ -68,7 +69,8 @@ exports.forgot = (req, res, next) => {
             };
             transporter.sendMail(mailOptions, err => {
                 var data = {
-                    message: 'Письмо с дальнейшими инструкциями было отправлено ' + login
+                    message: 'Письмо с дальнейшими инструкциями было отправлено ' + login,
+                    isNotLogged: true
                 };
                 res.render('auth/forgot', Object.assign(data, req.commonData));
                 done(err);
@@ -86,7 +88,7 @@ exports.reset = (req, res, next) => {
         resetPasswordToken: req.params.token,
         resetPasswordExpires: {$gt: Date.now()}
     };
-    requestToDB
+    userModel
         .checkToken(JSON.stringify(query))
         .then(response => {
             if (response.message.length) {
@@ -116,7 +118,7 @@ exports.resetAction = (req, res, next) => {
                 resetPasswordToken: req.params.token,
                 resetPasswordExpires: {$gt: Date.now()}
             };
-            requestToDB
+            userModel
                 .checkToken(JSON.stringify(query))
                 .then(response => {
                     if (response.message.length) {
@@ -134,7 +136,7 @@ exports.resetAction = (req, res, next) => {
             var newPassword = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8), null);
             var updatedUser = user;
             updatedUser.password = newPassword;
-            requestToDB
+            userModel
                 .updateUserInfo(updatedUser)
                 .then(response => {
                     done(null, response.login);

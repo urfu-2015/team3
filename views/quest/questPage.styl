@@ -1,4 +1,97 @@
-.supertext {
-  font-size: 64px;
-  text-align: center;
+header {
+    padding: 70px 0px;
+    background-size: cover;
+}
+.header__info {
+    max-width: 50%;
+    padding: 10px;
+    margin: auto;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 10px;
+}
+.city {
+    font-size: 20px;
+}
+.description, .photos {
+    padding: 20px;
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+.description__photo {
+    text-align: center;
+    width: 35%;
+}
+.description__photo > img{
+    max-height: 300px;
+    max-width: 100%;
+    border-radius: 10px;
+}
+.description__text {
+    padding: 10px;
+    font-size: 25px;
+    text-align: justify;
+    width: 65%;
+}
+h2 {
+    padding-left: 30px;
+}
+.author {
+    font-style: italic;
+    text-align: right;
+}
+.photos {
+    padding: 20px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.photo__img {
+    position: relative;
+}
+.photo__img > img {
+    border-radius: 10px 10px 0px 0px;
+    width: 100%;
+}
+.photo {
+    width: 48%;
+    border-radius: 10px;
+    text-align: center;
+    margin-right: 10px;
+    margin-bottom: 15px;
+}
+.photo__descr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px 0px 10px 10px;
+    border: 2px solid #128f76;
+    border-top: none;
+    background-color: #fff;
+}
+.photo__descr__hint {
+    width: 80%;
+    text-align: justify;
+    padding: 10px;
+    font-size: 15px;
+}
+.photo__descr__button {
+    padding: 10px;
+}
+.progress {
+    width: 80%;
+    margin: auto;
+}
+.progressTitle {
+    text-align: center;
+}
+@media screen and (max-width: 800px){
+    .description, .photos, .photo__descr {
+        flex-direction: column;
+        align-items: center;
+    }
+    .description__photo, .description__text, .photo, .photo__descr__hint {
+        width: 95%;
+    }
 }

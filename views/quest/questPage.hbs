@@ -7,6 +7,53 @@
         {{/if}}
     {{/content}}
     {{#content "content"}}
-        <div class="container"><p class="supertext">Квест успешно создан!</p></div>
+        <header style="background-image: url({{panorama}})">
+            <div class="header__info">
+                <h1 class="name">{{displayName}}</h1>
+                <p class="city">г. {{cityName}}</p>
+                <p class="icons">
+                    <i class="fa fa-2x fa-heart" aria-hidden="true"></i> {{rating.likes}}
+                    <i class="fa fa-2x fa-comments-o fa-fw"></i>
+                    <i class="fa fa-2x fa-thumbs-down" aria-hidden="true"></i> {{rating.dislikes}}
+                </p>
+            </div>
+        </header>
+        <h2>Описание квеста:</h2>
+        <div class="description">
+            <div class="description__photo">
+                <img src="{{titleImage}}">
+            </div>
+            <div class="description__text">
+                <p>{{description}}</p>
+                <p class="author">{{author}}</p>
+            </div>
+        </div>
+        <div class="photos">
+            {{#each photos}}
+                <div class="photo__img">
+                    <img src="{{url}}">
+                </div> 
+                <div class="photo__descr">
+                    <div class="photo__descr__hint" alt="{{alt}}">
+                        <p>{{hint}}</p>
+                    </div>
+                    <div class="photo__descr__button">
+                        <a href="#" class="btn btn-success btn-lg">Найдено!</a>
+                    </div>
+                </div>
+            {{/each}}            
+        </div>
+        <p>Здесь должен быть блок комментариев</p>
+    {{/content}}
+    {{#content "js" mode="append"}}
+        {{#if isDev}}
+            <script src="/questPage.js" type="text/javascript"></script>
+        {{else}}
+            <script src="//kafkatist.surge.sh/questPage.js" type="text/javascript"></script>
+        {{/if}}
+        <script>
+            alert('here');
+            alert(document.cookie);
+        </script>
     {{/content}}
 {{/extend}}

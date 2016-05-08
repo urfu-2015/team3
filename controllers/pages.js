@@ -1,6 +1,8 @@
+'use strict';
+
 const fs = require('fs');
-var handlebars = require('hbs').handlebars;
-var layouts = require('handlebars-layouts');
+const handlebars = require('hbs').handlebars;
+const layouts = require('handlebars-layouts');
 handlebars.registerHelper(layouts(handlebars));
 handlebars.registerPartial('base', fs.readFileSync('./views/base.hbs', 'utf8'));
 

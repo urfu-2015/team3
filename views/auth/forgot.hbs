@@ -13,10 +13,11 @@
                 {{#if message.length}}
                     <div class='alert alert-warning'>{{message}}</div>
                 {{/if}}
-                <form method="post">
+                <form method="post" action="/forgot">
                     <div class="form-group">
                         <label>Введите адрес электронной почты:</label>
-                        <input type="text" class="form-control" name="login">
+                        <input type="text" class="form-control" name="login" required
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
                     </div>
                     <button type="submit" class="btn btn-success">
                         Сбросить пароль
