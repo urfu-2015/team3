@@ -1,5 +1,5 @@
 'use strict';
-const apiKey = require('../apiKey').apiKey;
+// const apiKey = require('../apiKey').apiKey;
 const mLab = require('mongolab-data-api')('jCBpzUukLGFLZwoR2Uzs2ZcGpFMXYjQD');
 const dbName = 'kafkatist';
 
