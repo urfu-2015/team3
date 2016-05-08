@@ -3,16 +3,17 @@
 const pages = require('./controllers/pages');
 const auth = require('./controllers/auth');
 const quest = require('./controllers/quest');
+const profile = require('./controllers/profile');
 
 module.exports = function (app, passport) {
-    app.get('/', isLoggedIn, pages.index);
+    app.get('/', setLoggedFlag, pages.index);
 
     app.get('/logout', (req, res) => {
         req.logout();
         res.redirect('/');
     });
 
-    app.get('/login', isLoggedIn, (req, res) => {
+    app.get('/login', isLoggedIn, setLoggedFlag, (req, res) => {
         var data = Object.assign({message: req.flash('loginMessage')}, req.commonData);
         res.render('auth/login', data);
     });
@@ -23,7 +24,7 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/signup', isLoggedIn, (req, res) => {
+    app.get('/signup', isLoggedIn, setLoggedFlag, (req, res) => {
         var data = Object.assign({message: req.flash('signupMessage')}, req.commonData);
         res.render('auth/signup', data);
     });
@@ -34,13 +35,13 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/forgot', isLoggedIn, (req, res) => {
+    app.get('/forgot', isLoggedIn, setLoggedFlag, (req, res) => {
         res.render('auth/forgot', req.commonData);
     });
 
     app.post('/forgot', auth.forgot);
 
-    app.get('/reset/:token', isLoggedIn, auth.reset);
+    app.get('/reset/:token', isLoggedIn, setLoggedFlag, auth.reset);
 
     app.post('/reset/:token', auth.resetAction);
 
@@ -80,6 +81,10 @@ module.exports = function (app, passport) {
 
     app.post('/addQuest', quest.loadPhoto, quest.createQuest, quest.questPage);
 
+    app.get('/quest/:slug', setLoggedFlag, quest.getQuest);
+
+    app.get('/profile', canOpenProfile, profile.getProfile);
+
     app.all('*', pages.error404);
 
     app.use((err, req, res) => {
@@ -90,16 +95,22 @@ module.exports = function (app, passport) {
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
-        req.url === '/' ? next() : res.redirect('/');
+        res.redirect('/');
     }
-    var data = {isNotLogged: true};
-    req.commonData = Object.assign(data, req.commonData);
     next();
 }
 
-/* function canOpenProfile(req, res, next) {
+function setLoggedFlag(req, res, next) {
+    if (!req.isAuthenticated()) {
+        var data = {isNotLogged: true};
+        req.commonData = Object.assign(data, req.commonData);
+    }
+    next();
+}
+
+function canOpenProfile(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
     res.redirect('/');
-}*/
+}

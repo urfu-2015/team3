@@ -16,7 +16,6 @@ require('./lib/auth/passport')(passport);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 hbs.registerPartials(path.join(__dirname, '/views/partials'));
-// hbs.registerPartials(path.join(__dirname, 'blocks'));
 
 app.use(morgan('dev'));
 app.use(require('cookie-parser')());
