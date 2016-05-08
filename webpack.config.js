@@ -9,10 +9,9 @@ var stylusLoader = ExtractTextPlugin.extract("style-loader", "css-loader!stylus-
 module.exports = {
     context: path.join(__dirname, 'views'),
     entry: {
-        main: './main/main.js',
-        mainPage: './mainPage.js',
         navbar: './partials/navbar/navbar.js',
         addQuest: './quest/addQuest.js',
+        questPage: './quest/questPage.js',
         slider: './partials/slider/slider.js',
         authForm: './auth/authForm.js'
     },
@@ -32,6 +31,14 @@ module.exports = {
             {
                 test: /(\.png$)|(\.jpg$)|(\.jpeg$)|(\.gif$)/,
                 loader: 'file-loader'
+            },
+            {
+                test: /\.jsx?$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel',
+                query: {
+                    presets: ['es2015']
+                }
             }
         ]
     },

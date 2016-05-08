@@ -1,0 +1,17 @@
+{{#extend "base"}}
+    {{#content "css" mode="append"}}
+        {{#if isDev}}
+            <link rel="stylesheet" href="/questPage.css">
+        {{else}}
+            <link rel="stylesheet" href="//kafkatist.surge.sh/questPage.css">
+        {{/if}}
+    {{/content}}
+    {{#content "content"}}
+        <p class="supertext">Квест успешно создан!</p>
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; Kafkatist, 2016</p>
+            </div>
+        </footer>
+    {{/content}}
+{{/extend}}
