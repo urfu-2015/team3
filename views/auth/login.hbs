@@ -7,7 +7,7 @@
         {{/if}}
     {{/content}}
     {{#content "content"}}
-        <div class="container">
+        <div class="container auth-container">
             <div class="col-sm-6 col-sm-offset-3">
                 <h1><span class="fa fa-sign-in"></span> Авторизация</h1>
                 {{#if message.length}}
@@ -24,22 +24,24 @@
                     </div>
                     <button type="submit" class="btn btn-success"> Войти</button>
                 </form>
-                <hr>
-                <a href="/auth/facebook" class="btn btn-primary btn-lg">
-                    <span class="fa fa-facebook"></span>
-                </a>
-                <a href="/auth/vkontakte" class="btn btn-primary btn-lg">
-                    <span class="fa fa-vk"></span>
-                </a>
-                <a href="/auth/twitter" class="btn btn-info btn-lg">
-                    <span class="fa fa-twitter"></span>
-                </a>
-                <a href="/auth/google" class="btn btn-danger btn-lg">
-                    <span class="fa fa-google-plus"></span>
-                </a>
-                <hr>
-                <p>Вам нужен аккаунт? <a href="/login">Создайте его</a>.</p>
-                <p>Передумали? Перейдите на <a href="/">главную</a>.</p>
+                <div class="form-group">
+                    <a href="/auth/facebook" class="btn btn-primary btn-lg">
+                        <span class="fa fa-facebook"></span>
+                    </a>
+                    <a href="/auth/vkontakte" class="btn btn-primary btn-lg">
+                        <span class="fa fa-vk"></span>
+                    </a>
+                    <a href="/auth/twitter" class="btn btn-info btn-lg">
+                        <span class="fa fa-twitter"></span>
+                    </a>
+                    <a href="/auth/google" class="btn btn-danger btn-lg">
+                        <span class="fa fa-google-plus"></span>
+                    </a>
+                </div>
+                <div class="form-group">
+                    <p>Вам нужен аккаунт? <a href="/login">Создайте его</a>.</p>
+                    <p>Передумали? Перейдите на <a href="/">главную</a>.</p>
+                </div>
             </div>
         </div>
     {{/content}}
