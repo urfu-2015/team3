@@ -7,7 +7,7 @@
         {{/if}}
     {{/content}}
     {{#content "content"}}
-        <div class="container">
+        <div class="container auth-container">
             <div class="col-sm-6 col-sm-offset-3">
                 <h1><span class="fa fa-key"></span> Сброс пароля</h1>
                 {{#if message.length}}
@@ -22,9 +22,10 @@
                         Сбросить пароль
                     </button>
                 </form>
-                <hr>
-                <p>Передумали? Перейдите на <a href="/">главную</a>.</p>
-                <p>Вспомнили пароль? <a href="/login">Авторизуйтесь</a>.</p>
+                <div class="form-group">
+                    <p>Передумали? Перейдите на <a href="/">главную</a>.</p>
+                    <p>Вспомнили пароль? <a href="/login">Авторизуйтесь</a>.</p>
+                </div>
             </div>
         </div>
     {{/content}}

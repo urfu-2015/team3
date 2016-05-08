@@ -7,7 +7,7 @@
         {{/if}}
     {{/content}}
     {{#content "content"}}
-        <div class="container">
+        <div class="container auth-container">
             <div class="col-sm-6 col-sm-offset-3">
                 <h1><span class="fa fa-sign-in"></span> Регистрация</h1>
                 {{#if message.length}}
@@ -24,9 +24,10 @@
                     </div>
                     <button type="submit" class="btn btn-success">Зарегистрироваться</button>
                 </form>
-                <hr>
-                <p>У вас уже есть аккаунт? <a href="/login">Авторизуйтесь</a>.</p>
-                <p>Передумали? Перейдите на <a href="/">главную</a>.</p>
+                <div class="form-group">
+                    <p>У вас уже есть аккаунт? <a href="/login">Авторизуйтесь</a>.</p>
+                    <p>Передумали? Перейдите на <a href="/">главную</a>.</p>
+                </div>
             </div>
         </div>
     {{/content}}

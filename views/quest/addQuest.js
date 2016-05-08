@@ -1,5 +1,5 @@
 require('./addQuest.styl');
-require('./footer.styl');
+require('./../partials/footer.styl');
 /* eslint-disable no-unused-expressions*/
 'use strict';
 
@@ -11,6 +11,8 @@ const swiper = new Swiper('.swiper-container', {
     // centeredSlides: true,
     paginationClickable: true,
     grabCursor: true,
+    keyboardControl: true,
+    mousewheelControl: true,
     spaceBetween: 20
 });
 
@@ -36,8 +38,13 @@ previewPhotoInput.addEventListener('change', () => {
 });
 
 const photosInput = form.photos;
+let photosFileList;
 photosInput.addEventListener('change', () => {
+    $('.swiper').css('display', 'block');
+    $('.quest-photos').css('margin-bottom', '0');
+
     const photos = photosInput.files;
+    console.log(photos);
 
     for (let i = 0; i < photos.length; i++) {
         const photo = photos[i];
@@ -54,5 +61,5 @@ photosInput.addEventListener('change', () => {
 });
 
 function fileApiSupported() {
-    return window.Blob && window.FileList && window.FileReader;
+    return window.Blob && window.File && window.FileList && window.FileReader;
 }
