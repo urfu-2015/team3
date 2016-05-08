@@ -17,7 +17,7 @@ exports.getProfile = (req, res) => {
         })
         .catch(err => {
             if (err) {
-                        console.error(err);
-                    }
+                console.error(err);
+            }
         });
 };
