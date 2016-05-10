@@ -35,6 +35,9 @@ header {
     text-align: justify;
     width: 65%;
 }
+.addToWishList {
+    margin-top: 10px;
+}
 h2 {
     padding-left: 30px;
 }
@@ -53,6 +56,8 @@ h2 {
 .photo__img > img {
     border-radius: 10px 10px 0px 0px;
     width: 100%;
+    height: 500px;
+    object-fit: cover;
 }
 .photo {
     width: 48%;
@@ -60,24 +65,26 @@ h2 {
     text-align: center;
     margin-right: 10px;
     margin-bottom: 15px;
-}
-.photo__descr {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 10px;
     border: 2px solid #128f76;
     border-top: none;
     background-color: #fff;
 }
+.photo__descr {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
 .photo__descr__hint {
     width: 80%;
     text-align: justify;
-    padding: 10px;
-    font-size: 15px;
+    padding: 20px;
+    font-size: 20px;
 }
 .photo__descr__button {
     padding: 10px;
+    display: flex;
+    flex-direction: row;
 }
 .progress {
     width: 80%;
@@ -86,12 +93,127 @@ h2 {
 .progressTitle {
     text-align: center;
 }
-@media screen and (max-width: 800px){
-    .description, .photos, .photo__descr {
+@media screen and (max-width: 1000px){
+    .description, .photos, .photo__descr, .modal-body {
         flex-direction: column;
         align-items: center;
     }
     .description__photo, .description__text, .photo, .photo__descr__hint {
         width: 95%;
     }
+    .modal-photo, .modal-dialog, .modal-comments {
+        min-width: 100%;
+    }
+}
+.foundBtn {
+    border-radius: 10px 0px 0px 10px;
+}
+.commentBtn {
+    border-radius: 0px 10px 10px 0px;
+}
+.modal-dialog {
+    width: 85%;
+}
+.modal-body {
+    width: 100%;
+    display: flex;
+    padding: 0 10px;
+}
+.modal-photo {
+    width: 65%;
+}
+.modal-photo > img {
+    width: 100%;
+    max-height: 600px;
+}
+.modal-comments {
+    width: 40%;
+    padding: 10px;
+}
+.commentBox {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    margin: 10px;
+    width: 100%;
+    text-align: left;
+}
+.author-photo {
+    max-width: 15%;
+}
+.author-photo > img {
+    width: 100%;
+    border-radius: 50%;
+}
+.comment-text {
+    width: 80%;
+    font-size: 20px;
+    margin-left: 15px;
+    border-bottom: 2px dotted #aaa;
+}
+.comment-text > p {
+    margin: 0;
+}
+.author-name {
+    color: #128f76;
+}
+.text {
+    padding: 10px;
+}
+.date {
+    padding: 5px;
+    font-size: 15px;
+    color: #aaa;
+}
+.commentForm {
+    width: 100%;
+    display: flex;
+}
+.commentInput {
+   width: 90%;
+}
+.hidden {
+    visitibility: hidden;
+}
+.questComments {
+    width: 90%;
+    margin: 20px auto 100px auto;
+}
+.questComment {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 25px;
+}
+.commentAuthorPhoto {
+    width: 10%;
+}
+.commentAuthorPhoto > img {
+    width: 100%;
+    border-radius: 50%;
+}
+.commentData {
+    width: 85%;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+.commentAuthor {
+    color: #128f76;
+    font-size: 25px;
+    margin: 0;
+}
+.commentContent {
+    padding: 10px 0px;
+    font-size: 20px;
+    border-bottom: 2px dotted #aaa;
+}
+.commentDate {
+    color: #aaa;
+    padding: 0px 10px;
+    font-size: 15px;
+}
+#noComments {
+    font-size: 20px;
+    color: #aaa;
+    margin: 30px;
 }

@@ -24,11 +24,6 @@ class User {
         ];
     }
 
-    static getCurrentSessionUser(user) {
-        var query = JSON.stringify({_id: {$oid: user}});
-        return this.findUser(query);
-    }
-
     static findUser(query) {
         var warningMessage = 'Такой пользователь не найден';
         var callback = (resolve, reject, result, response) => {
@@ -105,14 +100,16 @@ class User {
         return updateRequest(updatedUser);
     }
 
-    static getUsers(query, callback) {
-        var options = {
-            database: dbName,
-            collectionName: 'users',
-            query: JSON.stringify(query)
-        };
-        mLab.listDocuments(options, (err, result) => {
-            callback(err, result);
+    static getUsers(query) {
+        return new Promise((resolve, reject) => {
+            var options = {
+                database: dbName,
+                collectionName: 'users',
+                query: JSON.stringify(query)
+            };
+            mLab.listDocuments(options, (err, result) => {
+                err ? reject(err) : resolve(result);
+            });
         });
     }
 
