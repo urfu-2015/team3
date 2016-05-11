@@ -80,6 +80,9 @@ module.exports = function (app, passport) {
     app.get('/addQuest', canCreateQuest, quest.addQuest);
 
     app.post('/addQuest', canCreateQuest, quest.createQuest, quest.questPage, quest.addToMyQuests);
+    
+    app.get('/search/cities', pages.searchCities);
+    app.get('/search/tags', pages.searchTags);
 
     app.get('/quest/:slug', setLoggedFlag, quest.getQuest);
 

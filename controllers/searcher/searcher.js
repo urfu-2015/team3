@@ -44,13 +44,22 @@ function getSimilarCities(name, callback, city) {
             return quest.cityName;
         });
         if (city) {
-            cities = cities.filter(function (cityName) {
-                return cityName.indexOf(city) !== -1;
+            cities = cities.filter(function (cityName, index) {
+                return cities.indexOf(cityName) === index && isMatch(cityName, city);
             });
         }
         callback(cities);
     };
     return getList(name, cb);
+}
+
+function isMatch(city, data) {
+    if (city.length < data.length) {
+        return false;
+    } else {
+        var part = city.substring(0, data.length).toLowerCase();
+        return part === data;
+    }
 }
 
 function getAllQuests(name, mainCb, tag) {

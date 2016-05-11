@@ -23,7 +23,16 @@ exports.index = (req, res) => {
 
 exports.error404 = (req, res) => res.sendStatus(404);
 
-exports.searchWord = (req, res) => {
+exports.searchCities = (req, res) => {
+    var cb = function (objects) {
+        res.send(objects);
+    };
+    if (req.query.word.length > 0) {
+        searcher.getCities(cb, req.query.word);
+    }
+};
+
+exports.searchTags = (req, res) => {
     var cb = function (objects) {
         res.send(objects);
     };

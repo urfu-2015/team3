@@ -150,15 +150,14 @@ describe('Searcher', function () {
                 .then(done, done);
         });
 
-        it('should return all cities which contain the search city', function (done) {
+        it('should return all cities which start with the search query', function (done) {
             var spy = sinon.spy();
             searcher
-                .getCities(spy, 'бург')
+                .getCities(spy, 'ек')
                 .then(function () {
                     var result = spy.args[0][0];
-                    assert.equal(result.length, 2);
+                    assert.equal(result.length, 1);
                     assert.equal(result[0], 'Екатеринбург');
-                    assert.equal(result[1], 'Кошкибург');
                 })
                 .then(done, done);
         });
