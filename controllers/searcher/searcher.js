@@ -56,10 +56,9 @@ function getSimilarCities(name, callback, city) {
 function isMatch(city, data) {
     if (city.length < data.length) {
         return false;
-    } else {
-        var part = city.substring(0, data.length).toLowerCase();
-        return part === data;
     }
+    var part = city.substring(0, data.length).toLowerCase();
+    return part === data;
 }
 
 function getAllQuests(name, mainCb, tag) {
