@@ -1,4 +1,6 @@
 @import '../../node_modules/bootstrap-styl/bootstrap/variables.styl'
+@import '../vars.styl'
+
 $footer-height = 60px;
 html {
   position: relative;
@@ -17,11 +19,13 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: $footer-height;
-  background-color: #18bc9c;
+  //background-color: #18bc9c;
+  background-color: $base-color;
   border-radius: 4px;
 }
 .footer p {
   margin: (($footer-height - $line-height-computed) / 2 * 0.95) 0;
-  color: #ffffff;
+  color: #fff;
+  //color: #000;
   text-align: center;
 }

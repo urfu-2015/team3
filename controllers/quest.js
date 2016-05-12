@@ -14,14 +14,22 @@ const cloudinary = require('../lib/cloudinary-images/cloudinary-loader');
 const Datauri = require('datauri');
 const path = require('path');
 
+let fields = [{name: 'preview', maxCount: 1}];
+for (let i = 0; i < 100; i++) {
+    const fieldName = 'photo' + i.toString();
+    fields.push({name: fieldName, maxCount: 1});
+}
+
 exports.addQuest = (req, res) => {
     var template = handlebars.compile(fs.readFileSync('./views/quest/addQuest.hbs', 'utf8'));
     res.send(template(Object.assign({title: 'Создание квеста'}, req.commonData)));
 };
 
-exports.loadPhoto = upload.fields([{name: 'preview', maxCount: 1}, {name: 'photos'}]);
+exports.loadPhoto = upload.fields(fields);
 
-exports.questPage = (req, res) => {
+exports.createQuest = (req, res, next) => {
+    // console.log(req.body);
+    // console.log(req.files);
     let promise = Promise.resolve();
     if (req.files.preview) {
         const preview = req.files.preview[0];
@@ -38,9 +46,17 @@ exports.questPage = (req, res) => {
 
     promise
         .then(previewUrl => {
+            const photosLength = req.body['photos-length'];
             let photos = [];
-            const reqPhotos = req.files.photos;
+            let reqPhotos = [];
+            if (photosLength > 0) {
+                for (let i = 0; i < photosLength; i++) {
+                    const fieldName = 'photo' + i.toString();
+                    reqPhotos.push(req.files[fieldName][0]);
+                }
+            }
             if (reqPhotos) {
+                // console.log(reqPhotos);
                 photos = reqPhotos.map((photo, index) => {
                     const dataUri = new Datauri();
                     dataUri.format(path.extname(photo.originalname).toString(), photo.buffer);
@@ -85,7 +101,7 @@ exports.questPage = (req, res) => {
         .catch(err => {
             console.error(err);
         });
-
+    next();
     /*
      Добавить:
       - получение автора из данных авторизации
@@ -95,7 +111,9 @@ exports.questPage = (req, res) => {
      Вопросы:
       - дата: формат?
      */
+};
 
+exports.questPage = (req, res) => {
     // заглушка пока нет страниц квестов
     var template = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
     res.send(template(Object.assign({title: 'Страница квеста'}, req.commonData)));
