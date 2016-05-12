@@ -83,7 +83,7 @@ module.exports = function (app, passport) {
 
     app.get('/quest/:slug', setLoggedFlag, quest.getQuest);
 
-    app.get('/profile', canOpenProfile, profile.getProfile);
+    app.get('/profile/:id', profile.getProfile);
 
     app.post('/addToWishList', quest.addToWishList);
 
@@ -114,9 +114,3 @@ function setLoggedFlag(req, res, next) {
     next();
 }
 
-function canOpenProfile(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/');
-}

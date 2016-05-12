@@ -19,7 +19,7 @@ class User {
             'photos',
             'nickname',
             'avatar',
-            'gender',
+            'city',
             'markers'
         ];
     }
@@ -140,7 +140,7 @@ class User {
         var isBanned = this.user.isBanned || false;
         var photos = this.user.photos || [];
         var avatar = this.user.avatar || '';
-        var gender = this.user.gender || '';
+        var city = this.user.city || '';
         var options = {
             database: dbName,
             collectionName: 'users',
@@ -154,7 +154,7 @@ class User {
                 isBanned,
                 photos,
                 avatar,
-                gender
+                city
             }
         };
         mLab.insertDocuments(options, (err, result) => {

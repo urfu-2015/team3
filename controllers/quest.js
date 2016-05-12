@@ -149,7 +149,8 @@ exports.getQuest = (req, res, next) => {
                 });
         },
         (quest, done) => {
-            quest = setIdForComments(quest);
+            var isNotLogged = req.isAuthenticated();
+            quest = setIdForComments(quest, isNotLogged);
             done(null, quest);
         },
         (quest, done) => {
@@ -316,10 +317,11 @@ function getSpecPhotoUrl(url) {
     return urlParts[urlParts.length - 1].toLowerCase().replace(/[^\w\-]+/g, '');
 }
 
-function setIdForComments(quest) {
+function setIdForComments(quest, isNotLogged) {
     var photos = [];
     quest.photos.forEach(photo => {
         photo.commentUrl = getSpecPhotoUrl(photo.url);
+        photo.isNotLogged = isNotLogged;
         photos.push(photo);
     });
     quest.photos = photos;
@@ -350,7 +352,6 @@ function divideComments(allComments, quest, users) {
             quest.questComments = quest.questComments || [];
             quest.questComments.push(comment);
         }
-        console.log(comment);
     });
     return quest;
 }

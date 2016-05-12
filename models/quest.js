@@ -179,6 +179,19 @@ class quest {
         });
     }
 
+    static getSomeQuests(slugs) {
+        var query = {slug: {$in: slugs}};
+        return new Promise((resolve, reject) => {
+            mLab.listDocuments({
+                database: dbName,
+                collectionName: 'quests',
+                query: JSON.stringify(query)
+            }, (err, result) => {
+                err ? reject(err) : resolve(result);
+            });
+        });
+    }
+
     save(callback) {
         var error = false;
         // если не задали displayName, возвращаем ошибку
