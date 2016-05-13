@@ -1,3 +1,113 @@
+@import './vars.styl'
+
+a,
+a:hover,
+a:focus,
+.btn-success .badge,
+.btn-link, .btn-link:hover, .btn-link:focus,
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus,
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-link:hover,
+.navbar-default .btn-link:hover,
+.navbar-default .btn-link:focus,
+.panel-success > .panel-heading .badge,
+.navbar-inverse .badge,
+.text-success,
+.text-success:hover,
+.has-success .help-block,
+.has-success .control-label,
+.has-success .radio,
+.has-success .checkbox,
+.has-success .radio-inline,
+.has-success .checkbox-inline,
+.has-success.radio label,
+.has-success.checkbox label,
+.has-success.radio-inline label,
+.has-success.checkbox-inline label,
+.has-success .form-control-feedback{
+  color: $base-color;
+}
+
+.bg-success,
+.table > thead > tr > td.success,
+.table > tbody > tr > td.success,
+.table > tfoot > tr > td.success,
+.table > thead > tr > th.success,
+.table > tbody > tr > th.success,
+.table > tfoot > tr > th.success,
+.table > thead > tr.success > td,
+.table > tbody > tr.success > td,
+.table > tfoot > tr.success > td,
+.table > thead > tr.success > th,
+.table > tbody > tr.success > th,
+.table > tfoot > tr.success > th,
+.has-success .input-group-addon,
+.navbar-inverse,
+.pagination > li > a,
+.pagination > li > span,
+.pager li > a,
+.pager li > span,
+.pager .disabled > a,
+.pager .disabled > a:hover,
+.pager .disabled > a:focus,
+.pager .disabled > span,
+.label-success,
+.progress-bar-success,
+.list-group-item-success,
+a.list-group-item-success.active {
+  background-color: $base-color;
+}
+
+.btn-success,
+.btn-success.disabled:hover,
+.btn-success[disabled]:hover,
+fieldset[disabled] .btn-success:hover,
+.btn-success.disabled:focus,
+.btn-success[disabled]:focus,
+fieldset[disabled] .btn-success:focus,
+.btn-success.disabled.focus,
+.btn-success[disabled].focus,
+fieldset[disabled] .btn-success.focus,
+.alert-success,
+.panel-success > .panel-heading {
+  background-color: $base-color;
+  border-color: $base-color;
+}
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus,
+a.thumbnail:hover,
+a.thumbnail:focus,
+a.thumbnail.active,
+.panel-success,
+.has-success .form-control,
+.has-success .form-control:focus,
+.has-success .input-group-addon {
+  border-color: $base-color;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: $base-color;
+  }
+}
+.panel-success > .panel-heading + .panel-collapse > .panel-body {
+  border-top-color: $base-color;
+}
+.panel-success > .panel-footer + .panel-collapse > .panel-body {
+  border-bottom-color: $base-color;
+}
+
+.form-control {
+  //background-color: rgba(255, 255, 255, 0.8);
+}
+
 body {
   background: url('symphony.png') repeat;
+  //background: url('linedpaper.png') repeat;
+  //color: $text-color;
 }
+

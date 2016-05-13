@@ -78,7 +78,7 @@ module.exports = function (app, passport) {
 
     app.get('/addQuest', quest.addQuest);
 
-    app.post('/addQuest', quest.loadPhoto, quest.questPage);
+    app.post('/addQuest', quest.loadPhoto, quest.createQuest, quest.questPage);
 
     app.all('*', pages.error404);
 
