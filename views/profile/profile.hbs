@@ -44,7 +44,7 @@
                             {{#if myQuests.length}}
                                 {{#each myQuests}}
                                     <div class="quest">
-                                        <a href=""><h3>{{questName}}</a>
+                                        <a href="/quest/{{questSlug}}"><h3>{{questName}}</a>
                                         <div class="quest__description">
                                             <div class="quest__description__photo">
                                                 <img src="{{questTitlePhoto}}">
@@ -56,14 +56,14 @@
                                     </div>
                                 {{/each}}
                             {{else}}
-                                <h3>Таких пока нет :(</h3>
+                                <h3>Созданных квестов нет.</h3>
                             {{/if}}
                         </div>
                         <div id="passedQuests" class="tab-pane fade">
                             {{#if passedQuests.length}}
                                 {{#each passedQuests}}
                                     <div class="quest">
-                                        <a href=""><h3>{{questName}}</a>
+                                        <a href="/quest/{{questSlug}}"><h3>{{questName}}</a>
                                         <div class="quest__description">
                                             <div class="quest__description__photo">
                                                 <img src="{{questTitlePhoto}}">
@@ -75,14 +75,14 @@
                                     </div>
                                 {{/each}}
                             {{else}}
-                                <h3>Таких пока нет :(</h3>
+                                <h3>Ни один квест пока не пройден.</h3>
                             {{/if}}
                         </div>
                         <div id="wishList" class="tab-pane fade">
                             {{#if wishList.length}}
                                 {{#each wishList}}
                                     <div class="quest">
-                                        <a href=""><h3>{{questName}}</a>
+                                        <a href="/quest/{{questSlug}}"><h3>{{questName}}</a>
                                         <div class="quest__description">
                                             <div class="quest__description__photo">
                                                 <img src="{{questTitlePhoto}}">
@@ -94,7 +94,7 @@
                                     </div>
                                 {{/each}}
                             {{else}}
-                                <h3>Таких пока нет :(</h3>
+                                <h3>Пока нет квестов, которые хотелось бы пройти.</h3>
                             {{/if}}        
                         </div>
                         <div id="map" class="tab-pane fade"

@@ -72,6 +72,7 @@ function getQuestsInfo(list) {
     var result = [];
     list.forEach(element => {
         result.push({
+            questSlug: element.slug,
             questName: element.displayName,
             questTitlePhoto: element.titleImage,
             questDescription: element.description
