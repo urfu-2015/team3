@@ -1,6 +1,6 @@
 'use strict';
-// const apiKey = require('../apiKey').apiKey;
-const mLab = require('mongolab-data-api')('jCBpzUukLGFLZwoR2Uzs2ZcGpFMXYjQD');
+const apiKey = require('../apiKey').apiKey;
+const mLab = require('mongolab-data-api')(apiKey);
 const dbName = 'kafkatist';
 
 class quest {

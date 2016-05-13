@@ -1,8 +1,8 @@
 'use strict';
 
 const dbName = 'kafkatist';
-// const apiKey = require('../apiKey').apiKey;
-const mLab = require('mongolab-data-api')('jCBpzUukLGFLZwoR2Uzs2ZcGpFMXYjQD');
+const apiKey = require('../apiKey').apiKey;
+const mLab = require('mongolab-data-api')(apiKey);
 
 class Comment {
     constructor(commentObject) {
