@@ -14,7 +14,8 @@ exports.index = (req, res) => {
             'apple',
             'orange',
             'banana'
-        ]
+        ],
+        currentUserID: req.user
     }, req.commonData)));
 };
 

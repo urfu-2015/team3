@@ -83,9 +83,10 @@ exports.createQuest = (req, res, next) => {
                 .then(photos => {
                     const tags = req.body['quest-tags'].split(', ').filter(tag => tag.length > 0);
                     const quest = new Quest({
+                        currentUserID: req.user,
                         displayName: req.body['quest-name'],
                         cityName: req.body['quest-city'],
-                        author: 'Anna.Smith',
+                        author: req.user,
                         titleImage: previewUrl,
                         description: req.body['quest-description'],
                         tags,
@@ -122,7 +123,8 @@ exports.createQuest = (req, res, next) => {
 exports.questPage = (req, res) => {
     // заглушка пока нет страниц квестов
     var template = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
-    res.send(template(Object.assign({title: 'Страница квеста'}, req.commonData)));
+    var data = {title: 'Страница квеста', currentUserID: req.user};
+    res.send(template(Object.assign(data, req.commonData)));
 };
 
 exports.getQuest = (req, res, next) => {
@@ -184,6 +186,7 @@ exports.getQuest = (req, res, next) => {
                 btnData.classStyle = 'btn-danger';
             }
             quest = Object.assign(btnData, quest);
+            quest.currentUserID = req.user;
             var templ = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
             res.send(templ(Object.assign(quest, req.commonData)));
             done(null);
@@ -260,7 +263,8 @@ exports.addPhotoComment = (req, res, next) => {
                 .save()
                 .then(result => {
                     var date = result.date;
-                    var data = {authorPhoto, author, body, date};
+                    var authorID = userID;
+                    var data = {authorPhoto, author, body, date, authorID};
                     res.status(200).send(data);
                 })
                 .catch(err => {
@@ -300,7 +304,8 @@ exports.addQuestComment = (req, res, next) => {
                 .save()
                 .then(result => {
                     var date = result.date;
-                    var data = {authorPhoto, author, body, date};
+                    var authorID = userID;
+                    var data = {authorPhoto, author, body, date, authorID};
                     res.status(200).send(data);
                 })
                 .catch(err => {
@@ -337,6 +342,7 @@ function getCurrentUser(users, id) {
 
 function divideComments(allComments, quest, users) {
     allComments.forEach(comment => {
+        comment.authorID = comment.author;
         var authorInfo = getAuthorInfo(users, comment.author);
         if (authorInfo) {
             comment.author = authorInfo.author;

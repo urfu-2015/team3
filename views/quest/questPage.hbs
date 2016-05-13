@@ -89,7 +89,9 @@
                                                     <img src="{{authorPhoto}}">
                                                 </div>
                                                 <div class="comment-text">
-                                                    <p class="author-name">{{author}}</p>
+                                                    <a class="author-name" href="/profile/{{authorID}}">
+                                                        {{author}}
+                                                    </a>
                                                     <p class="text">{{body}}</p>
                                                     <p class="date">{{date}}</p>
                                                 </div>
@@ -124,7 +126,9 @@
                             <img src="{{authorPhoto}}">
                         </div>
                         <div class="commentData">
-                            <p class="commentAuthor">{{author}}</p>
+                            <a class="commentAuthor" href="/profile/{{authorID}}">
+                                {{author}}
+                            </a>
                             <p class="commentContent">{{body}}</p>
                             <p class="commentDate">{{date}}</p>
                         </div>

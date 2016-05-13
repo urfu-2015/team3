@@ -15,12 +15,11 @@ exports.getProfile = (req, res, next) => {
     var userID = req.params.id;
     async.waterfall([
         done => {
-            // получаем инфу о пользователе
             userModel
                 .findUser(JSON.stringify({_id: {$oid: userID}}))
                 .then(result => {
                     if (result.message.length) {
-                        // нет пользователя с таким айдишником - not found
+                        res.redirect('');
                         return;
                     }
                     done(null, result.user);
@@ -30,7 +29,6 @@ exports.getProfile = (req, res, next) => {
                 });
         },
         (user, done) => {
-            // получаем все квесты
             var questLists = [user.myQuests, user.passedQuests, user.wishList];
             var promises = [];
             questLists.forEach(list => {
@@ -47,7 +45,8 @@ exports.getProfile = (req, res, next) => {
                         myQuests: getQuestsInfo(result[0]),
                         passedQuests: getQuestsInfo(result[1]),
                         wishList: getQuestsInfo(result[2]),
-                        markers: JSON.stringify(user.markers)
+                        markers: JSON.stringify(user.markers),
+                        currentUserID: req.user
                     };
                     done(null, profileInfo);
                 })
@@ -58,7 +57,6 @@ exports.getProfile = (req, res, next) => {
         (result, done) => {
             var isCurrent = req.user === result.id ? {isCurrentUser: true} : {isCurrentUser: false};
             result = Object.assign(result, isCurrent);
-            console.log(result);
             var templ = handlebars.compile(fs.readFileSync('./views/profile/profile.hbs', 'utf8'));
             res.send(templ(Object.assign(result, req.commonData)));
             done(null);
@@ -67,6 +65,14 @@ exports.getProfile = (req, res, next) => {
         err ? next(err) : next();
     });
 };
+
+/* exports.editProfile = (req, res) => {
+
+};
+
+exports.updateProfile = (req, res) => {
+
+};*/
 
 function getQuestsInfo(list) {
     var result = [];

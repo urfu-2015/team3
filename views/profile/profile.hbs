@@ -107,24 +107,6 @@
     {{/content}}
     {{#content "js" mode="append"}}
         <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-        <script type="text/javascript">
-            ymaps.ready(init);
-            var myMap;
-
-            function init() {
-                myMap = new ymaps.Map('map', {
-                    center: [56.8575, 60.6125],
-                    zoom: 4,
-                    controls: ['zoomControl', 'fullscreenControl']
-                });
-                var coordinates = JSON.parse(document.querySelector('#map').dataset.coordinates);
-                console.log(coordinates);
-                coordinates.forEach(coordinate => {
-                    var marker = [coordinate.lat, coordinate.lng];
-                    myMap.geoObjects.add(new ymaps.Placemark(marker));
-                });
-            }
-        </script>
         {{#if isDev}}
             <script src="/profile.js" type="text/javascript"></script>
         {{else}}
