@@ -1,5 +1,5 @@
 $("#quest-city").autocomplete({
-    source: function (request, response) {
+    source: function(request, response) {
         $.ajax({
             type: "GET",
             url: "/search/cities",
@@ -13,7 +13,7 @@ $("#quest-city").autocomplete({
 });
 
 $("#quest-tags").autocomplete({
-    source: function (request, response) {
+    source: function(request, response) {
         var term = request.term;
         var lastSpaceIndex = term.lastIndexOf(' ');
         if (lastSpaceIndex !== -1) {
@@ -28,7 +28,7 @@ $("#quest-tags").autocomplete({
             }
         });
     },
-    select: function (event, ui) {
+    select: function(event, ui) {
         var values = $("#quest-tags").val();
         if (values.indexOf(ui.item.value) === -1) {
             var lastSpaceIndex = values.lastIndexOf(' ');
@@ -42,7 +42,7 @@ $("#quest-tags").autocomplete({
         return false;
     },
     /* eslint-disable no-unused-vars*/
-    focus: function (event, ui) {
+    focus: function(event, ui) {
         return false;
     },
     minLength: 1
