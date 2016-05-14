@@ -20,7 +20,8 @@ class User {
             'nickname',
             'avatar',
             'city',
-            'markers'
+            'markers',
+            'gender'
         ];
     }
 
@@ -37,30 +38,8 @@ class User {
         return getRequest(query, warningMessage, callback);
     }
 
-    static addUser(user) {
-        var query = {login: user.login};
-        var warningMessage = 'Такой логин уже существует';
-        var callback = (resolve, reject, result, response) => {
-            if (result.length) {
-                response.message = warningMessage;
-                resolve(response);
-            } else {
-                user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8), null);
-                mLab.insertDocuments({
-                    database: dbName,
-                    collectionName: collection,
-                    documents: user
-                }, (err, insertResult) => {
-                    response.user = insertResult;
-                    err ? reject(err) : resolve(response);
-                });
-            }
-        };
-        return getRequest(JSON.stringify(query), warningMessage, callback);
-    }
-
-    static addSocialUser(user) {
-        return insertRequest(user);
+    saveSocialUser() {
+        return insertRequest(getUserObj(this));
     }
 
     static checkPassword(login, password) {
@@ -124,46 +103,62 @@ class User {
         });
     }
 
-    save(callback) {
-        for (var key in this.questObject) {
-            if (this.fields.indexOf(key) === -1) {
-                return callback(true, "field '" + key + "' not in fields", []);
-            }
-        }
-
-        var login = this.user.login;
-        var password = this.user.password;
-        var nickname = this.user.nickname || '';
-        var passedQuests = this.user.passedQuests || [];
-        var myQuests = this.user.myQuests || [];
-        var wishList = this.user.wishList || [];
-        var isBanned = this.user.isBanned || false;
-        var photos = this.user.photos || [];
-        var avatar = this.user.avatar || '';
-        var city = this.user.city || '';
-        var options = {
-            database: dbName,
-            collectionName: 'users',
-            documents: {
-                login,
-                password,
-                nickname,
-                passedQuests,
-                myQuests,
-                wishList,
-                isBanned,
-                photos,
-                avatar,
-                city
+    save() {
+        var user = getUserObj(this);
+        var warningMessage = 'Такой логин уже существует';
+        var callback = (resolve, reject, result, response) => {
+            if (result.length) {
+                response.message = warningMessage;
+                resolve(response);
+            } else {
+                user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8), null);
+                mLab.insertDocuments({
+                    database: dbName,
+                    collectionName: collection,
+                    documents: user
+                }, (err, insertResult) => {
+                    response.user = insertResult;
+                    err ? reject(err) : resolve(response);
+                });
             }
         };
-        mLab.insertDocuments(options, (err, result) => {
-            callback(err, "", result);
-        });
+        return getRequest(JSON.stringify({login: user.login}), warningMessage, callback);
     }
 }
 
 module.exports = User;
+
+function getUserObj(obj) {
+    var login = obj.user.login;
+    var password = obj.user.password;
+    var nickname = obj.user.nickname || '';
+    var passedQuests = obj.user.passedQuests || [];
+    var myQuests = obj.user.myQuests || [];
+    var wishList = obj.user.wishList || [];
+    var isBanned = obj.user.isBanned || false;
+    var photos = obj.user.photos || [];
+    var avatar = '';
+    if (obj.user.gender) {
+        avatar = obj.user.gender === 'woman' ?
+            'http://res.cloudinary.com/kafkatist/image/upload/v1463231123/girl_gkuapr.jpg' :
+            'http://res.cloudinary.com/kafkatist/image/upload/v1463231124/boy_txlo5l.png';
+    }
+    var city = obj.user.city || '';
+    var gender = obj.user.gender || '';
+    return {
+        login,
+        password,
+        nickname,
+        passedQuests,
+        myQuests,
+        wishList,
+        isBanned,
+        photos,
+        avatar,
+        city,
+        gender
+    };
+}
 
 function getRequest(query, warningMessage, colName, callback) {
     var collectName = colName;
