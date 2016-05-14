@@ -97,7 +97,7 @@ form.addEventListener('submit', function (event) {
     var formData = new FormData(form);
 
     photosFileList = photosFileList.map(obj => obj.photo);
-    /*photosFileList = photosFileList.map(obj => {
+    /* photosFileList = photosFileList.map(obj => {
         return {
             photo: obj.photo,
             title: obj.title,
@@ -152,7 +152,7 @@ function initMap(id) {
         var placemark;
         var map = new ymaps.Map('map_' + id, {
             center: [55.7522, 37.6155],
-            zoom: 15,
+            zoom: 4,
             controls: ['zoomControl', 'fullscreenControl']
         });
         var search = new ymaps.control.SearchControl({options: {noPlacemark: true}});

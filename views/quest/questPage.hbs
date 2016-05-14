@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="modal-comments" id="cb_{{commentUrl}}">
 
-                                        {{#unless isNotLogged}}
+                                        {{#if isLogged}}
                                             <div class="commentForm">
                                                 <input class="form-control commentToAdd"
                                                 type="text" name="commentText"
@@ -80,7 +80,7 @@
                                                     <i class="fa fa-lg fa-pencil" aria-hidden="true"></i>
                                                 </button>
                                             </div>
-                                        {{/unless}}
+                                        {{/if}}
 
                                         {{#each comments}}
                                             <div class="commentBox">

@@ -154,8 +154,8 @@ exports.getQuest = (req, res, next) => {
                 });
         },
         (quest, done) => {
-            var isNotLogged = req.isAuthenticated();
-            quest = setIdForComments(quest, isNotLogged);
+            var isLogged = req.isAuthenticated();
+            quest = setIdForComments(quest, isLogged);
             done(null, quest);
         },
         (quest, done) => {
@@ -182,7 +182,7 @@ exports.getQuest = (req, res, next) => {
             quest.author = getCurrentUser(users, quest.author).nickname;
             done(null, getCurrentUser(users, req.user), quest);
         },
-        (user, quest, done) => {            
+        (user, quest, done) => {
             var btnData = {phrase: 'Хочу пройти', classStyle: 'btn-success'};
             var phrase = 'Хочу пройти';
             if (user && user.wishList && user.wishList.indexOf(slug) !== -1) {
@@ -326,11 +326,11 @@ function getSpecPhotoUrl(url) {
     return urlParts[urlParts.length - 1].toLowerCase().replace(/[^\w\-]+/g, '');
 }
 
-function setIdForComments(quest, isNotLogged) {
+function setIdForComments(quest, isLogged) {
     var photos = [];
     quest.photos.forEach(photo => {
         photo.commentUrl = getSpecPhotoUrl(photo.url);
-        photo.isNotLogged = isNotLogged;
+        photo.isLogged = isLogged;
         photos.push(photo);
     });
     quest.photos = photos;

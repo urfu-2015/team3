@@ -77,7 +77,7 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    //app.get('/addQuest', isLoggedIn, quest.addQuest);
+    // app.get('/addQuest', isLoggedIn, quest.addQuest);
     app.get('/addQuest', quest.addQuest);
 
     app.post('/addQuest', quest.loadPhoto, quest.createQuest, quest.questPage);
