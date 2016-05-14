@@ -23,6 +23,11 @@ header {
 .description__photo {
     text-align: center;
     width: 35%;
+    margin: 0px 10px;
+    height: 350px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center top;
 }
 .description__photo > img{
     max-height: 300px;
@@ -34,6 +39,7 @@ header {
     font-size: 25px;
     text-align: justify;
     width: 65%;
+    margin: 0px 10px;
 }
 .addToWishList {
     margin-top: 10px;
@@ -46,7 +52,6 @@ h2 {
     text-align: right;
 }
 .photos {
-    padding: 35px;
     justify-content: space-between;
     flex-wrap: wrap;
 }
@@ -54,7 +59,7 @@ h2 {
     position: relative;
 }
 .photo__img > img {
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 9px 9px 0px 0px;
     width: 100%;
     height: 500px;
     object-fit: cover;
@@ -63,12 +68,10 @@ h2 {
     width: 48%;
     border-radius: 10px;
     text-align: center;
-    margin-right: 10px;
-    margin-bottom: 15px;
     border-radius: 10px;
     border: 2px solid #128f76;
-    border-top: none;
     background-color: #fff;
+    margin: 10px auto;
 }
 .modal {
     max-width: 100%;
@@ -82,7 +85,7 @@ h2 {
 .photo__descr__hint {
     width: 80%;
     text-align: justify;
-    padding: 20px;
+    padding: 20px 0px;
     font-size: 20px;
 }
 .photo__descr__button {
@@ -222,15 +225,18 @@ h2 {
 .modal-header .close {
     margin-top: 0;
 }
+a:hover {
+    text-decoration: none;
+}
 @media screen and (max-width: 1000px){
     .modal.fade, .modal.fade.in {
         padding: 0 !important;
     }
     .modal-dialog{
-          width: 100%;
-          height: 100%;
-          padding: 0;
-          margin:0;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin:0;
     }
     .modal-content {
         overflow:auto;
@@ -246,7 +252,7 @@ h2 {
         width: 95%;
     }
     .modal-photo, .modal-dialog, .modal-comments {
-        min-width: 100%;
+        width: 100%;
     }
     .photos {
         padding: 10px;
@@ -279,8 +285,7 @@ h2 {
         padding: 10px;
     }
 }
-@media screen and (max-width: 1000px) and (min-width: 700px) 
-{
+@media screen and (max-width: 1000px) and (min-width: 700px) {
     .photos {
         padding: 10px;
     }
@@ -308,7 +313,4 @@ h2 {
     .city {
         font-size: 21px;
     }
-    .modal-dialog {
-    width: 400px;
-}
 }

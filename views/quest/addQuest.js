@@ -97,7 +97,14 @@ form.addEventListener('submit', function (event) {
     var formData = new FormData(form);
 
     photosFileList = photosFileList.map(obj => obj.photo);
-    console.log(photosFileList);
+    /*photosFileList = photosFileList.map(obj => {
+        return {
+            photo: obj.photo,
+            title: obj.title,
+            geo: obj.geo,
+            hint: obj.hint
+        }
+    });*/
     const photosLength = photosFileList.length;
     formData.set('photos-length', photosLength);
 
@@ -113,6 +120,7 @@ form.addEventListener('submit', function (event) {
         formData.set(fieldName, photo);
     });
     formData.delete('photos');
+    console.log(formData);
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/addQuest", true);

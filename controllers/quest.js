@@ -117,11 +117,14 @@ exports.createQuest = (req, res, next) => {
       - тэги: прикрутить как в поиске
      Вопросы:
       - дата: формат?
+      14 мая 2016
+      зачем дата?
      */
 };
 
 exports.questPage = (req, res) => {
     // заглушка пока нет страниц квестов
+    // она уже есть :)
     var template = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
     var data = {title: 'Страница квеста', currentUserID: req.user};
     res.send(template(Object.assign(data, req.commonData)));
@@ -176,9 +179,10 @@ exports.getQuest = (req, res, next) => {
                 });
         },
         (users, quest, done) => {
+            quest.author = getCurrentUser(users, quest.author).nickname;
             done(null, getCurrentUser(users, req.user), quest);
         },
-        (user, quest, done) => {
+        (user, quest, done) => {            
             var btnData = {phrase: 'Хочу пройти', classStyle: 'btn-success'};
             var phrase = 'Хочу пройти';
             if (user && user.wishList && user.wishList.indexOf(slug) !== -1) {
