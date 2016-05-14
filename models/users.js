@@ -17,7 +17,7 @@ class User {
             'photos',
             'nickname',
             'avatar',
-            'gender',
+            'gender'
         ];
     }
 
@@ -56,7 +56,7 @@ class User {
             data: data,
             query: JSON.stringify(query)
         };
-        
+
         mLab.updateDocuments(options, (err, result) => {
             callback(err, result);
         });

@@ -47,7 +47,7 @@ exports.getQuests = (req, res) => {
         res.send(template(Object.assign({
             quests: quests
         }, req.commonData)));
-    };  
+    };
     searcher.getQuests(cb, req.query.tag);
 };
- 
+
