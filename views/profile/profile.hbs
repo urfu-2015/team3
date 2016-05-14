@@ -11,7 +11,15 @@
             <div class="personInfo">
                 <div class="data">
                     <p class="name">{{nickname}}</p>
-                    <p class="from"><i class="fa fa-lg fa-map-marker" aria-hidden="true"></i> {{city}}</p>
+                    {{#if city}}
+                        <p class="from"><i class="fa fa-lg fa-map-marker" aria-hidden="true"></i> 
+                            {{city}}
+                        </p>
+                    {{else}}
+                        <p class="from"><i class="fa fa-lg fa-map-marker" aria-hidden="true"></i> 
+                            Планета Земля :)
+                        </p>
+                    {{/if}}
                 </div>
                 <div class="avatar descHide">
                     <img src="{{avatar}}">
