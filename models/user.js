@@ -137,7 +137,7 @@ function getUserObj(obj) {
     var wishList = obj.user.wishList || [];
     var isBanned = obj.user.isBanned || false;
     var photos = obj.user.photos || [];
-    var avatar ='http://res.cloudinary.com/kafkatist/image/upload/v1463238108/noavatar_eb8qq6.png';
+    var avatar = 'http://res.cloudinary.com/kafkatist/image/upload/v1463238108/noavatar_eb8qq6.png';
     if (obj.user.gender) {
         avatar = obj.user.gender === 'female' ?
             'http://res.cloudinary.com/kafkatist/image/upload/v1463231123/girl_gkuapr.jpg' :
