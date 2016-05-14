@@ -137,11 +137,11 @@ function getUserObj(obj) {
     var wishList = obj.user.wishList || [];
     var isBanned = obj.user.isBanned || false;
     var photos = obj.user.photos || [];
-    var avatar = '';
+    var avatar = 'http://res.cloudinary.com/kafkatist/image/upload/v1463238108/noavatar_eb8qq6.png';
     if (obj.user.gender) {
-        avatar = obj.user.gender === 'woman' ?
+        avatar = obj.user.gender === 'female' ?
             'http://res.cloudinary.com/kafkatist/image/upload/v1463231123/girl_gkuapr.jpg' :
-            'http://res.cloudinary.com/kafkatist/image/upload/v1463231124/boy_txlo5l.png';
+            'http://res.cloudinary.com/kafkatist/image/upload/v1463237541/boy_jscjr6.png';
     }
     var city = obj.user.city || '';
     var gender = obj.user.gender || '';
