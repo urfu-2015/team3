@@ -1,0 +1,282 @@
+screen-xs-max = 768px;
+screen-md-min = 992px;
+tr-time = .65s; 
+
+.navbar-search
+{
+    margin: -20px 0 0;
+    background: none;
+    text-align: center;
+}
+
+.row 
+{
+    height: 600px;
+    padding: 0;
+}
+
+.quest
+{
+    position: relative;
+    background: #18bc9c;
+    padding: 0;
+    overflow: hidden;
+    background-position: center center;
+    background-size: cover;
+
+    &-name
+    {
+        position: relative;
+        font-weight: bold;
+        font-size: 35px;
+        padding: 20px 20px 20px;
+        top: 130px;
+        color: #fff;
+        text-align: left;
+        text-shadow: 0 0 5px rgba(0,0,0,.5);
+        overflow: hidden; 
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        z-index: 1000;
+        transition: tr-time;
+        transform: top;
+        background: rgba(40, 101, 108, .8);
+
+        &::after
+        {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #fff;
+            content: '';
+            transition: transform tr-time;
+            transform: translate3d(-100%, 0, 0);
+        }
+    }
+
+    &:hover .quest-name
+    {
+        top: 20px;
+    }
+}
+
+.small
+{
+
+    height: 50%;
+}
+
+.medium
+{
+    height: 100%;
+}
+
+.large
+{
+    height: 100%;
+}
+
+.description
+{
+    z-index: 100;
+    padding: 10px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-transform: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    color: #fff;
+    opacity: 0;
+    background: rgba(40, 101, 108, .8);
+
+    &__small
+    {
+        height: 120px;
+        font-size: 16px;
+        bottom: 3em;
+    }
+
+    &__medium
+    {
+        height: 120px;
+        font-size: 20px;
+        bottom: 10em;
+    }
+
+    &__large
+    {
+        height: 300px;
+        font-size: 22px;
+        bottom: 4.5em;
+    }
+}
+
+
+.icons
+{
+    margin: 0;
+    text-align: center;
+    padding: 10px;
+}
+
+.icon
+{
+    display: inline; 
+    margin: 40px 10px; 
+    font-size: 15px;
+    /*color: #fff;*/
+    z-index: 1000;
+    white-space: nowrap;
+}
+
+.addition
+{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    top: auto;
+    background: #fff;
+    color: #28656C;
+    height: 50px;
+
+}
+
+.blur
+{
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.medium .blur 
+{
+    background: no-repeat center center;
+    background-size: cover;
+}
+
+.small .blur 
+{
+    background: no-repeat center center;
+    background-size: cover;
+}
+
+.large .blur 
+{
+    background: no-repeat center center;
+    background-size: cover;
+}
+
+@media (max-width: screen-xs-max)
+{
+    .quest
+    {
+        height: 450px;
+    }
+
+    .quest-name
+    {
+        font-size: 24px;
+    }
+
+    .description
+    {
+        height: 200px;
+        opacity: 1;
+        font-size: 16px;
+        bottom: 100px;
+    }
+}
+
+@media (min-width: screen-xs-max) and (max-width: screen-md-min)
+{
+    .quest
+    {
+        height: 600px;
+    }
+
+    .description
+    {
+        height: 300px;
+        bottom: 4.5em;
+        font-size: 24px;
+        opacity: 1;
+    }
+}
+
+@media (max-width: screen-md-min) 
+{
+    .quest-name
+    {
+        top: 20px;
+
+        &::after
+        {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    .addition
+    {
+        transition: transform tr-time;
+        transform: translate3d(0,0,0);
+    }
+
+    .blur
+    {
+        -webkit-filter: url(#blur);
+        filter: url(#blur);
+        -webkit-filter: blur(5px);
+        filter: blur(5px);
+        -webkit-transition: 1s -webkit-filter linear;
+        transition: 1s filter linear;
+    }
+
+}
+
+
+@media (min-width: screen-md-min)
+{
+    .quest:hover
+    {
+        .quest-name::after
+        {
+            transform: translate3d(0,0,0);
+        }
+
+        .description
+        {
+            opacity: 1;
+        }
+
+        .blur
+        {
+            -webkit-filter: url(#blur);
+            filter: url(#blur);
+            -webkit-filter: blur(5px);
+            filter: blur(5px);
+            -webkit-transition: 1s -webkit-filter linear;
+            transition: 1s filter linear;
+        }
+
+        .addition
+        {
+            transform: translate3d(0, 0, 0);
+        }
+    } 
+
+    .addition
+    {
+        transition: transform tr-time;
+        transform: translate3d(0, 100%, 0);
+    }
+}

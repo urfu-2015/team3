@@ -15,6 +15,7 @@ module.exports = {
         questPage: './quest/questPage.js',
         authForm: './auth/authForm.js',
         profile: './profile/profile.js'
+        quests: './pageQuests/questslist.js'
     },
     devtool: 'source-map',
     output: {

@@ -1,5 +1,5 @@
 require('./addQuest.styl');
-require('../search/search.js');
+require('./search.js');
 /* eslint-disable no-unused-expressions*/
 'use strict';
 

@@ -40,3 +40,14 @@ exports.searchTags = (req, res) => {
         searcher.getSimilarTags(cb, req.query.word);
     }
 };
+
+exports.getQuests = (req, res) => {
+    var template = handlebars.compile(fs.readFileSync('./views/pageQuests/questslist.hbs', 'utf8'));
+    var cb = function (quests) {
+        res.send(template(Object.assign({
+            quests: quests
+        }, req.commonData)));
+    };  
+    searcher.getQuests(cb, req.query.tag);
+};
+ 

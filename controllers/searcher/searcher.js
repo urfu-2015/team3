@@ -44,6 +44,7 @@ function getSimilarCities(name, callback, city) {
             return quest.cityName;
         });
         if (city) {
+            city = city.toLowerCase();
             cities = cities.filter(function (cityName, index) {
                 return cities.indexOf(cityName) === index && isMatch(cityName, city);
             });
