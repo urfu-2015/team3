@@ -85,9 +85,9 @@ module.exports = function (app, passport) {
 
     app.get('/profile/:id', profile.getProfile);
 
-    app.get('/editProfile', profile.editProfile);
+/*    app.get('/editProfile', profile.editProfile);
 
-    app.post('/editProfile', profile.updateProfile);
+    app.post('/editProfile', profile.updateProfile);*/
 
     app.post('/addToWishList', quest.addToWishList);
 
