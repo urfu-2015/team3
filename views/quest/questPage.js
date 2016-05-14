@@ -20,7 +20,8 @@ var addPhotoCommentBtn = document.getElementsByClassName('addComment');
 var addQuestCommentBtn = document.getElementById('addQuestComment');
 if (addQuestCommentBtn) {
     addQuestCommentBtn.addEventListener('click', function () {
-        addQuestComment(addQuestCommentBtn.previousElementSibling);
+        // addQuestComment(addQuestCommentBtn.previousElementSibling);
+        addQuestComment(document.getElementById('testCommentQuest'));
     });
 }
 
@@ -54,6 +55,7 @@ function addQuestComment(commentText) {
     xhr.send(params);
     xhr.onreadystatechange = () => {
         if (xhr.status === 200 && xhr.readyState === 4) {
+            console.log(xhr.status);
             questCommentsBox.appendChild(createQuestComment(JSON.parse(xhr.responseText)));
             commentText.value = '';
             document.getElementById('noComments').style.display = 'none';

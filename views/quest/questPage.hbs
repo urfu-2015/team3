@@ -1,5 +1,7 @@
 {{#extend "base"}}
     {{#content "css" mode="append"}}
+        <link href="http://one-signal.github.io/emoji-picker/lib/css/nanoscroller.css" rel="stylesheet">
+        <link href="http://one-signal.github.io/emoji-picker/lib/css/emoji.css" rel="stylesheet">
         {{#if isDev}}
             <link rel="stylesheet" href="/questPage.css">
         {{else}}
@@ -111,8 +113,10 @@
         <div class="questComments" id="questCommentsBox">
             {{#unless isNotLogged}}
                 <div class="commentForm">
-                    <input class="form-control" type="text" name="textComment"
-                    placeholder="Поделитесь вашим мнением"/>
+                    <p class="emoji-picker-container">
+                    <input id="testCommentQuest" class="form-control" type="text" name="textComment"
+                    placeholder="Поделитесь вашим мнением" data-emojiable="true" />
+                    </p>
                     <button class="btn btn-default" id="addQuestComment">
                         <i class="fa fa-lg fa-pencil" aria-hidden="true"></i>
                     </button>
@@ -139,10 +143,33 @@
         </div>
     {{/content}}
     {{#content "js" mode="append"}}
+        <script src="http://wedgies.github.io/jquery-emoji-picker/js/jquery.emojipicker.js" type="text/javascript"></script>
+        <script src="http://wedgies.github.io/jquery-emoji-picker/js/jquery.emojipicker.a.js"></script>
+        <script src="http://one-signal.github.io/emoji-picker/lib/js/nanoscroller.min.js"></script>
+          <script src="http://one-signal.github.io/emoji-picker/lib/js/tether.min.js"></script>
+          <script src="http://one-signal.github.io/emoji-picker/lib/js/config.js"></script>
+          <script src="http://one-signal.github.io/emoji-picker/lib/js/util.js"></script>
+          <script src="http://one-signal.github.io/emoji-picker/lib/js/jquery.emojiarea.js"></script>
+          <script src="http://one-signal.github.io/emoji-picker/lib/js/emoji-picker.js"></script>
+           <script>
+                $(function() {
+                  // Initializes and creates emoji set from sprite sheet
+                  window.emojiPicker = new EmojiPicker({
+                    emojiable_selector: '[data-emojiable=true]',
+                    assetsPath: 'http://one-signal.github.io/emoji-picker/lib/img/',
+                    popupButtonClasses: 'fa fa-smile-o'
+                  });
+                  // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+                  // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+                  // It can be called as many times as necessary; previously converted input fields will not be converted again
+                  window.emojiPicker.discover();
+                });
+              </script>
         {{#if isDev}}
             <script src="/questPage.js" type="text/javascript"></script>
         {{else}}
             <script src="//kafkatist.surge.sh/questPage.js" type="text/javascript"></script>
+
         {{/if}}
     {{/content}}
 {{/extend}}
