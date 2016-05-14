@@ -1,0 +1,170 @@
+.navbar {
+    padding: 0px 10px;
+    margin-bottom: 0;
+}
+.navbar-collapse,
+.dropdown-menu {
+    font-size: 18px;
+}
+.personInfo-wrap {
+    margin: auto;
+    background: url(http://res.cloudinary.com/kafkatist/image/upload/v1463043768/2_ocdokj.jpg);
+    background-size: cover;
+    background-position: right center;
+    min-height: 200px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+}
+.personInfo {
+    background-color: rgba(18, 143, 118, .7);
+    border-radius: 10px;
+    padding: 1.5vh;
+    width: 50%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #fff;
+}
+.data {
+    width: 72%;
+}
+.avatar {
+    width: 28%;
+    overflow: hidden;
+}
+.name {
+    font-size: 3vw;
+    text-align: center;
+}
+.from {
+    font-size: 2vw;
+    text-align: center;
+}
+.avatar > img {
+    width: 100%;
+    margin: auto;
+    border-radius: 10px;
+}
+.descHide {
+    display: none;
+}
+#map {
+    width: 100%;
+    height: 300px;
+}
+.info {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    padding: 30px;
+}
+.descAvatar {
+    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+    background-size: cover;
+    background-position: center center;
+}
+.quests {
+    width: 70%;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, .5);
+    border-radius: 10px;
+    margin-left: 20px;
+}
+.quest__description {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px dotted #aaa;
+}
+.quest__description__photo {
+    width: 25%;
+    padding: 10px;
+}
+.quest__description__photo > img {
+    width: 100%;
+    border-radius: 10px;
+}
+.quest__description__text {
+    width: 75%;
+    padding: 10px;
+    font-size: 20px;
+}
+a {
+    color: #000;
+}
+a:hover {
+    text-decoration: none;
+    color: #128f76;
+}
+.photos {
+    padding: 20px;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 20px;
+    padding-top: 0;
+}
+.nav-tabs > li {
+    font-size: 20px;
+}
+
+@media screen and (max-width: 570px) {
+    .nav-tabs > li {
+        float: none;
+    }
+}
+
+@media screen and (min-width: 700px) and (max-width: 800px) {
+    .descAvatar {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media screen and (max-width: 700px){
+    .personInfo {
+        width: 80%;
+    }
+    .name {
+        font-size: 4vw;
+    }
+    .from {
+        font-size: 3vw;
+    }
+    .descHide {
+        display: block;
+    }
+    .descAvatar {
+        display: none;
+    }
+    .info {
+        padding: 10px;
+    }
+    .quests {
+        width: 100%;
+        margin: 10px;
+    }                
+}
+
+@media screen and (max-width: 500px) {
+    .quest__description {
+        flex-direction: column;
+    }
+    .quest__description__photo {
+        width: 100%;
+    }
+    .quest__description__text {
+        font-size: 15px;
+        text-align: center;
+        width: 100%;
+    }
+    .swiper-container {
+        height: 200px;
+    }
+    .photos {
+        width: 100%;
+    }
+}

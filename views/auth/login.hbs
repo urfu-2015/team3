@@ -16,25 +16,26 @@
                 <form action="/login" method="post">
                     <div class="form-group">
                         <label>Введите адрес электронной почты:</label>
-                        <input type="text" class="form-control" name="login">
+                        <input type="text" class="form-control" name="login" required
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
                     </div>
                     <div class="form-group">
                         <label>Введите пароль:</label>
-                        <input type="password" class="form-control" name="password">
+                        <input type="password" class="form-control" name="password" required>
                     </div>
                     <button type="submit" class="btn btn-success"> Войти</button>
                 </form>
                 <div class="form-group">
-                    <a href="/auth/facebook" class="btn btn-primary btn-lg">
+                    <a href="/auth/facebook" class="btn btn-primary">
                         <span class="fa fa-facebook"></span>
                     </a>
-                    <a href="/auth/vkontakte" class="btn btn-primary btn-lg">
+                    <a href="/auth/vkontakte" class="btn btn-primary">
                         <span class="fa fa-vk"></span>
                     </a>
-                    <a href="/auth/twitter" class="btn btn-info btn-lg">
+                    <a href="/auth/twitter" class="btn btn-info">
                         <span class="fa fa-twitter"></span>
                     </a>
-                    <a href="/auth/google" class="btn btn-danger btn-lg">
+                    <a href="/auth/google" class="btn btn-danger">
                         <span class="fa fa-google-plus"></span>
                     </a>
                 </div>

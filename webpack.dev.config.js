@@ -13,7 +13,8 @@ module.exports = {
         slider: './partials/slider.js',
         addQuest: './quest/addQuest.js',
         questPage: './quest/questPage.js',
-        authForm: './auth/authForm.js'
+        authForm: './auth/authForm.js',
+        profile: './profile/profile.js'
     },
     devtool: 'source-map',
     output: {
