@@ -33,9 +33,9 @@ $("#quest-tags").autocomplete({
         if (values.indexOf(ui.item.value) === -1) {
             var lastSpaceIndex = values.lastIndexOf(' ');
             if (lastSpaceIndex === -1) {
-                $("#quest-tags").val(ui.item.value);
+                $("#quest-tags").val(ui.item.value + ', ');
             } else {
-                values = values.substring(0, lastSpaceIndex) + ', ' + ui.item.value;
+                values = values.substring(0, lastSpaceIndex + 1) + ui.item.value + ', ';
                 $("#quest-tags").val(values);
             }
         }

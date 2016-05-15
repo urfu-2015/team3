@@ -64,10 +64,10 @@ function isMatch(city, data) {
 
 function getAllQuests(name, mainCb, tag) {
     var cb = function (quests) {
-        if (tag) {
+        if (tag && tag !== 'default') {
             quests = quests.filter(function (quest) {
                 return quest.tags.some(function (elem) {
-                    return elem.name.indexOf(tag) !== -1;
+                    return elem.indexOf(tag) !== -1;
                 });
             });
         }

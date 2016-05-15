@@ -1,21 +1,15 @@
-// const handlebars = require('hbs').handlebars;
-
-// $('#search-quests').on('input', function () {
-//     $.ajax({
-//         type: "GET",
-//         url: "/quests",
-//         data: {word: this.value},
-//         success: function (data) {
-//             console.log('success');
-//         }
-//     });
-// });
-
-// function updateDocument(data) {
-//     var source = $(".container-fluid").html();
-//     var template = handlebars.compile(source);
-//     var container = document.querySelector('.container-fluid');
-//     container.innerHTML = template(Object.assign({
-//         quests: data
-//     }, {}));
-// }
+$('#search-button').click(function () {
+    var searchField = document.getElementById('search-input');
+    var value = searchField.value ? searchField.value : 'default';
+    $.ajax({
+        type: "GET",
+        url: "/quests",
+        data: {
+            word: value
+        },
+        success: function (data) {
+            var container = document.querySelector('.container-fluid');
+            container.innerHTML = data;
+        }
+    });
+});

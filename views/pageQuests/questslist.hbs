@@ -7,18 +7,14 @@
         {{/if}}
     {{/content}}
     {{#content "content"}}
-        <nav class="navbar navbar-default navbar-search">
-            <form class="navbar-form" role="search">
-                <div class="input-group col-xs-12  col-sm-5 input-group-md">
-                    <input type="text" id="search-quests" class="form-control" placeholder="Введите тэг" name="q">
-                    <div class="input-group-btn">
-                        <button class="btn" type="submit">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </nav>
+        <div class="search-quests">
+            <div class="input-group col-xs-12 col-sm-5">
+                <input type="text" class="form-control" placeholder="Введите название" id="search-input">
+                <button class="btn" id="search-button">
+                    <i class="glyphicon glyphicon-search"></i>
+                </button>
+            </div>
+        </div>
         <main class="container-fluid">
             {{#if quests.length}}
                 {{#each quests}}

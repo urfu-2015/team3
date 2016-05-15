@@ -1,0 +1,18 @@
+{{#if quests.length}}
+    {{#each quests}}
+        <figure style="background-image:url({{titleImage}});" class="col-xs-12 col-sm-12 col-md-6 col-lg-6 quest medium">
+            <div class="blur"></div>
+            <h3 class="quest-name">{{displayName}}</h3>
+            <figcaption class="addition">
+                <ul class="icons">
+                    <li class="icon"><i class="fa fa-2x fa-thumbs-o-up fa-fw"></i>5</li>
+                    <li class="icon"><i class="fa fa-2x fa-thumbs-o-down fa-fw"></i>0</li>
+                    <li class="icon"><i class="fa fa-2x fa-comments-o fa-fw"></i>15</li>
+                </ul>
+                <p class="description description__medium box after">{{description}}</p>
+            </figcaption>
+        </figure>
+    {{/each}}
+{{^}}
+    <p>Quests not found!</p>
+{{/if}}

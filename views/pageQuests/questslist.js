@@ -11,6 +11,6 @@ $(document).ready(function () {
     if (questsChildren.length % 2 === 1) {
         var last = questsChildren[questsChildren.length - 1];
         last.style.textAlign = "center";
-        last.style.marginLeft = "25%";
+        last.style.display = "inline-block";
     }
 });
