@@ -14,9 +14,14 @@
                 <h1 id="questName" data-slug="{{slug}}">{{displayName}}</h1>
                 <p class="city">г. {{cityName}}</p>
                 <p class="icons">
-                    <i class="fa fa-2x fa-heart" aria-hidden="true"></i> {{rating.likes}}
-                    <i class="fa fa-2x fa-comments-o fa-fw"></i>
-                    <i class="fa fa-2x fa-thumbs-down" aria-hidden="true"></i> {{rating.dislikes}}
+                    <i class="fa fa-2x fa-heart {{likesClass}}" aria-hidden="true"
+                    id="likes"></i> 
+                    <span id="likesCount">{{rating.likes.length}}</span>
+                    <i class="fa fa-2x fa-thumbs-down {{dislikesClass}}" aria-hidden="true"
+                    id="dislikes"></i>
+                    <span id="dislikesCount">{{rating.dislikes.length}}</span>
+                    <i class="fa fa-2x fa-comments-o fa-fw"></i> 
+                    <span id="commentsCount"> {{questComments.length}}</span>
                 </p>
                 {{#unless isNotLogged}}
                 <p class="addToWishList">

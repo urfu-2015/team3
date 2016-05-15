@@ -25,8 +25,16 @@ class User {
             'gender'
         ];
     }
-
-    static findUser(query) {
+    /* eslint-disable no-unused-vars*/
+    static findUser(query, setOfFields) {
+        var options = {
+            database: dbName,
+            collectionName: collection,
+            query: query
+        };
+        if (arguments.length === 2) {
+            options.setOfFields = JSON.stringify(arguments[1]);
+        }
         var warningMessage = 'Такой пользователь не найден';
         var callback = (resolve, reject, result, response) => {
             if (!result.length) {
@@ -36,7 +44,7 @@ class User {
             response.user = result[0];
             resolve(response);
         };
-        return getRequest(query, warningMessage, callback);
+        return getRequest(options, warningMessage, callback);
     }
 
     saveSocialUser() {
@@ -44,7 +52,11 @@ class User {
     }
 
     static checkPassword(login, password) {
-        var query = {login: login};
+        var options = {
+            database: dbName,
+            collectionName: collection,
+            query: JSON.stringify({login: login})
+        };
         var warningMessage = 'Такой пользователь не найден';
         var callback = (resolve, reject, result, response) => {
             if (!result.length) {
@@ -60,10 +72,15 @@ class User {
                 resolve(response);
             }
         };
-        return getRequest(JSON.stringify(query), warningMessage, callback);
+        return getRequest(options, warningMessage, callback);
     }
 
     static checkToken(query) {
+        var options = {
+            database: dbName,
+            collectionName: collection,
+            query: query
+        };
         var warningMessage = 'Токен сброса пароля неактивен. Попробуйте сбросить пароль ещё раз.';
         var callback = (resolve, reject, result, response) => {
             if (!result.length) {
@@ -73,7 +90,7 @@ class User {
             response.user = result[0];
             resolve(response);
         };
-        return getRequest(query, warningMessage, callback);
+        return getRequest(options, warningMessage, callback);
     }
 
     static updateUserInfo(updatedUser) {
@@ -106,6 +123,11 @@ class User {
 
     save() {
         var user = getUserObj(this);
+        var options = {
+            database: dbName,
+            collectionName: collection,
+            query: JSON.stringify({login: user.login})
+        };
         var warningMessage = 'Такой логин уже существует';
         var callback = (resolve, reject, result, response) => {
             if (result.length) {
@@ -123,7 +145,7 @@ class User {
                 });
             }
         };
-        return getRequest(JSON.stringify({login: user.login}), warningMessage, callback);
+        return getRequest(options, warningMessage, callback);
     }
 }
 
@@ -165,19 +187,10 @@ function getUserObj(obj) {
     };
 }
 
-function getRequest(query, warningMessage, colName, callback) {
-    var collectName = colName;
-    if (arguments.length === 3) {
-        callback = arguments[2];
-        collectName = collection;
-    }
+function getRequest(options, warningMessage, callback) {
     var response = {message: '', user: {}};
     return new Promise((resolve, reject) => {
-        mLab.listDocuments({
-            database: dbName,
-            collectionName: collectName,
-            query: query
-        }, (err, result) => {
+        mLab.listDocuments(options, (err, result) => {
             if (err) {
                 reject(err);
             }

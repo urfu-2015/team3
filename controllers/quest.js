@@ -296,7 +296,7 @@ exports.getQuest = (req, res, next) => {
                 if (err) {
                     done(err, null);
                 } else {
-                    result.length ? done(null, result[0]) : res.redirect('/search');
+                    result.length ? done(null, result[0]) : res.sendStatus(400);
                 }
             });
         },
@@ -354,9 +354,7 @@ exports.getQuest = (req, res, next) => {
             }
 
             quest.currentUserID = req.user;
-
-            console.log(quest);
-
+            quest = checkLikes(quest, req.user);
             var templ = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
             res.send(templ(Object.assign(quest, req.commonData)));
             done(null);
@@ -411,7 +409,7 @@ exports.addPhotoComment = (req, res, next) => {
     async.waterfall([
         done => {
             userModel
-                .findUser(JSON.stringify({_id: {$oid: userID}}))
+                .findUser(JSON.stringify({_id: {$oid: userID}}), {nickname: 1, avatar: 1})
                 .then(result => {
                     var author = result.user.nickname;
                     var authorPhoto = result.user.avatar;
@@ -453,7 +451,7 @@ exports.addQuestComment = (req, res, next) => {
     async.waterfall([
         done => {
             userModel
-                .findUser(JSON.stringify({_id: {$oid: userID}}))
+                .findUser(JSON.stringify({_id: {$oid: userID}}), {nickname: 1, avatar: 1})
                 .then(result => {
                     var author = result.user.nickname;
                     var authorPhoto = result.user.avatar;
@@ -486,6 +484,68 @@ exports.addQuestComment = (req, res, next) => {
         return err ? next(err) : next();
     });
 };
+
+exports.likeAction = (req, res, next) => {
+    var slug = req.body.slug;
+    var action = req.body.action;
+    var user = req.user;
+    async.waterfall([
+        done => {
+            if (!user) {
+                // отправлять сообщение!
+                return res.status(200).send({});
+            }
+            questModel.getQuests({slug: slug}, (err, result) => {
+                if (err) {
+                    done(err, null);
+                } else {
+                    result.length ? done(null, result[0]) : res.redirect('/search');
+                }
+            });
+        },
+        (quest, done) => {
+            quest = action === 'like' ? likeHandler(quest, user) : dislikeHandler(quest, user);
+            questModel
+                .updateQuests(quest)
+                .then(result => {
+                    return res.status(200).send(result);
+                })
+                .catch(err => {
+                    next(err);
+                });
+        }
+    ], err => {
+        err ? next(err) : next();
+    });
+};
+
+function likeHandler(quest, userID) {
+    var likeIndex = quest.rating.likes.indexOf(userID);
+    var dislikeIndex = quest.rating.dislikes.indexOf(userID);
+    if (dislikeIndex > -1) {
+        quest.rating.dislikes.splice(dislikeIndex, 1);
+    }
+    if (likeIndex > -1) {
+        quest.rating.likes.splice(likeIndex, 1);
+    } else {
+        quest.rating.likes.push(userID);
+    }
+    return quest;
+}
+
+function dislikeHandler(quest, userID) {
+    var likeIndex = quest.rating.likes.indexOf(userID);
+    var dislikeIndex = quest.rating.dislikes.indexOf(userID);
+    if (likeIndex > -1) {
+        quest.rating.likes.splice(dislikeIndex, 1);
+    }
+    if (dislikeIndex > -1) {
+        quest.rating.dislikes.splice(likeIndex, 1);
+    } else {
+        quest.rating.dislikes.push(userID);
+    }
+    return quest;
+}
 
 function getSpecPhotoUrl(url) {
     var urlParts = url.split('/');
@@ -529,6 +589,16 @@ function divideComments(allComments, quest, users) {
             quest.questComments.push(comment);
         }
     });
+    return quest;
+}
+
+function checkLikes(quest, id) {
+    if (quest.rating.likes.indexOf(id) > -1) {
+        quest.likesClass = 'isChecked';
+    }
+    if (quest.rating.dislikes.indexOf(id) > -1) {
+        quest.dislikesClass = 'isChecked';
+    }
     return quest;
 }
 

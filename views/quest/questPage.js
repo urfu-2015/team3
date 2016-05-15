@@ -53,6 +53,49 @@ function uploadFile(idPhoto) {
 
 var questCommentsBox = document.getElementById('questCommentsBox');
 
+var likeBtn = document.getElementById('likes');
+var dislikeBtn = document.getElementById('dislikes');
+var likesCount = document.getElementById('likesCount');
+var dislikesCount = document.getElementById('dislikesCount');
+var callback = function (data) {
+    if (data.rating) {
+        likesCount.textContent = data.rating.likes.length;
+        dislikesCount.textContent = data.rating.dislikes.length;
+        likeBtn.classList.toggle('isChecked');
+        dislikeBtn.classList.toggle('isChecked');
+    }
+};
+
+likeBtn.addEventListener('click', function () {
+    likeRequest('like', callback);
+});
+
+dislikeBtn.addEventListener('click', function () {
+    likeRequest('dislike', callback);
+});
+
+function likeRequest(action, callback) {
+    $.ajax({
+        url: '/likeQuest',
+        dataType: 'json',
+        type: 'PUT',
+        data: {slug, action},
+        success: function (result) {
+            callback(result);
+        },
+        error: function (xhr, status, err) {
+            console.error(err);
+        }
+    });
+}
+
+var foundBtn = document.querySelector('.foundBtn');
+[].slice.call(foundBtn).forEach(btn => {
+    btn.addEventListener('click', function () {
+
+    });
+});
+
 var wishBtn = document.getElementById('wish');
 if (wishBtn) {
     wishBtn.addEventListener('click', function () {
@@ -76,41 +119,53 @@ if (addQuestCommentBtn) {
 }
 
 function addPhotoComment(commentInfo) {
-    var url = commentInfo.getAttribute('data-url');
-    var commentUrl = commentInfo.getAttribute('data-mc');
-    var text = commentInfo.value;
-
-    var xhr = new XMLHttpRequest();
-    var params = 'slug=' + encodeURIComponent(slug) + '&url=' + encodeURIComponent(url) +
-        '&text=' + encodeURIComponent(text);
-    xhr.open('PUT', '/addPhotoComment', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send(params);
-    xhr.onreadystatechange = () => {
-        if (xhr.status === 200 && xhr.readyState === 4) {
-            var id = "cb_" + commentUrl;
-            var commentsBox = document.getElementById(id);
-            commentsBox.appendChild(createPhotoComment(JSON.parse(xhr.responseText)));
-            commentInfo.value = '';
-        }
+    var data = {
+        slug: slug,
+        url: commentInfo.getAttribute('data-url'),
+        commentUrl: commentInfo.getAttribute('data-mc'),
+        text: commentInfo.value
     };
+    $.ajax({
+        url: '/addPhotoComment',
+        dataType: 'json',
+        type: 'PUT',
+        data: data,
+        success: function (result) {
+            var id = "cb_" + data.commentUrl;
+            var commentsBox = document.getElementById(id);
+            commentsBox.appendChild(createPhotoComment(result));
+            commentInfo.value = '';
+        },
+        error: function (xhr, status, err) {
+            console.error(err);
+        }
+    });
 }
 
 function addQuestComment(commentText) {
-    var text = commentText.value;
-    var xhr = new XMLHttpRequest();
-    var params = 'slug=' + encodeURIComponent(slug) + '&text=' + encodeURIComponent(text);
-    xhr.open('PUT', '/addQuestComment', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send(params);
-    xhr.onreadystatechange = () => {
-        if (xhr.status === 200 && xhr.readyState === 4) {
-            console.log(xhr.status);
-            questCommentsBox.appendChild(createQuestComment(JSON.parse(xhr.responseText)));
-            commentText.value = '';
-            document.getElementById('noComments').style.display = 'none';
-        }
+    var data = {
+        slug: slug,
+        text: commentText.value
     };
+    $.ajax({
+        url: '/addQuestComment',
+        dataType: 'json',
+        type: 'PUT',
+        data: data,
+        success: function (result) {
+            questCommentsBox.appendChild(createQuestComment(result));
+            commentText.value = '';
+            var noCom = document.getElementById('noComments');
+            if (noCom) {
+                noCom.style.display = 'none';
+            }
+            var commentsCount = document.getElementById('commentsCount');
+            commentsCount.textContent = parseInt(commentsCount.textContent, 10) + 1;
+        },
+        error: function (xhr, status, err) {
+            console.error(err);
+        }
+    });
 }
 
 function createPhotoComment(data) {
@@ -180,14 +235,13 @@ function createQuestComment(data) {
 }
 
 function addToWishList(slug) {
-    var xhr = new XMLHttpRequest();
-    var params = 'slug=' + encodeURIComponent(slug);
-    xhr.open('POST', '/addToWishList', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send(params);
-    xhr.onreadystatechange = () => {
-        if (xhr.status === 200 && xhr.readyState === 4) {
-            wishBtn.textContent = JSON.parse(xhr.responseText).phrase;
+    $.ajax({
+        url: '/addToWishList',
+        dataType: 'json',
+        type: 'POST',
+        data: {slug: slug},
+        success: function (result) {
+            wishBtn.textContent = result.phrase;
             if (wishBtn.classList.contains('btn-success')) {
                 wishBtn.classList.remove('btn-success');
                 wishBtn.classList.add('btn-danger');
@@ -195,6 +249,9 @@ function addToWishList(slug) {
                 wishBtn.classList.remove('btn-danger');
                 wishBtn.classList.add('btn-success');
             }
+        },
+        error: function (xhr, status, err) {
+            console.error(err);
         }
-    };
+    });
 }

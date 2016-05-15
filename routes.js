@@ -98,6 +98,8 @@ module.exports = function (app, passport) {
 
     app.put('/addQuestComment', quest.addQuestComment);
 
+    app.put('/likeQuest', quest.likeAction);
+
     app.post('/sendUserPhoto', quest.loadUserPhoto, quest.sendUserPhoto);
 
     app.get('/quests', setLoggedFlag, pages.getQuests);

@@ -148,25 +148,18 @@ class quest {
         return opt.lowercase ? s.toLowerCase() : s;
     }
 
-    static updateQuests(data, query, callback) {
-        // проверяем что не хотят добавить лишнее поле
-        var error = false;
-        for (var key in data) {
-            if (this.fields.indexOf(key) == -1) {
-                callback(true, []);
-            }
-        }
-        var options = {
-            database: dbName,
-            collectionName: 'quests',
-            data: data,
-            query: JSON.stringify(query)
-        };
-        if (!error) {
-            mLab.updateDocuments(options, (err, result) => {
-                callback(err, result);
+    static updateQuests(quest) {
+        return new Promise((resolve, reject) => {
+            var id = quest._id.$oid;
+            mLab.updateDocument({
+                database: dbName,
+                collectionName: 'quests',
+                id: id,
+                updateObject: quest
+            }, (err, result) => {
+                err ? reject(err) : resolve(result);
             });
-        }
+        });
     }
 
     static getQuests(query, callback) {
@@ -186,7 +179,10 @@ class quest {
             mLab.listDocuments({
                 database: dbName,
                 collectionName: 'quests',
-                query: JSON.stringify(query)
+                query: JSON.stringify(query),
+                setOfFields: JSON.stringify(
+                    {slug: 1, displayName: 1, titleImage: 1, description: 1}
+                )
             }, (err, result) => {
                 err ? reject(err) : resolve(result);
             });
