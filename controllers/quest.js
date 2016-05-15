@@ -33,18 +33,14 @@ exports.addQuest = (req, res) => {
 
 exports.loadPhoto = upload.fields(fields);
 
-exports.sendUserPhoto = (req, res, next) => {
-    console.log(req.files)
-    console.log(req.files.fileToUpload);
+exports.sendUserPhoto = (req, res) => {
+    console.log(req.files.fileToUpload[0]);
     res.send("OK");
 };
-
 
 exports.loadUserPhoto = upload.fields([{name: 'fileToUpload', maxCount: 1}]);
 
 exports.createQuest = (req, res, next) => {
-    // console.log(req.body);
-    // console.log(req.files);
     let promise = Promise.resolve();
     if (req.files.preview) {
         const preview = req.files.preview[0];

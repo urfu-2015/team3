@@ -1,10 +1,10 @@
 require('./questPage.styl');
 
-$(function() {
-     $("input:file").change(function (){
+$(function () {
+    $("input:file").change(function () {
         uploadFile();
-     });
-  });
+    });
+});
 
 function uploadFile() {
     var blobFile = $('#my-file-selector')[0].files[0];
