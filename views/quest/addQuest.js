@@ -7,9 +7,8 @@ const Swiper = require('swiper');
 const swiper = new Swiper('.swiper-container', {
     pagination: '.swiper-pagination',
     slidesPerView: 'auto',
-    centeredSlides: true,
     paginationClickable: true,
-    grabCursor: true,
+    // grabCursor: true,
     keyboardControl: true,
     mousewheelControl: true,
     spaceBetween: 20
@@ -23,18 +22,25 @@ btnBack.addEventListener('click', () => {
 
 const previewPhotoInput = form.preview;
 previewPhotoInput.addEventListener('change', () => {
-    const previewPhoto = previewPhotoInput.files[0];
-    const reader = new FileReader();
-    const uploader = document.querySelector('.upload-photo');
-    reader.addEventListener('load', function () {
-        $(uploader).css('background-image',
-            `url('${reader.result.replace(/(\r\n|\n|\r)/gm, '')}')`);
+    const photo = previewPhotoInput.files[0];
+    loadPhotoPreview(photo, showPreview);
+    function showPreview(base64) {
+        const uploader = document.querySelector('.upload-photo');
+        $(uploader).css('background-image', `url('${base64}')`);
         $(uploader).css('background-size', 'cover');
         const icon = document.querySelector('.quest-preview-photo .upload-photo-icon');
         $(icon).css('opacity', '0');
-    });
-    reader.readAsDataURL(previewPhoto);
+    }
 });
+
+function loadPhotoPreview(photo, callback, args) {
+    const reader = new FileReader();
+    reader.addEventListener('load', function () {
+        const base64 = reader.result.replace(/(\r\n|\n|\r)/gm, '');
+        callback(base64, args);
+    });
+    reader.readAsDataURL(photo);
+}
 
 const photosInput = form.photos;
 let photosFileList = [];
@@ -49,84 +55,119 @@ let photosFileList = [];
  */
 
 photosInput.addEventListener('change', () => {
-    $('.swiper').css('display', 'block');
-    $('.quest-photos').css('margin-bottom', '0');
-
+    showSwiperContainer();
     const photos = photosInput.files;
 
     for (let i = 0; i < photos.length; i++) {
         const photo = photos[i];
-        const id = Date.now();
-        photosFileList.push({photo, id, title: undefined, geo: undefined, hint: undefined});
-
         if (photo.type.match('image')) {
-            const reader = new FileReader();
-            reader.addEventListener('load', function () {
-                const url = reader.result.replace(/(\r\n|\n|\r)/gm, '');
-                swiper.appendSlide(
-                    `<div class="swiper-slide">
+            const id = Date.now();
+            photosFileList.push({photo, id, title: '', geo: undefined, hint: ''});
+            const slideNumber = swiper.slides.length;
+            loadPhotoPreview(photo, addSlide, {slideNumber, id});
+        }
+    }
+    function addSlide(base64, args) {
+        swiper.appendSlide(
+            `<div class="swiper-slide" id="${args.slideNumber}">
                         <div class="img-rounded swiper-quest-image"
-                        style="background: url(${url}) 100% 100%; background-size: cover;">
-                            <a class="openmodal btn btn-default editBtn" href="#${id}"
+                        style="background: url(${base64}) 100% 100%; background-size: cover;">
+                            <a class="openmodal btn btn-default editBtn" href="#${args.id}"
                             data-toggle="modal">
                                 <i class="fa fa-lg fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-default deleteBtn" href="#" id="delete_${id}">
+                            <button class="btn btn-default deleteBtn" id="delete_${args.id}">
                                 <i class="fa fa-lg fa-trash-o" aria-hidden="true"></i>
-                            </a>
+                            </button>
                         </div>
                     </div>`);
-            });
-            var modal = getModal(id);
-            document.querySelector('body').appendChild(modal);
-            initMap(id);
-            reader.readAsDataURL(photo);
-            /* deletePhotoHandler(id);*/
-        }
+        const modal = getModal(args.id);
+        document.querySelector('body').appendChild(modal);
+        initMap(args.id);
+        deletePhotoHandler(args.id);
     }
-    // console.log(photosFileList);
 });
 
-photosInput.addEventListener('submit', function (event) {
-    event.preventDefault();
-    console.log('file input');
-});
+function createHtml(htmlStr) {
+    let frag = document.createDocumentFragment();
+    let temp = document.createElement('div');
+    temp.innerHTML = htmlStr;
+    while (temp.firstChild) {
+        frag.appendChild(temp.firstChild);
+    }
+    return frag;
+}
+
+function getErrorMsg(strongMsg, otherMsg) {
+    return `<div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>${strongMsg}</strong> ${otherMsg}
+            </div>`;
+}
 
 form.addEventListener('submit', function (event) {
     event.preventDefault();
     var formData = new FormData(form);
 
-    photosFileList = photosFileList.map(obj => obj.photo);
-    /* photosFileList = photosFileList.map(obj => {
-        return {
-            photo: obj.photo,
-            title: obj.title,
-            geo: obj.geo,
-            hint: obj.hint
-        }
-    });*/
     const photosLength = photosFileList.length;
+    if (photosLength > 30) {
+        const errorMsg = createHtml(getErrorMsg('Oops!', 'Выберите не более 30 квестовых фото'));
+        document.body.insertBefore(errorMsg, form);
+        return;
+    } else if (photosLength < 2) {
+        const errorMsg = createHtml(getErrorMsg('Oops!', 'Выберите не менее 2 квестовых фото'));
+        document.body.insertBefore(errorMsg, form);
+        return;
+    }
+
+    let photoAttributes = [];
+
+    for (let i = 0; i < photosLength; i++) {
+        const photoObj = photosFileList[i];
+        if (photoObj.geo) {
+            photoAttributes.push({
+                title: photoObj.title,
+                geolocation: photoObj.geo,
+                hint: photoObj.hint
+            });
+        } else {
+            const errorMsg = createHtml(getErrorMsg('Oops!', 'Укажите геолокацию для всех фото'));
+            document.body.insertBefore(errorMsg, form);
+            return;
+        }
+    }
+
+    // console.log('attributes:');
+    // console.log(photoAttributes);
+
+    const photoFiles = photosFileList.map(obj => obj.photo);
+    // console.log('photos:');
+    // console.log(photoFiles);
+
     formData.set('photos-length', photosLength);
 
-    const remainingLength = 100 - photosLength;
+    const remainingLength = 30 - photosLength;
     let photos = new Array(remainingLength);
-    photos.unshift(...photosFileList);
+    photos.unshift(...photoFiles);
     const superFile = new File([""], "filename");
 
     photos.fill(superFile, photosLength);
+    // console.log(photos);
     photos.forEach((photo, index) => {
         const fieldName = 'photo' + index.toString();
-        // console.log(fieldName);
         formData.set(fieldName, photo);
     });
+    formData.set('photoAttributes', JSON.stringify(photoAttributes));
     formData.delete('photos');
-    console.log(formData);
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/addQuest", true);
     xhr.send(formData);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
+            // const html = document.createElement('html');
+            // html.innerHTML = xhr.responseText;
+
             document.querySelector("html").innerHTML = xhr.responseText;
         }
     };
@@ -136,12 +177,31 @@ function fileApiSupported() {
     return window.Blob && window.File && window.FileList && window.FileReader;
 }
 
+function showSwiperContainer() {
+    $('.swiper').css('display', 'block');
+    $('.quest-photos').css('margin-bottom', '0');
+}
+
+function hideSwiperContainer() {
+    $('.swiper').css('display', 'none');
+    $('.quest-photos').css('margin-bottom', '20px');
+}
+
 function deletePhotoHandler(id) {
-    var deleteBtn = document.getElementById('delete_' + id);
+    const btnId = 'delete_' + id;
+    var deleteBtn = document.getElementById(btnId);
     deleteBtn.addEventListener('click', function (event) {
-        photosFileList = photosFileList.filter(obj => {
-            return obj.id !== id;
-        });
+        if (document.activeElement === deleteBtn) {
+            photosFileList = photosFileList.filter(obj => obj.id !== id);
+
+            const slideId = event.target.parentNode.parentNode.getAttribute('id');
+            swiper.removeSlide(slideId);
+            // console.log('remove');
+            // console.log(photosFileList);
+            if (swiper.slides.length === 0) {
+                hideSwiperContainer();
+            }
+        }
     });
 }
 
