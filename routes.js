@@ -77,10 +77,10 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    // app.get('/addQuest', isLoggedIn, quest.addQuest);
-    app.get('/addQuest', quest.addQuest);
+    app.get('/addQuest', canCreateQuest, quest.addQuest);
 
-    app.post('/addQuest', quest.loadPhoto, quest.createQuest, quest.questPage);
+    app.post('/addQuest', canCreateQuest, quest.loadPhoto, quest.createQuest, quest.questPage,
+        quest.addToMyQuests);
 
     app.get('/quest/:slug', setLoggedFlag, quest.getQuest);
 
@@ -109,6 +109,14 @@ function isLoggedIn(req, res, next) {
         res.redirect('/');
     }
     next();
+}
+
+function canCreateQuest(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.redirect('/');
+    }
 }
 
 function setLoggedFlag(req, res, next) {

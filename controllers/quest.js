@@ -21,7 +21,7 @@ const Datauri = require('datauri');
 const path = require('path');
 
 let fields = [{name: 'preview', maxCount: 1}];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 30; i++) {
     const fieldName = 'photo' + i.toString();
     fields.push({name: fieldName, maxCount: 1});
 }
@@ -37,6 +37,8 @@ exports.createQuest = (req, res, next) => {
     // console.log(req.body);
     // console.log(req.files);
     let promise = Promise.resolve();
+    const photoAttributes = JSON.parse(req.body.photoAttributes);
+    // console.log(photoAttributes);
     if (req.files.preview) {
         const preview = req.files.preview[0];
         const dataUri = new Datauri();
@@ -55,9 +57,13 @@ exports.createQuest = (req, res, next) => {
             const photosLength = req.body['photos-length'];
             let photos = [];
             let reqPhotos = [];
+            // console.log('photosLength:');
+            // console.log(photosLength);
             if (photosLength > 0) {
                 for (let i = 0; i < photosLength; i++) {
                     const fieldName = 'photo' + i.toString();
+                    // console.log(fieldName);
+                    // console.log(req.files[fieldName][0]);
                     reqPhotos.push(req.files[fieldName][0]);
                 }
             }
@@ -66,13 +72,15 @@ exports.createQuest = (req, res, next) => {
                 photos = reqPhotos.map((photo, index) => {
                     const dataUri = new Datauri();
                     dataUri.format(path.extname(photo.originalname).toString(), photo.buffer);
-                    const photoAlt = 'Фото ' + index;
+                    // const photoAlt = 'Фото ' + index;
                     /* eslint-disable no-unused-vars*/
                     return new Promise((resolve, reject) => {
                         cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
                             resolve({
                                 url: imageURL,
-                                alt: photoAlt
+                                title: photoAttributes[index].title,
+                                geolocation: photoAttributes[index].geolocation,
+                                hint: photoAttributes[index].hint
                             });
                         });
                     });
@@ -81,9 +89,9 @@ exports.createQuest = (req, res, next) => {
 
             Promise.all(photos)
                 .then(photos => {
+                    // console.log(photos);
                     const tags = req.body['quest-tags'].split(', ').filter(tag => tag.length > 0);
                     const quest = new Quest({
-                        currentUserID: req.user,
                         displayName: req.body['quest-name'],
                         cityName: req.body['quest-city'],
                         author: req.user,
@@ -94,12 +102,20 @@ exports.createQuest = (req, res, next) => {
                         date: Date.now(),
                         photos
                     });
+
                     /* eslint-disable no-unused-vars*/
                     quest.save((err, message, result) => {
                         if (err) {
-                            console.error(err);
+                            console.log(message);
+                        } else {
+                            // console.log('slug1');
+                            // console.log(result.slug);
+                            req.slug = result.slug;
                         }
                     });
+                })
+                .then(() => {
+                    next();
                 })
                 .catch(err => {
                     console.error(err);
@@ -108,7 +124,6 @@ exports.createQuest = (req, res, next) => {
         .catch(err => {
             console.error(err);
         });
-    next();
     /*
      Добавить:
       - получение автора из данных авторизации
@@ -122,12 +137,52 @@ exports.createQuest = (req, res, next) => {
      */
 };
 
-exports.questPage = (req, res) => {
-    // заглушка пока нет страниц квестов
-    // она уже есть :)
-    var template = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
-    var data = {title: 'Страница квеста', currentUserID: req.user};
-    res.send(template(Object.assign(data, req.commonData)));
+exports.questPage = (req, res, next) => {
+    // var template = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
+    // var data = {title: 'Страница квеста', currentUserID: req.user};
+    // res.send(template(Object.assign(data, req.commonData)));
+    // console.log('slug2');
+    // console.log(req.slug);
+    if (req.slug) {
+        res.redirect('/quest/' + req.slug);
+    } else {
+        // ошибка?
+        res.redirect('/');
+    }
+    next();
+};
+
+exports.addToMyQuests = (req, res, next) => {
+    if (req.user && req.slug) {
+        var userID = req.user;
+        var slug = req.slug;
+        var query = {_id: {$oid: userID}};
+        async.waterfall([
+            done => {
+                userModel
+                    .findUser(JSON.stringify(query))
+                    .then(result => {
+                        done(null, result.user);
+                    })
+                    .catch(err => {
+                        done(err);
+                    });
+            },
+            (user, done) => {
+                user.myQuests.push(slug);
+                userModel
+                    .updateUserInfo(user)
+                    .then(updatedUser => {
+                        return res.status(200).send({});
+                    })
+                    .catch(err => {
+                        done(err);
+                    });
+            }
+        ], err => {
+            return err ? next(err) : next();
+        });
+    }
 };
 
 exports.getQuest = (req, res, next) => {
@@ -381,4 +436,3 @@ function getPhotoIndex(url, quest) {
     }
     return -1;
 }
-
