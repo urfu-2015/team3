@@ -160,17 +160,31 @@ form.addEventListener('submit', function (event) {
     formData.set('photoAttributes', JSON.stringify(photoAttributes));
     formData.delete('photos');
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/addQuest", true);
-    xhr.send(formData);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // const html = document.createElement('html');
-            // html.innerHTML = xhr.responseText;
-
-            document.querySelector("html").innerHTML = xhr.responseText;
+    $.ajax({
+        url: "/addQuest",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log(response);
+            document.querySelector("html").innerHTML = response;
+        },
+        error: function(jqXHR, textStatus, errorMessage) {
+            console.log(errorMessage); // Optional
         }
-    };
+    });
+    //var xhr = new XMLHttpRequest();
+    //xhr.open("POST", "/addQuest", true);
+    //xhr.send(formData);
+    //xhr.onreadystatechange = function () {
+    //    if (xhr.readyState === 4 && xhr.status === 200) {
+    //        // const html = document.createElement('html');
+    //        // html.innerHTML = xhr.responseText;
+    //
+    //        document.querySelector("html").innerHTML = xhr.responseText;
+    //    }
+    //};
 });
 
 function fileApiSupported() {
