@@ -42,10 +42,11 @@ exports.searchTags = (req, res) => {
 };
 
 exports.getQuests = (req, res) => {
+    var template;
     if (req.query.word) {
-        var template = handlebars.compile(fs.readFileSync('./views/pageQuests/part.hbs', 'utf8'));
+        template = handlebars.compile(fs.readFileSync('./views/pageQuests/part.hbs', 'utf8'));
     } else {
-        var template = handlebars.compile(fs.readFileSync('./views/pageQuests/questslist.hbs', 'utf8'));
+        template = handlebars.compile(fs.readFileSync('./views/pageQuests/questslist.hbs','utf8'));
     }
     var cb = function (quests) {
         res.send(template(Object.assign({
