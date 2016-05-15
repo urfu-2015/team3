@@ -1,5 +1,46 @@
 require('./questPage.styl');
 
+$(function() {
+     $("input:file").change(function (){
+        uploadFile();
+     });
+  });
+
+function uploadFile() {
+    var blobFile = $('#my-file-selector')[0].files[0];
+    console.log(blobFile);
+    var formData = new FormData();
+    formData.set("fileToUpload", blobFile);
+    console.log(formData);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/sendUserPhoto", true);
+    xhr.send(formData);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log(xhr.responseText);
+        }
+    };
+
+//     var fd = new FormData();
+//     fd.append("fileToUpload", blobFile);
+//     console.log(fd);
+
+//     $.ajax({
+//        url: "/sendUserPhoto",
+//        type: "POST",
+//        data: fd,
+//        processData: false,
+//        contentType: false,
+//        success: function(response) {
+//            // .. do something
+//            console.log(response);
+//        },
+//        error: function(jqXHR, textStatus, errorMessage) {
+//            console.log(errorMessage); // Optional
+//        }
+//     });
+}
+
 var slug = document.getElementById('questName').getAttribute('data-slug');
 var questCommentsBox = document.getElementById('questCommentsBox');
 

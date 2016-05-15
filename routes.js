@@ -96,6 +96,8 @@ module.exports = function (app, passport) {
 
     app.put('/addQuestComment', quest.addQuestComment);
 
+    app.post('/sendUserPhoto', quest.loadUserPhoto, quest.sendUserPhoto);
+
     app.all('*', pages.error404);
 
     app.use((err, req, res) => {
