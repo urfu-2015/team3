@@ -21,7 +21,6 @@ const cloudinary = require('../lib/cloudinary-images/cloudinary-loader');
 const Datauri = require('datauri');
 const path = require('path');
 
-
 let fields = [{name: 'preview', maxCount: 1}];
 for (let i = 0; i < 100; i++) {
     const fieldName = 'photo' + i.toString();
@@ -87,7 +86,7 @@ exports.sendUserPhoto = (req, res, next) => {
                                         .then(result => {
                                             res.send('good photo');
                                         })
-                                        .catch(err => {next(err);});
+                                        .catch(err => next(err));
                                 })
                                 .catch(err => next(err));
                         })
