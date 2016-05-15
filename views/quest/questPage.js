@@ -1,47 +1,67 @@
 require('./questPage.styl');
+var latitude;
+var longitude;
+var slug = document.getElementById('questName').getAttribute('data-slug');
+
+$(document).ready(function () {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+        });
+    } else {
+        // view card
+    }
+});
 
 $(function () {
-    $("input:file").change(function () {
-        uploadFile();
+    $("input[id$='_my-file-selector']").change(function () {
+        uploadFile(this.id.slice(0, -17));
     });
 });
 
-function uploadFile() {
-    var blobFile = $('#my-file-selector')[0].files[0];
+function uploadFile(idPhoto) {
+    var blobFile = $('#' + idPhoto + '_my-file-selector')[0].files[0];
     console.log(blobFile);
     var formData = new FormData();
+
     formData.set("fileToUpload", blobFile);
-    console.log(formData);
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/sendUserPhoto", true);
-    xhr.send(formData);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log(xhr.responseText);
+    formData.set("id", idPhoto);
+    formData.set("latitude", latitude);
+    formData.set("longitude", longitude);
+    formData.set("slug", slug);
+
+    // console.log(formData);
+
+    // var xhr = new XMLHttpRequest();
+    // xhr.open("POST", "/sendUserPhoto", true);
+    // xhr.send(formData);
+    // xhr.onreadystatechange = function () {
+    //     if (xhr.readyState === 4 && xhr.status === 200) {
+    //         if (xhr.responseText === 'Wrong photo')
+    //             $('.photo__descr').css('opacity', '.4');
+    //     }
+    // };
+
+    // var fd = new FormData();
+    // fd.set("fileToUpload", blobFile);
+    // console.log(fd);
+
+    $.ajax({
+        url: "/sendUserPhoto",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (jqXHR, textStatus, errorMessage) {
+            console.log(errorMessage);
         }
-    };
-
-//     var fd = new FormData();
-//     fd.append("fileToUpload", blobFile);
-//     console.log(fd);
-
-//     $.ajax({
-//        url: "/sendUserPhoto",
-//        type: "POST",
-//        data: fd,
-//        processData: false,
-//        contentType: false,
-//        success: function(response) {
-//            // .. do something
-//            console.log(response);
-//        },
-//        error: function(jqXHR, textStatus, errorMessage) {
-//            console.log(errorMessage); // Optional
-//        }
-//     });
+    });
 }
 
-var slug = document.getElementById('questName').getAttribute('data-slug');
 var questCommentsBox = document.getElementById('questCommentsBox');
 
 var wishBtn = document.getElementById('wish');

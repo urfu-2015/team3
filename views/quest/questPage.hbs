@@ -36,6 +36,7 @@
                 <p class="author">{{author}}</p>
             </div>
         </div>
+            
         <div class="photos">
             {{#each photos}}
                 <div class="photo">
@@ -47,8 +48,8 @@
                             <p>{{hint}}</p>
                         </div>
                         <div class="photo__descr__button">
-                            <label class="btn btn-success findBtn" for="my-file-selector">
-                                <input id="my-file-selector" type="file" accept="image/*" capture="camera" data-bfi-disabled style="display:none;">
+                            <label class="btn btn-success findBtn" for="{{@index}}_my-file-selector">
+                                <input id="{{@index}}_my-file-selector" type="file" accept="image/*" capture="camera" data-bfi-disabled style="display:none;">
                                 Найдено!
                             </label>
 
