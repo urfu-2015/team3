@@ -8,6 +8,7 @@ const userModel = require('../models/user');
 const CommentsModel = require('../models/comments');
 const async = require('async');
 const requestToDB = require('../lib/auth/requestToDB');
+const geolib = require('geolib');
 
 handlebars.registerHelper(layouts(handlebars));
 handlebars.registerPartial('base', fs.readFileSync('./views/base.hbs', 'utf8'));
@@ -33,9 +34,75 @@ exports.addQuest = (req, res) => {
 
 exports.loadPhoto = upload.fields(fields);
 
+exports.sendUserPhoto = (req, res, next) => {
+    console.log(req.files.fileToUpload[0]); // сама фотка
+    console.log(req.body.id); // id фотки в модели quest
+    var parser = require('exif-parser').create(req.files.fileToUpload[0].buffer);
+    var result = parser.parse();
+    console.log(result);
+    console.log(req.body);
+    questModel
+        .getQuests({slug: req.body.slug}, (err, quest) => {
+            if (err) {
+
+            } else {
+                var id = parseInt(req.body.id, 10);
+                var lat = quest[0].photos[id].geolocation.lat;
+                var lng = quest[0].photos[id].geolocation.lng;
+                var userLat = req.body.latitude;
+                var userLng = req.body.longitude;
+                var distance = geolib.getDistance(
+                    {latitude: lat, longitude: lng},
+                    {latitude: req.body.latitude, longitude: req.body.longitude}
+                );
+                var maxDistance = 500;
+                console.log(distance);
+                console.log(quest[0].photos[id].geolocation);
+                if (distance <= maxDistance) {
+                    var userID = req.user;
+                    var newMarker = {lat: userLat, lng: userLng};
+                    var preview = req.files.fileToUpload[0];
+                    var dataUri = new Datauri();
+                    dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);
+
+                    /* eslint-disable no-unused-vars*/
+                    var promise = new Promise((resolve, reject) => {
+                        cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
+                            resolve(imageURL);
+                        });
+                    });
+
+                    promise
+                        .then(previewUrl => {
+                            userModel
+                                .findUser(JSON.stringify({_id: {$oid: userID}}))
+                                .then(found => {
+                                    var user = found.user;
+                                    user.markers.push(newMarker);
+                                    user.photos = user.photos || [];
+                                    user.photos.push(previewUrl);
+                                    userModel
+                                        .updateUserInfo(user)
+                                        .then(result => {
+                                            res.send('good photo');
+                                        })
+                                        .catch(err => next(err));
+                                })
+                                .catch(err => next(err));
+                        })
+                        .catch(err => {
+                            next(err);
+                        });
+                } else {
+                    res.send('wrong photo');
+                }
+            }
+        });
+};
+
+exports.loadUserPhoto = upload.fields([{name: 'fileToUpload', maxCount: 1}]);
+
 exports.createQuest = (req, res, next) => {
-    // console.log(req.body);
-    // console.log(req.files);
     let promise = Promise.resolve();
     const photoAttributes = JSON.parse(req.body.photoAttributes);
     // console.log(photoAttributes);

@@ -12,11 +12,12 @@ class User {
         this.fields = [
             'login',
             'password',
-            'passedQuests',
-            'myQuests',
-            'wishList',
+            'activeQuests', // квесты, которые сейчас проходятся {slug1: [3, 1], slug2: [0, 2]}
+            'passedQuests', // пройденные квесты
+            'myQuests', // созданные квесты
+            'wishList', // квесты которые я хочу пройти
             'isBanned',
-            'photos',
+            'photos', // мои фотографии, котороые подошли к квестам
             'nickname',
             'avatar',
             'city',

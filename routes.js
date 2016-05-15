@@ -19,7 +19,7 @@ module.exports = function (app, passport) {
     });
 
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/',
+        successRedirect: '/quest/dvory-pitera',
         failureRedirect: '/login',
         failureFlash: true
     }));
@@ -95,6 +95,8 @@ module.exports = function (app, passport) {
     app.put('/addPhotoComment', quest.addPhotoComment);
 
     app.put('/addQuestComment', quest.addQuestComment);
+
+    app.post('/sendUserPhoto', quest.loadUserPhoto, quest.sendUserPhoto);
 
     app.all('*', pages.error404);
 
