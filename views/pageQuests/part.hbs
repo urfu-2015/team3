@@ -5,9 +5,8 @@
             <h3 class="quest-name">{{displayName}}</h3>
             <figcaption class="addition">
                 <ul class="icons">
-                    <li class="icon"><i class="fa fa-2x fa-thumbs-o-up fa-fw"></i>5</li>
-                    <li class="icon"><i class="fa fa-2x fa-thumbs-o-down fa-fw"></i>0</li>
-                    <li class="icon"><i class="fa fa-2x fa-comments-o fa-fw"></i>15</li>
+                    <li class="icon"><i class="fa fa-2x fa-thumbs-o-up fa-fw"></i>{{rating.likes.length}}</li>
+                    <li class="icon"><i class="fa fa-2x fa-thumbs-o-down fa-fw"></i>{{rating.dislikes.length}}</li>
                 </ul>
                 <p class="description description__medium box after">{{description}}</p>
             </figcaption>
