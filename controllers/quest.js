@@ -406,6 +406,7 @@ exports.addQuestComment = (req, res, next) => {
     var userID = req.user;
     var slug = req.body.slug;
     var body = req.body.text;
+    console.log(userID, slug, body);
     async.waterfall([
         done => {
             userModel

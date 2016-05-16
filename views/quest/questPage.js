@@ -4,6 +4,7 @@ var longitude;
 var slug = document.getElementById('questName').getAttribute('data-slug');
 
 $(document).ready(function () {
+    $('.emoji-wysiwyg-editor').css('height', '44px');
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
             latitude = position.coords.latitude;
@@ -30,22 +31,6 @@ function uploadFile(idPhoto) {
     formData.set("latitude", latitude);
     formData.set("longitude", longitude);
     formData.set("slug", slug);
-
-    // console.log(formData);
-
-    // var xhr = new XMLHttpRequest();
-    // xhr.open("POST", "/sendUserPhoto", true);
-    // xhr.send(formData);
-    // xhr.onreadystatechange = function () {
-    //     if (xhr.readyState === 4 && xhr.status === 200) {
-    //         if (xhr.responseText === 'Wrong photo')
-    //             $('.photo__descr').css('opacity', '.4');
-    //     }
-    // };
-
-    // var fd = new FormData();
-    // fd.set("fileToUpload", blobFile);
-    // console.log(fd);
 
     $.ajax({
         url: "/sendUserPhoto",
@@ -74,7 +59,11 @@ if (wishBtn) {
 var addPhotoCommentBtn = document.getElementsByClassName('addComment');
 [].slice.call(addPhotoCommentBtn).forEach(btn => {
     btn.addEventListener('click', function () {
-        addPhotoComment(btn.previousElementSibling);
+        //addPhotoComment(btn.previousElementSibling);
+        // берем id у кнопки 
+        var btnId = btn.id.slice(19);
+        // console.log(btnId);
+        addPhotoComment(document.getElementById('addPhotoComment-' + btnId)); // надо передать кнопку
     });
 });
 
