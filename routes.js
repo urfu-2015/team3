@@ -98,11 +98,9 @@ module.exports = function (app, passport) {
 
     app.put('/addQuestComment', quest.addQuestComment);
 
-<<<<<<< 9444bd0f0f4a775c8f6c2d36b952e53cae35db9a
     app.post('/sendUserPhoto', quest.loadUserPhoto, quest.sendUserPhoto);
-=======
+
     app.get('/quests', pages.getQuests);
->>>>>>> add page quests hbs
 
     app.all('*', pages.error404);
 
