@@ -59,10 +59,7 @@ if (wishBtn) {
 var addPhotoCommentBtn = document.getElementsByClassName('addComment');
 [].slice.call(addPhotoCommentBtn).forEach(btn => {
     btn.addEventListener('click', function () {
-        // addPhotoComment(btn.previousElementSibling);
-        // берем id у кнопки
         var btnId = btn.id.slice(19);
-        // console.log(btnId);
         addPhotoComment(document.getElementById('addPhotoComment-' + btnId));
     });
 });
