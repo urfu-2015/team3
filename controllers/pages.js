@@ -3,7 +3,7 @@
 const fs = require('fs');
 const handlebars = require('hbs').handlebars;
 const layouts = require('handlebars-layouts');
-const searcher = require('./searcher/searcher.js')
+const searcher = require('./searcher/searcher.js');
 
 handlebars.registerHelper(layouts(handlebars));
 handlebars.registerPartial('base', fs.readFileSync('./views/base.hbs', 'utf8'));
@@ -46,7 +46,7 @@ exports.getQuests = (req, res) => {
     if (req.query.word) {
         template = handlebars.compile(fs.readFileSync('./views/pageQuests/part.hbs', 'utf8'));
     } else {
-        template = handlebars.compile(fs.readFileSync('./views/pageQuests/questslist.hbs','utf8'));
+        template = handlebars.compile(fs.readFileSync('./views/pageQuests/questslist.hbs', 'utf8'));
     }
     var cb = function (quests) {
         res.send(template(Object.assign({

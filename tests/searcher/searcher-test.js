@@ -4,45 +4,51 @@ const assert = require('assert');
 const sinon = require('sinon');
 const mockery = require('mockery');
 
-const tags = [
-    {slug: 'graffitiEkb', name: 'Graffiti Ekb'},
-    {slug: 'graffiti', name: 'Graffiti'},
-    {slug: 'граффити', name: 'Граффити'},
-    {slug: 'граффит', name: 'Граффит'},
-    {slug: 'catsEkb', name: 'Cats Ekb'},
-    {slug: 'cats', name: 'Cats'}
-];
 const quests = [
     {
         displayName: 'Граффити',
         cityName: 'Екатеринбург',
-        tags: [
-            {slug: 'graffitiEkb', name: 'Graffiti Ekb'},
-            {slug: 'graffiti', name: 'Graffiti'},
-            {slug: 'граффити', name: 'Граффити'},
-            {slug: 'граффит', name: 'Граффит'}
-        ]
+        tags: ['Graffiti', 'Граффити', 'Граффит'],
+        rating: {likes: [], dislikes: []}
     },
     {
         displayName: 'Котики',
         cityName: 'Кошкибург',
-        tags: [
-            {slug: 'catsEkb', name: 'Cats Ekb'},
-            {slug: 'cats', name: 'Cats'}
-        ]
+        tags: ['Cats', 'Koshki'],
+        rating: {likes: [], dislikes: []}
     }
 ];
+
+var cityE = '^' + encodeURIComponent('ек');
+var existCityQuery = JSON.stringify({cityName: {$regex: cityE, $options: 'i'}});
+
+var cityO = '^' + encodeURIComponent('Оренбург');
+var notExistCityQuery = JSON.stringify({cityName: {$regex: cityO, $options: 'i'}});
+
+var tagGr = '^' + encodeURIComponent('графф');
+var existTagQuery = JSON.stringify({tags: {$regex: tagGr, $options: 'i'}});
+
+var tagGraffity = '^' + encodeURIComponent('Граффити');
+var existFullTagQuery = JSON.stringify({tags: {$regex: tagGraffity, $options: 'i'}});
+
+var tagA = '^' + encodeURIComponent('alphabet');
+var notExistTagQuery = JSON.stringify({tags: {$regex: tagA, $options: 'i'}});
 
 var searcher;
 describe('Searcher', function () {
     before(function () {
-        function getListMock(name, cb) {
+        function getListMock(name, cb, opt) {
             return new Promise(function (resolve, reject) {
-                if (name === 'tags') {
-                    cb(tags);
-                    resolve();
-                } else if (name === 'quests') {
+                if (!opt) {
                     cb(quests);
+                    resolve();
+                } else if (opt.query === existCityQuery ||
+                           opt.query === existTagQuery ||
+                           opt.query === existFullTagQuery) {
+                    cb([quests[0]]);
+                    resolve();
+                } else if (opt.query === notExistCityQuery || opt.query === notExistTagQuery) {
+                    cb([]);
                     resolve();
                 } else {
                     reject();
@@ -64,13 +70,12 @@ describe('Searcher', function () {
                 .getAllTags(spy)
                 .then(function () {
                     var result = spy.args[0][0];
-                    assert.equal(result.length, 6);
-                    assert.equal(result[0], 'Graffiti Ekb');
-                    assert.equal(result[1], 'Graffiti');
-                    assert.equal(result[2], 'Граффити');
-                    assert.equal(result[3], 'Граффит');
-                    assert.equal(result[4], 'Cats Ekb');
-                    assert.equal(result[5], 'Cats');
+                    assert.equal(result.length, 5);
+                    assert.equal(result[0], 'Graffiti');
+                    assert.equal(result[1], 'Граффити');
+                    assert.equal(result[2], 'Граффит');
+                    assert.equal(result[3], 'Cats');
+                    assert.equal(result[4], 'Koshki');
                 })
                 .then(done, done);
         });

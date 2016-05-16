@@ -9,7 +9,7 @@
     {{#content "content"}}
         <div class="search-quests">
             <div class="input-group col-xs-12 col-sm-5">
-                <input type="text" class="form-control" placeholder="Введите название" id="search-input">
+                <input type="text" class="form-control" placeholder="Введите название или тэг" id="search-input">
                 <button class="btn" id="search-button">
                     <i class="glyphicon glyphicon-search"></i>
                 </button>
@@ -23,16 +23,15 @@
                         <h3 class="quest-name">{{displayName}}</h3>
                         <figcaption class="addition">
                             <ul class="icons">
-                                <li class="icon"><i class="fa fa-2x fa-thumbs-o-up fa-fw"></i>5</li>
-                                <li class="icon"><i class="fa fa-2x fa-thumbs-o-down fa-fw"></i>0</li>
-                                <li class="icon"><i class="fa fa-2x fa-comments-o fa-fw"></i>15</li>
+                                <li class="icon"><i class="fa fa-2x fa-thumbs-o-up fa-fw"></i>{{rating.likes.length}}</li>
+                                <li class="icon"><i class="fa fa-2x fa-thumbs-o-down fa-fw"></i>{{rating.dislikes.length}}</li>
                             </ul>
                             <p class="description description__medium box after">{{description}}</p>
                         </figcaption>
                     </figure>
                 {{/each}}
             {{^}}
-                <p>Quests not found!</p>
+                <p class="no-quests">Quests not found!</p>
             {{/if}}
         </main>
     {{/content}}
