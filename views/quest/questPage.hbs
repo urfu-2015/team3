@@ -40,17 +40,19 @@
         <div class="photos">
             {{#each photos}}
                 <div class="photo">
-                    <div class="photo__img">
+                    <div class="photo__img" style="
+                    {{#ifIn @index ../passedPhotos}}opacity: .4;{{/ifIn}}">
                         <img src="{{url}}" alt="{{title}}">
                     </div> 
                     <div class="photo__descr">
-                        <div class="photo__descr__hint" alt="{{alt}}">
+                        <div class="photo__descr__hint" style="{{#ifIn @index ../passedPhotos}}opacity: .4;{{/ifIn}}" alt="{{alt}}">
                             <p>{{hint}}</p>
                         </div>
                         <div class="photo__descr__button">
-                            <label class="btn btn-success findBtn" for="{{@index}}_my-file-selector">
+                            <label class="btn btn-success findBtn {{#ifIn @index ../passedPhotos}}disabled{{/ifIn}}" for="{{@index}}_my-file-selector">
                                 <input id="{{@index}}_my-file-selector" type="file" accept="image/*" capture="camera" data-bfi-disabled style="display:none;">
-                                Найдено!
+                                {{#ifIn @index ../passedPhotos}}Фотография принята{{/ifIn}}
+                                {{#ifNotIn @index ../passedPhotos}}Сделать фото{{/ifNotIn}}
                             </label>
 
                             <a class="openmodal btn btn-warning commentBtn" href="#id_{{commentUrl}}"
