@@ -49,7 +49,7 @@
                             <p>{{hint}}</p>
                         </div>
                         <div class="photo__descr__button">
-                            <label class="btn btn-success findBtn {{#ifIn @index ../passedPhotos}}disabled{{/ifIn}}" for="{{@index}}_my-file-selector">
+                            <label class="btn btn-success foundBtn {{#ifIn @index ../passedPhotos}}disabled{{/ifIn}}" for="{{@index}}_my-file-selector">
                                 <input id="{{@index}}_my-file-selector" type="file" accept="image/*" capture="camera" data-bfi-disabled style="display:none;">
                                 {{#ifIn @index ../passedPhotos}}Фотография принята{{/ifIn}}
                                 {{#ifNotIn @index ../passedPhotos}}Сделать фото{{/ifNotIn}}
