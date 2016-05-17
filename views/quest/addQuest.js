@@ -20,11 +20,18 @@ btnBack.addEventListener('click', () => {
     window.history.back();
 }, false);
 
+const btnReset = form.reset;
+btnReset.addEventListener('click', () => {
+
+}, false);
+
 const previewPhotoInput = form.preview;
+let previewBase64;
 previewPhotoInput.addEventListener('change', () => {
     const photo = previewPhotoInput.files[0];
-    loadPhotoPreview(photo, showPreview);
+    loadBase64(photo, showPreview);
     function showPreview(base64) {
+        previewBase64 = base64;
         const uploader = document.querySelector('.upload-photo');
         $(uploader).css('background-image', `url('${base64}')`);
         $(uploader).css('background-size', 'cover');
@@ -33,7 +40,7 @@ previewPhotoInput.addEventListener('change', () => {
     }
 });
 
-function loadPhotoPreview(photo, callback, args) {
+function loadBase64(photo, callback, args) {
     const reader = new FileReader();
     reader.addEventListener('load', function () {
         const base64 = reader.result.replace(/(\r\n|\n|\r)/gm, '');
@@ -54,6 +61,10 @@ let photosFileList = [];
         photosFileList.find(obj => {return obj.id === somdeId}).hint = hint;
  */
 
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 photosInput.addEventListener('change', () => {
     showSwiperContainer();
     const photos = photosInput.files;
@@ -61,13 +72,15 @@ photosInput.addEventListener('change', () => {
     for (let i = 0; i < photos.length; i++) {
         const photo = photos[i];
         if (photo.type.match('image')) {
-            const id = Date.now();
-            photosFileList.push({photo, id, title: '', geo: undefined, hint: ''});
+            let id = Date.now();
+            const randomNumber = getRandomInt(100, 10000);
+            id = ''.concat(id.toString(), randomNumber.toString());
             const slideNumber = swiper.slides.length;
-            loadPhotoPreview(photo, addSlide, {slideNumber, id});
+            loadBase64(photo, addSlide, {slideNumber, id});
         }
     }
     function addSlide(base64, args) {
+        photosFileList.push({base64, id: args.id, title: '', geo: null, hint: ''});
         swiper.appendSlide(
             `<div class="swiper-slide" id="${args.slideNumber}">
                         <div class="img-rounded swiper-quest-image"
@@ -107,7 +120,7 @@ function getErrorMsg(strongMsg, otherMsg) {
 
 form.addEventListener('submit', function (event) {
     event.preventDefault();
-    var formData = new FormData(form);
+    let formData = {};
 
     const photosLength = photosFileList.length;
     if (photosLength > 30) {
@@ -137,54 +150,41 @@ form.addEventListener('submit', function (event) {
         }
     }
 
-    // console.log('attributes:');
-    // console.log(photoAttributes);
+    const photos = photosFileList.map(obj => obj.base64);
 
-    const photoFiles = photosFileList.map(obj => obj.photo);
-    // console.log('photos:');
-    // console.log(photoFiles);
+    formData['photos-length'] = photosLength;
 
-    formData.set('photos-length', photosLength);
-
-    const remainingLength = 30 - photosLength;
-    let photos = new Array(remainingLength);
-    photos.unshift(...photoFiles);
-    const superFile = new File([""], "filename");
-
-    photos.fill(superFile, photosLength);
-    // console.log(photos);
     photos.forEach((photo, index) => {
         const fieldName = 'photo' + index.toString();
-        formData.set(fieldName, photo);
+        formData[fieldName] = photo;
     });
-    formData.set('photoAttributes', JSON.stringify(photoAttributes));
-    formData.delete('photos');
+
+    formData.photoAttributes = photoAttributes;
+    if (previewBase64) {
+        formData.preview = previewBase64;
+    }
+
+    const formLength = form.elements.length;
+    for (let i = 0; i < formLength; i++) {
+        const field = form[i];
+        const fieldName = field.name;
+        if (fieldName !== 'photos' || fieldName !== 'preview') {
+            formData[fieldName] = field.value;
+        }
+    }
 
     $.ajax({
         url: "/addQuest",
         type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
+        data: JSON.stringify(formData),
+        contentType: 'application/json',
         success: function (response) {
-            console.log(response);
             document.querySelector("html").innerHTML = response;
         },
         error: function (jqXHR, textStatus, errorMessage) {
             console.log(errorMessage); // Optional
         }
     });
-    // var xhr = new XMLHttpRequest();
-    // xhr.open("POST", "/addQuest", true);
-    // xhr.send(formData);
-    // xhr.onreadystatechange = function () {
-    //    if (xhr.readyState === 4 && xhr.status === 200) {
-    //        // const html = document.createElement('html');
-    //        // html.innerHTML = xhr.responseText;
-    //
-    //        document.querySelector("html").innerHTML = xhr.responseText;
-    //    }
-    // };
 });
 
 function fileApiSupported() {
@@ -210,8 +210,6 @@ function deletePhotoHandler(id) {
 
             const slideId = event.target.parentNode.parentNode.getAttribute('id');
             swiper.removeSlide(slideId);
-            // console.log('remove');
-            // console.log(photosFileList);
             if (swiper.slides.length === 0) {
                 hideSwiperContainer();
             }
@@ -258,7 +256,7 @@ function setCoordinates(id, coords) {
 }
 
 function setInformation(event) {
-    var id = parseInt(event.target.id.split('_')[1], 10);
+    var id = event.target.id.split('_')[1];
     var title = document.getElementById('title_' + id).value;
     var hint = document.getElementById('desc_' + id).value;
     photosFileList.find(obj => {

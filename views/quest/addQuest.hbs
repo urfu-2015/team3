@@ -90,8 +90,30 @@
                 </div>
             </div>
         </form>
+        <!--<div class="progress progress-striped active" onclick="move()">-->
+            <!--<div class="progress-bar progress-bar-success" style="width: 10%">-->
+                <!--<div class="progress-bar-label">10%</div>-->
+            <!--</div>-->
+        <!--</div>-->
     {{/content}}
     {{#content "js" mode="append"}}
+        <!--<script>-->
+            <!--function move() {-->
+                <!--var elem = document.querySelector('.progress-bar');-->
+                <!--console.log(elem);-->
+                <!--var width = 10;-->
+                <!--var id = setInterval(frame, 100);-->
+                <!--function frame() {-->
+                    <!--if (width >= 100) {-->
+                        <!--clearInterval(id);-->
+                    <!--} else {-->
+                        <!--width++;-->
+                        <!--elem.style.width = width + '%';-->
+                        <!--document.querySelector('.progress-bar-label').innerHTML = width * 1  + '%';-->
+                    <!--}-->
+                <!--}-->
+            <!--}-->
+        <!--</script>-->
         <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
         {{#if isDev}}

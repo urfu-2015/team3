@@ -21,18 +21,10 @@ const cloudinary = require('../lib/cloudinary-images/cloudinary-loader');
 const Datauri = require('datauri');
 const path = require('path');
 
-let fields = [{name: 'preview', maxCount: 1}];
-for (let i = 0; i < 30; i++) {
-    const fieldName = 'photo' + i.toString();
-    fields.push({name: fieldName, maxCount: 1});
-}
-
 exports.addQuest = (req, res) => {
     var template = handlebars.compile(fs.readFileSync('./views/quest/addQuest.hbs', 'utf8'));
     res.send(template(Object.assign({title: 'Создание квеста'}, req.commonData)));
 };
-
-exports.loadPhoto = upload.fields(fields);
 
 exports.sendUserPhoto = (req, res, next) => {
     console.log(req.files.fileToUpload[0]); // сама фотка
@@ -104,16 +96,13 @@ exports.loadUserPhoto = upload.fields([{name: 'fileToUpload', maxCount: 1}]);
 
 exports.createQuest = (req, res, next) => {
     let promise = Promise.resolve();
-    const photoAttributes = JSON.parse(req.body.photoAttributes);
-    // console.log(photoAttributes);
-    if (req.files.preview) {
-        const preview = req.files.preview[0];
-        const dataUri = new Datauri();
-        dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);
+    const photoAttributes = req.body.photoAttributes;
+    if (req.body.preview) {
+        const preview = req.body.preview;
 
         /* eslint-disable no-unused-vars*/
         promise = new Promise((resolve, reject) => {
-            cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
+            cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
                 resolve(imageURL);
             });
         });
@@ -131,18 +120,15 @@ exports.createQuest = (req, res, next) => {
                     const fieldName = 'photo' + i.toString();
                     // console.log(fieldName);
                     // console.log(req.files[fieldName][0]);
-                    reqPhotos.push(req.files[fieldName][0]);
+                    reqPhotos.push(req.body[fieldName]);
                 }
             }
             if (reqPhotos) {
                 // console.log(reqPhotos);
                 photos = reqPhotos.map((photo, index) => {
-                    const dataUri = new Datauri();
-                    dataUri.format(path.extname(photo.originalname).toString(), photo.buffer);
-                    // const photoAlt = 'Фото ' + index;
                     /* eslint-disable no-unused-vars*/
                     return new Promise((resolve, reject) => {
-                        cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
+                        cloudinary.uploadImage(photo, Date.now().toString(), imageURL => {
                             resolve({
                                 url: imageURL,
                                 title: photoAttributes[index].title,
@@ -191,32 +177,18 @@ exports.createQuest = (req, res, next) => {
         .catch(err => {
             console.error(err);
         });
-    /*
-     Добавить:
-      - получение автора из данных авторизации
-     Не хватает в клиентском коде:
-      - alt, geolocation у photos
-      - тэги: прикрутить как в поиске
-     Вопросы:
-      - дата: формат?
-      14 мая 2016
-      зачем дата?
-     */
 };
 
 exports.questPage = (req, res, next) => {
     // var template = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
     // var data = {title: 'Страница квеста', currentUserID: req.user};
     // res.send(template(Object.assign(data, req.commonData)));
-    // console.log('slug2');
-    // console.log(req.slug);
     if (req.slug) {
         res.redirect('/quest/' + req.slug);
     } else {
         // ошибка?
         res.redirect('/');
     }
-    next();
 };
 
 exports.addToMyQuests = (req, res, next) => {

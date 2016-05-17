@@ -36,6 +36,10 @@ module.exports = {
                 loader: 'file-loader'
             },
             {
+                test: /\.svg$/,
+                loader: 'svg-url-loader'
+            },
+            {
                 test: /\.jsx?$/,
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel',
