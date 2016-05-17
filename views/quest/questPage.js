@@ -40,6 +40,10 @@ function uploadFile(idPhoto) {
         contentType: false,
         success: function (response) {
             console.log(response);
+            // если 'good photo', то надо
+            // добавить добавить стили к пройденной фотке и вывести сообщение "Фотография принята"
+
+            // если 'wrong photo', то надо вывести сообщение "Неверная фотография"
         },
         error: function (jqXHR, textStatus, errorMessage) {
             console.log(errorMessage);
@@ -67,7 +71,6 @@ var addPhotoCommentBtn = document.getElementsByClassName('addComment');
 var addQuestCommentBtn = document.getElementById('addQuestComment');
 if (addQuestCommentBtn) {
     addQuestCommentBtn.addEventListener('click', function () {
-        // addQuestComment(addQuestCommentBtn.previousElementSibling);
         addQuestComment(document.getElementById('testCommentQuest'));
     });
 }

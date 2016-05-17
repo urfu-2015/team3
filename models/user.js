@@ -133,11 +133,13 @@ function getUserObj(obj) {
     var login = obj.user.login;
     var password = obj.user.password;
     var nickname = obj.user.nickname || '';
+    var activeQuests = obj.user.activeQuests || {};
     var passedQuests = obj.user.passedQuests || [];
     var myQuests = obj.user.myQuests || [];
     var wishList = obj.user.wishList || [];
     var isBanned = obj.user.isBanned || false;
     var photos = obj.user.photos || [];
+    var markers = obj.user.markers || [];
     var avatar = 'http://res.cloudinary.com/kafkatist/image/upload/v1463238108/noavatar_eb8qq6.png';
     if (obj.user.gender) {
         avatar = obj.user.gender === 'female' ?
@@ -150,12 +152,14 @@ function getUserObj(obj) {
         login,
         password,
         nickname,
+        activeQuests,
         passedQuests,
         myQuests,
         wishList,
         isBanned,
         photos,
         avatar,
+        markers,
         city,
         gender
     };

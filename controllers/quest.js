@@ -10,6 +10,30 @@ const async = require('async');
 const requestToDB = require('../lib/auth/requestToDB');
 const geolib = require('geolib');
 
+handlebars.registerHelper('ifIn', function (elem, list, options) {
+    if (!list) {
+        return ""; // если пользователь не вошел
+    }
+
+    if (list.indexOf(elem.toString()) > -1) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
+});
+
+handlebars.registerHelper('ifNotIn', function (elem, list, options) {
+    if (!list) {
+        return options.fn(this);
+    }
+
+    console.log(elem, list);
+
+    if (list.indexOf(elem.toString()) === -1) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
+});
+
 handlebars.registerHelper(layouts(handlebars));
 handlebars.registerPartial('base', fs.readFileSync('./views/base.hbs', 'utf8'));
 const multer = require('multer');
@@ -70,9 +94,28 @@ exports.sendUserPhoto = (req, res, next) => {
                                 .findUser(JSON.stringify({_id: {$oid: userID}}))
                                 .then(found => {
                                     var user = found.user;
+
+                                    // надо добавить фото к пользователю в activeQuests
+                                    // и проверить, что если уже все фотки к квесту пройдены,
+                                    // то добавить квест в пройденное
+
+                                    if (user.activeQuests[quest[0].slug] &&
+                                     quest[0].photos.length ===
+                                     user.activeQuests[quest[0].slug].length + 1) {
+                                        // если это была последняя фотка чтобы пройти квест
+                                        user.passedQuests.push(quest[0].slug);
+                                    }
+                                    // добавляем фотографию в пройденные
+
+                                    if (!user.activeQuests[quest[0].slug]) {
+                                        user.activeQuests[quest[0].slug] = [];
+                                    }
+                                    user.activeQuests[quest[0].slug].push(req.body.id);
+
                                     user.markers.push(newMarker);
                                     user.photos = user.photos || [];
                                     user.photos.push(previewUrl);
+
                                     userModel
                                         .updateUserInfo(user)
                                         .then(result => {
@@ -284,7 +327,15 @@ exports.getQuest = (req, res, next) => {
                 btnData.classStyle = 'btn-danger';
             }
             quest = Object.assign(btnData, quest);
+
+            if (user) {
+                quest.passedPhotos = user.activeQuests[quest.slug] || [];
+            }
+
             quest.currentUserID = req.user;
+
+            console.log(quest);
+
             var templ = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
             res.send(templ(Object.assign(quest, req.commonData)));
             done(null);
