@@ -108,7 +108,8 @@ exports.sendUserPhoto = (req, res, next) => {
                                     // то добавить квест в пройденное
 
                                     if (user.activeQuests[quest[0].slug] &&
-                                     quest[0].photos.length === user.activeQuests[quest[0].slug].length + 1) {
+                                     quest[0].photos.length ===
+                                     user.activeQuests[quest[0].slug].length + 1) {
                                         // если это была последняя фотка чтобы пройти квест
                                         user.passedQuests.push(quest[0].slug);
                                     }
