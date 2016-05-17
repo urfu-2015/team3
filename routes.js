@@ -19,7 +19,7 @@ module.exports = function (app, passport) {
     });
 
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/quest/dvory-pitera',
+        successRedirect: '/',
         failureRedirect: '/login',
         failureFlash: true
     }));
@@ -77,9 +77,9 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/addQuest', canCreateQuest, quest.addQuest);
+    app.get('/addQuest', canOpenPage, quest.addQuest);
 
-    app.post('/addQuest', canCreateQuest, quest.createQuest, quest.questPage, quest.addToMyQuests);
+    app.post('/addQuest', canOpenPage, quest.createQuest, quest.questPage, quest.addToMyQuests);
 
     app.get('/search/cities', pages.searchCities);
     app.get('/search/tags', pages.searchTags);
@@ -88,9 +88,11 @@ module.exports = function (app, passport) {
 
     app.get('/profile/:id', profile.getProfile);
 
-/*    app.get('/editProfile', profile.editProfile);
+    app.get('/profile', profile.getProfile);
 
-    app.post('/editProfile', profile.updateProfile);*/
+    app.get('/editProfile', canOpenPage, profile.editProfile);
+
+    app.put('/updateProfile', profile.updateProfile);
 
     app.post('/addToWishList', quest.addToWishList);
 
@@ -119,7 +121,7 @@ function isLoggedIn(req, res, next) {
     next();
 }
 
-function canCreateQuest(req, res, next) {
+function canOpenPage(req, res, next) {
     if (req.isAuthenticated()) {
         next();
     } else {

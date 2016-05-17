@@ -1,0 +1,51 @@
+{{#extend "base"}}
+    {{#content "css" mode="append"}}
+        {{#if isDev}}
+            <link rel="stylesheet" href="/editProfile.css">
+        {{else}}
+            <link rel="stylesheet" href="//kafkatist.surge.sh/editProfile.css">
+        {{/if}}
+    {{/content}}
+    {{#content "content"}}
+        <div class="wrap">
+            <h1><span class="fa fa-pencil-square-o"></span> Редактирование профиля</h1>
+            <div id="message" class="alert"></div>
+            <img id="avatar" src="{{avatar}}">
+            <label class="btn btn-success photoLabel" for="photo">
+                <input id="photo" type="file" accept="image/*" capture="camera" style="display:none;">
+                Выбрать фото
+            </label>
+            <div class="container auth-container">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div>
+                        <div class="form-group">
+                            <label>Ваше имя:</label>
+                            <input type="text" class="form-control" name="nickname"
+                            value="{{nickname}}" id="nickname" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Откуда вы?</label>
+                            <input type="text" class="form-control" name="city"
+                            value="{{city}}" id="city" required>
+                        </div>
+                        <button type="submit" name="save" class="btn btn-success" id="save">
+                            Сохранить
+                        </button>
+                        <button type="submit" name="back" class="btn btn-default" id="back">
+                            Отмена
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/content}}
+    {{#content "js" mode="append"}}
+        <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+        {{#if isDev}}
+            <script src="/editProfile.js" type="text/javascript"></script>
+        {{else}}
+            <script src="//kafkatist.surge.sh/editProfile.js" type="text/javascript"></script>
+        {{/if}}
+    {{/content}}
+{{/extend}}
+

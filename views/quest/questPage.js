@@ -11,7 +11,7 @@ $(document).ready(function () {
             longitude = position.coords.longitude;
         });
     } else {
-        // view card
+        // view map
     }
 });
 
@@ -88,13 +88,6 @@ function likeRequest(action, callback) {
         }
     });
 }
-
-var foundBtn = document.querySelector('.foundBtn');
-[].slice.call(foundBtn).forEach(btn => {
-    btn.addEventListener('click', function () {
-
-    });
-});
 
 var wishBtn = document.getElementById('wish');
 if (wishBtn) {
