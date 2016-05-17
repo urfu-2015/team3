@@ -8,6 +8,7 @@ const hbs = require('hbs');
 const flash = require('connect-flash');
 const morgan = require('morgan');
 var argv = require('minimist')(process.argv.slice(2));
+const bodyParser = require('body-parser');
 
 const publicDir = path.join(__dirname, 'public');
 
@@ -19,7 +20,12 @@ hbs.registerPartials(path.join(__dirname, '/views/partials'));
 
 app.use(morgan('dev'));
 app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({extended: true}));
+
+app.use(bodyParser.json({limit: '200mb'}));
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(require('compression')());
+
 app.use(require('express-session')({
     secret: 'kafkatist',
     resave: false,
@@ -27,7 +33,9 @@ app.use(require('express-session')({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(publicDir));
+app.use(express.static(publicDir, {
+    maxAge: 1000 * 60 * 60 * 24 * 30
+}));
 app.use(flash());
 
 app.set('port', (process.env.PORT || 5000));

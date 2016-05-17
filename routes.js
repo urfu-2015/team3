@@ -79,8 +79,7 @@ module.exports = function (app, passport) {
 
     app.get('/addQuest', canCreateQuest, quest.addQuest);
 
-    app.post('/addQuest', canCreateQuest, quest.loadPhoto, quest.createQuest, quest.questPage,
-        quest.addToMyQuests);
+    app.post('/addQuest', canCreateQuest, quest.createQuest, quest.questPage, quest.addToMyQuests);
 
     app.get('/quest/:slug', setLoggedFlag, quest.getQuest);
 
