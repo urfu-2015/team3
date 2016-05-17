@@ -19,7 +19,11 @@ exports.getProfile = (req, res, next) => {
         if (req.isAuthenticated()) {
             userID = req.user;
         } else {
-            return res.redirect('/notFound');
+            var data = {
+                code: 401,
+                error: 'Unauthorized'
+            };
+            return res.render('error', Object.assign(req.commonData, data));
         }
     }
     async.waterfall([

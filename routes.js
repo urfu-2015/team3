@@ -13,7 +13,7 @@ module.exports = function (app, passport) {
         res.redirect('/');
     });
 
-    app.get('/login', isLoggedIn, setLoggedFlag, (req, res) => {
+    app.get('/login', onlyForNotAuth, setLoggedFlag, (req, res) => {
         var data = Object.assign({message: req.flash('loginMessage')}, req.commonData);
         res.render('auth/login', data);
     });
@@ -24,7 +24,7 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/signup', isLoggedIn, setLoggedFlag, (req, res) => {
+    app.get('/signup', onlyForNotAuth, setLoggedFlag, (req, res) => {
         var data = Object.assign({message: req.flash('signupMessage')}, req.commonData);
         res.render('auth/signup', data);
     });
@@ -35,17 +35,17 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/forgot', isLoggedIn, setLoggedFlag, (req, res) => {
+    app.get('/forgot', onlyForNotAuth, setLoggedFlag, (req, res) => {
         res.render('auth/forgot', req.commonData);
     });
 
     app.post('/forgot', auth.forgot);
 
-    app.get('/reset/:token', isLoggedIn, setLoggedFlag, auth.reset);
+    app.get('/reset/:token', onlyForNotAuth, setLoggedFlag, auth.reset);
 
     app.post('/reset/:token', auth.resetAction);
 
-    app.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'}));
+    app.get('/auth/facebook', onlyForNotAuth, passport.authenticate('facebook', {scope: 'email'}));
 
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
         successRedirect: '/',
@@ -53,7 +53,7 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/auth/vkontakte', passport.authenticate('vkontakte'));
+    app.get('/auth/vkontakte', onlyForNotAuth, passport.authenticate('vkontakte'));
 
     app.get('/auth/vkontakte/callback', passport.authenticate('vkontakte', {
         successRedirect: '/',
@@ -61,7 +61,7 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/auth/twitter', passport.authenticate('twitter'));
+    app.get('/auth/twitter', onlyForNotAuth, passport.authenticate('twitter'));
 
     app.get('/auth/twitter/callback', passport.authenticate('twitter', {
         successRedirect: '/',
@@ -69,7 +69,7 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/auth/google', passport.authenticate('google', {scope: 'profile'}));
+    app.get('/auth/google', onlyForNotAuth, passport.authenticate('google', {scope: 'profile'}));
 
     app.get('/auth/google/callback', passport.authenticate('google', {
         successRedirect: '/',
@@ -77,9 +77,9 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/addQuest', canOpenPage, quest.addQuest);
+    app.get('/addQuest', onlyForAuth, quest.addQuest);
 
-    app.post('/addQuest', canOpenPage, quest.createQuest, quest.questPage, quest.addToMyQuests);
+    app.post('/addQuest', onlyForAuth, quest.createQuest, quest.questPage, quest.addToMyQuests);
 
     app.get('/search/cities', pages.searchCities);
     app.get('/search/tags', pages.searchTags);
@@ -90,7 +90,7 @@ module.exports = function (app, passport) {
 
     app.get('/profile', profile.getProfile);
 
-    app.get('/editProfile', canOpenPage, profile.editProfile);
+    app.get('/editProfile', onlyForAuth, profile.editProfile);
 
     app.put('/updateProfile', profile.updateProfile);
 
@@ -114,19 +114,26 @@ module.exports = function (app, passport) {
     });
 };
 
-function isLoggedIn(req, res, next) {
+function onlyForNotAuth(req, res, next) {
     if (req.isAuthenticated()) {
-        res.redirect('/');
+        var data = {
+            code: 404,
+            error: 'not found'
+        };
+        return res.render('error', Object.assign(req.commonData, data));
     }
     next();
 }
 
-function canOpenPage(req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        res.redirect('/login');
+function onlyForAuth(req, res, next) {
+    if (!req.isAuthenticated()) {
+        var data = {
+            code: 401,
+            error: 'authorization required'
+        };
+        return res.render('error', Object.assign(req.commonData, data));
     }
+    next();
 }
 
 function setLoggedFlag(req, res, next) {
