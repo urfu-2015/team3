@@ -81,6 +81,9 @@ module.exports = function (app, passport) {
 
     app.post('/addQuest', canCreateQuest, quest.createQuest, quest.questPage, quest.addToMyQuests);
 
+    app.get('/search/cities', pages.searchCities);
+    app.get('/search/tags', pages.searchTags);
+
     app.get('/quest/:slug', setLoggedFlag, quest.getQuest);
 
     app.get('/profile/:id', profile.getProfile);
@@ -96,6 +99,8 @@ module.exports = function (app, passport) {
     app.put('/addQuestComment', quest.addQuestComment);
 
     app.post('/sendUserPhoto', quest.loadUserPhoto, quest.sendUserPhoto);
+
+    app.get('/quests', pages.getQuests);
 
     app.all('*', pages.error404);
 

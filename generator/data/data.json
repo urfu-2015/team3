@@ -9,7 +9,9 @@
       "description": "Поиск граффити в Екатеринбурге",
       "tags": [
         {"slug": "graffitiEkb", "name": "Graffiti Ekb"},
-        {"slug": "graffiti", "name": "Graffiti"}
+        {"slug": "graffiti", "name": "Graffiti"},
+        {"slug": "граффити", "name": "Граффити"},
+        {"slug": "граффит", "name": "Граффит"}
       ],
       "complexity": {"value": 2, "votes": [2, 2, 2]},
       "rating" : {"value": 5, "votes": [5, 5, 5]},
@@ -106,6 +108,8 @@
     {"_id": "56e516f1ee0c7dd812193f0d", "slug": "catsEkb", "name": "Cats Ekb"},
     {"_id": "56e51768c57f239418199a55", "slug": "cats", "name": "Cats"},
     {"_id": "56e517fb156b69880cc11eeb", "slug": "graffitiEkb", "name": "Graffiti Ekb"},
-    {"_id": "56e518171fe0ded00d42fa41", "slug": "graffiti", "name": "Graffiti"}
+    {"_id": "56e518171fe0ded00d42fa41", "slug": "graffiti", "name": "Graffiti"},
+    {"_id": "56e518171fe0ded00d42fa51", "slug": "граффити", "name": "Граффити"},
+    {"_id": "56e518171fe0ded00d42fa61", "slug": "граффит", "name": "Граффит"}
   ]
 }
