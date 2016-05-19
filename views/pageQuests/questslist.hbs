@@ -14,11 +14,12 @@
                     <i class="glyphicon glyphicon-search"></i>
                 </button>
             </div>
+            <input type="button" class="btn btn_green" value="Ближайшие квесты" id="sort-button">
         </div>
         <main class="container-fluid">
             {{#if quests.length}}
                 {{#each quests}}
-                    <figure style="background-image:url({{titleImage}});" class="col-xs-12 col-sm-12 col-md-6 col-lg-6 quest medium">
+                    <figure style="background-image:url({{titleImage}});" class="col-xs-12 col-sm-12 col-md-6 col-lg-6 quest medium" data-slug="{{slug}}">
                         <div class="blur"></div>
                         <h3 class="quest-name">{{displayName}}</h3>
                         <figcaption class="addition">

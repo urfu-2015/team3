@@ -2,6 +2,8 @@
 
 const natural = require('natural');
 var getList = require('./requestToMlab.js');
+const geolib = require('geolib');
+var currentGeo;
 
 module.exports = {
     getAllTags: function (cb) {
@@ -12,7 +14,8 @@ module.exports = {
         return getTags('quests', cb, query);
     },
 
-    getQuests: function (cb, tag) {
+    getQuests: function (cb, tag, curGeo) {
+        currentGeo = curGeo;
         return getAllQuests('quests', cb, tag);
     },
 
@@ -66,12 +69,12 @@ function getSimilarCities(name, callback, city) {
 
 function getAllQuests(name, mainCb, tag) {
     var cb = function (quests) {
-        quests = quests.sort(function (quest1, quest2) {
-            if (quest2.rating.likes && quest1.rating.likes) {
-                return quest2.rating.likes.length - quest1.rating.likes.length;
-            }
-            return 0;
-        });
+        if (currentGeo) {
+            quests = quests.sort(sortQuestsOnGeo);
+        } else {
+            quests = quests.sort(sortQuestsOnLikes);
+        }
+        currentGeo = null;
         mainCb(quests);
     };
     var options = {};
@@ -82,4 +85,19 @@ function getAllQuests(name, mainCb, tag) {
         return getList(name, cb, options);
     }
     return getList(name, cb);
+}
+
+function sortQuestsOnLikes(quest1, quest2) {
+    if (quest2.rating.likes && quest1.rating.likes) {
+        return quest2.rating.likes.length - quest1.rating.likes.length;
+    }
+    return 0;
+}
+
+function sortQuestsOnGeo(quest1, quest2) {
+    var firstGeo = quest1.photos[0].geolocation;
+    var secondGeo = quest2.photos[0].geolocation;
+    var firstDist = geolib.getDistance(firstGeo, currentGeo);
+    var secondDist = geolib.getDistance(secondGeo, currentGeo);
+    return firstDist - secondDist;
 }

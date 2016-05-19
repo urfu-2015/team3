@@ -215,7 +215,7 @@ class quest {
         var description = this.questObject.description || "";
         var tags = this.questObject.tags || [];
         var complexity = this.questObject.complexity || {};
-        var rating = this.questObject.rating || {};
+        var rating = this.questObject.rating || {likes: [], dislikes: []};
         var duration = this.questObject.duration || "";
         var date = this.questObject.date || "";
         var photos = this.questObject.photos || [];

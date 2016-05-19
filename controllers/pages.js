@@ -53,6 +53,14 @@ exports.getQuests = (req, res) => {
             quests: quests
         }, req.commonData)));
     };
-    searcher.getQuests(cb, req.query.word);
+    var geo = {};
+    if (req.query.latitude) {
+        geo.latitude = parseFloat(req.query.latitude);
+        geo.longitude = parseFloat(req.query.longitude);
+    }
+    if (geo.latitude) {
+        searcher.getQuests(cb, req.query.word, geo);
+    } else {
+        searcher.getQuests(cb, req.query.word);
+    }
 };
-
