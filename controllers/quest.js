@@ -185,10 +185,10 @@ exports.createQuest = (req, res, next) => {
 
             Promise.all(photos)
                 .then(photos => {
-                    // console.log(photos);
                     const tags = req.body['quest-tags'].split(', ').filter(tag => tag.length > 0);
-                    const quest = new Quest({
+                    var quest = new Quest({
                         displayName: req.body['quest-name'],
+                        salt: "",
                         cityName: req.body['quest-city'],
                         author: req.user,
                         titleImage: previewUrl,
@@ -199,10 +199,31 @@ exports.createQuest = (req, res, next) => {
                         photos
                     });
 
-                    /* eslint-disable no-unused-vars*/
+                    /* eslint-disable no-unused-vars */
+
                     quest.save((err, message, result) => {
                         if (err) {
                             console.log(message);
+                            // сохраняем квест с солью
+                            quest = new Quest({
+                                displayName: req.body['quest-name'],
+                                salt: Math.floor(Date.now() % 1000).toString(),
+                                cityName: req.body['quest-city'],
+                                author: req.user,
+                                titleImage: previewUrl,
+                                description: req.body['quest-description'],
+                                tags,
+                                duration: req.body['quest-duration'],
+                                date: Date.now(),
+                                photos
+                            });
+                            quest.save((err, message, result) => {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    req.slug = result.slug;
+                                }
+                            });
                         } else {
                             // console.log('slug1');
                             // console.log(result.slug);
