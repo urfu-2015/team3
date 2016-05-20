@@ -8,7 +8,6 @@ const nodemailer = require('nodemailer');
 const config = require('../lib/auth/config');
 
 exports.forgot = (req, res, next) => {
-    console.log(req.commonData);
     async.waterfall([
         done => {
             crypto.randomBytes(20, (err, buf) => {

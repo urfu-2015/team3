@@ -45,18 +45,23 @@ const cloudinary = require('../lib/cloudinary-images/cloudinary-loader');
 const Datauri = require('datauri');
 const path = require('path');
 
+let fields = [{name: 'preview', maxCount: 1}];
+for (let i = 0; i < 30; i++) {
+    const fieldName = 'photo' + i.toString();
+    fields.push({name: fieldName, maxCount: 1});
+}
+
 exports.addQuest = (req, res) => {
     var template = handlebars.compile(fs.readFileSync('./views/quest/addQuest.hbs', 'utf8'));
     res.send(template(Object.assign({title: 'Создание квеста'}, req.commonData)));
 };
 
+exports.loadPhoto = upload.fields(fields);
+
 exports.sendUserPhoto = (req, res, next) => {
-    console.log(req.files.fileToUpload[0]); // сама фотка
-    console.log(req.body.id); // id фотки в модели quest
-    var parser = require('exif-parser').create(req.files.fileToUpload[0].buffer);
-    var result = parser.parse();
-    console.log(result);
-    console.log(req.body);
+    if (!req.isAuthenticated()) {
+        return res.send({message: 'Вы должны быть авторизованы, чтобы проходить квест'});
+    }
     questModel
         .getQuests({slug: req.body.slug}, (err, quest) => {
             if (err) {
@@ -77,13 +82,19 @@ exports.sendUserPhoto = (req, res, next) => {
                 if (distance <= maxDistance) {
                     var userID = req.user;
                     var newMarker = {lat: userLat, lng: userLng};
-                    var preview = req.files.fileToUpload[0];
-                    var dataUri = new Datauri();
-                    dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);
+                    var preview = req.body.fileToUpload;
+                    /* var dataUri = new Datauri();
+                    dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);*/
 
-                    /* eslint-disable no-unused-vars*/
-                    var promise = new Promise((resolve, reject) => {
+                    /* var promise = new Promise((resolve, reject) => {
                         cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
+                            resolve(imageURL);
+                        });
+                    });*/
+                    /* eslint-disable no-unused-vars */
+                    var promise = new Promise((resolve, reject) => {
+                        cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
+                            console.log(imageURL);
                             resolve(imageURL);
                         });
                     });
@@ -119,7 +130,11 @@ exports.sendUserPhoto = (req, res, next) => {
                                     userModel
                                         .updateUserInfo(user)
                                         .then(result => {
-                                            res.send('good photo');
+                                            var data = {
+                                                message: 'Фотография принята!',
+                                                isOk: true
+                                            };
+                                            res.send(data);
                                         })
                                         .catch(err => next(err));
                                 })
@@ -129,7 +144,7 @@ exports.sendUserPhoto = (req, res, next) => {
                             next(err);
                         });
                 } else {
-                    res.send('wrong photo');
+                    res.send({message: 'Фотография не принята: координаты неверные.'});
                 }
             }
         });
@@ -139,13 +154,16 @@ exports.loadUserPhoto = upload.fields([{name: 'fileToUpload', maxCount: 1}]);
 
 exports.createQuest = (req, res, next) => {
     let promise = Promise.resolve();
-    const photoAttributes = req.body.photoAttributes;
-    if (req.body.preview) {
-        const preview = req.body.preview;
+    const photoAttributes = JSON.parse(req.body.photoAttributes);
+    // console.log(photoAttributes);
+    if (req.files.preview) {
+        const preview = req.files.preview[0];
+        const dataUri = new Datauri();
+        dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);
 
         /* eslint-disable no-unused-vars*/
         promise = new Promise((resolve, reject) => {
-            cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
+            cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
                 resolve(imageURL);
             });
         });
@@ -161,17 +179,18 @@ exports.createQuest = (req, res, next) => {
             if (photosLength > 0) {
                 for (let i = 0; i < photosLength; i++) {
                     const fieldName = 'photo' + i.toString();
-                    // console.log(fieldName);
-                    // console.log(req.files[fieldName][0]);
-                    reqPhotos.push(req.body[fieldName]);
+                    reqPhotos.push(req.files[fieldName][0]);
                 }
             }
             if (reqPhotos) {
                 // console.log(reqPhotos);
                 photos = reqPhotos.map((photo, index) => {
+                    const dataUri = new Datauri();
+                    dataUri.format(path.extname(photo.originalname).toString(), photo.buffer);
+                    // const photoAlt = 'Фото ' + index;
                     /* eslint-disable no-unused-vars*/
                     return new Promise((resolve, reject) => {
-                        cloudinary.uploadImage(photo, Date.now().toString(), imageURL => {
+                        cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
                             resolve({
                                 url: imageURL,
                                 title: photoAttributes[index].title,
@@ -241,18 +260,32 @@ exports.createQuest = (req, res, next) => {
         .catch(err => {
             console.error(err);
         });
+    /*
+     Добавить:
+      - получение автора из данных авторизации
+     Не хватает в клиентском коде:
+      - alt, geolocation у photos
+      - тэги: прикрутить как в поиске
+     Вопросы:
+      - дата: формат?
+      14 мая 2016
+      зачем дата?
+     */
 };
 
 exports.questPage = (req, res, next) => {
     // var template = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
     // var data = {title: 'Страница квеста', currentUserID: req.user};
     // res.send(template(Object.assign(data, req.commonData)));
+    // console.log('slug2');
+    // console.log(req.slug);
     if (req.slug) {
         res.redirect('/quest/' + req.slug);
     } else {
         // ошибка?
         res.redirect('/');
     }
+    next();
 };
 
 exports.addToMyQuests = (req, res, next) => {
@@ -295,8 +328,12 @@ exports.getQuest = (req, res, next) => {
             questModel.getQuests({slug: slug}, (err, result) => {
                 if (err) {
                     done(err, null);
+                }
+                if (result.length) {
+                    done(null, result[0]);
                 } else {
-                    result.length ? done(null, result[0]) : res.redirect('/search');
+                    var data = {code: 404, error: 'not found'};
+                    return res.render('error', Object.assign(req.commonData, data));
                 }
             });
         },
@@ -354,9 +391,7 @@ exports.getQuest = (req, res, next) => {
             }
 
             quest.currentUserID = req.user;
-
-            console.log(quest);
-
+            quest = checkLikes(quest, req.user);
             var templ = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
             res.send(templ(Object.assign(quest, req.commonData)));
             done(null);
@@ -411,7 +446,7 @@ exports.addPhotoComment = (req, res, next) => {
     async.waterfall([
         done => {
             userModel
-                .findUser(JSON.stringify({_id: {$oid: userID}}))
+                .findUser(JSON.stringify({_id: {$oid: userID}}), {nickname: 1, avatar: 1})
                 .then(result => {
                     var author = result.user.nickname;
                     var authorPhoto = result.user.avatar;
@@ -453,7 +488,7 @@ exports.addQuestComment = (req, res, next) => {
     async.waterfall([
         done => {
             userModel
-                .findUser(JSON.stringify({_id: {$oid: userID}}))
+                .findUser(JSON.stringify({_id: {$oid: userID}}), {nickname: 1, avatar: 1})
                 .then(result => {
                     var author = result.user.nickname;
                     var authorPhoto = result.user.avatar;
@@ -486,6 +521,68 @@ exports.addQuestComment = (req, res, next) => {
         return err ? next(err) : next();
     });
 };
+
+exports.likeAction = (req, res, next) => {
+    var slug = req.body.slug;
+    var action = req.body.action;
+    var user = req.user;
+    async.waterfall([
+        done => {
+            if (!user) {
+                // отправлять сообщение!
+                return res.status(200).send({});
+            }
+            questModel.getQuests({slug: slug}, (err, result) => {
+                if (err) {
+                    done(err, null);
+                } else {
+                    result.length ? done(null, result[0]) : res.redirect('/search');
+                }
+            });
+        },
+        (quest, done) => {
+            quest = action === 'like' ? likeHandler(quest, user) : dislikeHandler(quest, user);
+            questModel
+                .updateQuests(quest)
+                .then(result => {
+                    return res.status(200).send(result);
+                })
+                .catch(err => {
+                    next(err);
+                });
+        }
+    ], err => {
+        err ? next(err) : next();
+    });
+};
+
+function likeHandler(quest, userID) {
+    var likeIndex = quest.rating.likes.indexOf(userID);
+    var dislikeIndex = quest.rating.dislikes.indexOf(userID);
+    if (dislikeIndex > -1) {
+        quest.rating.dislikes.splice(dislikeIndex, 1);
+    }
+    if (likeIndex > -1) {
+        quest.rating.likes.splice(likeIndex, 1);
+    } else {
+        quest.rating.likes.push(userID);
+    }
+    return quest;
+}
+
+function dislikeHandler(quest, userID) {
+    var likeIndex = quest.rating.likes.indexOf(userID);
+    var dislikeIndex = quest.rating.dislikes.indexOf(userID);
+    if (likeIndex > -1) {
+        quest.rating.likes.splice(dislikeIndex, 1);
+    }
+    if (dislikeIndex > -1) {
+        quest.rating.dislikes.splice(likeIndex, 1);
+    } else {
+        quest.rating.dislikes.push(userID);
+    }
+    return quest;
+}
 
 function getSpecPhotoUrl(url) {
     var urlParts = url.split('/');
@@ -529,6 +626,16 @@ function divideComments(allComments, quest, users) {
             quest.questComments.push(comment);
         }
     });
+    return quest;
+}
+
+function checkLikes(quest, id) {
+    if (quest.rating.likes.indexOf(id) > -1) {
+        quest.likesClass = 'isChecked';
+    }
+    if (quest.rating.dislikes.indexOf(id) > -1) {
+        quest.dislikesClass = 'isChecked';
+    }
     return quest;
 }
 

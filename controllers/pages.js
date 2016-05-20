@@ -21,7 +21,13 @@ exports.index = (req, res) => {
     }, req.commonData)));
 };
 
-exports.error404 = (req, res) => res.sendStatus(404);
+exports.error404 = (req, res) => {
+    var data = {
+        code: 404,
+        error: 'not found'
+    };
+    res.render('error', Object.assign(req.commonData, data));
+};
 
 exports.searchCities = (req, res) => {
     var cb = function (objects) {

@@ -15,3 +15,14 @@ function init() {
         myMap.geoObjects.add(new ymaps.Placemark(marker));
     });
 }
+
+const Swiper = require('swiper');
+/* eslint-disable no-unused-vars*/
+const swiper = new Swiper('.swiper-container', {
+    pagination: '.swiper-pagination',
+    slidesPerView: 'auto',
+    paginationClickable: true,
+    keyboardControl: true,
+    mousewheelControl: true,
+    spaceBetween: 20
+});

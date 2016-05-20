@@ -1,0 +1,43 @@
+html {
+    height: 100%;
+}
+body {
+    background-color: #000;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+.wrap {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    color: white;
+}
+.message {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.btn {
+    margin: 20px;
+}
+h1 {
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Special Elite', cursive;
+}
+h3 {
+    text-align: center;
+}
+@media screen and (max-width: 1000px) {
+    .wrap {
+        flex-direction: column;
+        align-items: center;
+    }
+    img {
+        width: 180px;
+        height: 250px;
+    }
+}

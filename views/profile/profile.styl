@@ -56,6 +56,7 @@
 }
 .info {
     display: flex;
+    flex-direction: row;
     justify-content: space-around;
     align-items: stretch;
     padding: 30px;
@@ -110,10 +111,48 @@ a:hover {
 .nav-tabs > li {
     font-size: 20px;
 }
+.editbtn {
+    margin-top: 10px;
+}
+.editbtn > a {
+    font-size: 18px;
+}
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.swiper-container {
+    width: 90%;
+    height: 300px;
+    margin: 20px auto;
+}
+.swiper-slide {
+    width: 300px;
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+}
+.modal-slide {
+    position: absolute;
+    background: rgba(0, 0, 0, .5);
+    border-radius: 5px;
+    top: 0;
+    left: 0;
+}
+.active {
+    color: #128f76;
+}
+.fa-map-marker {
+    color: #f63e72;
+}
 
-@media screen and (max-width: 570px) {
+@media screen and (max-width: 770px) {
     .nav-tabs > li {
         float: none;
+    }
+    .quest {
+        flex-direction: column;
     }
 }
 
@@ -125,6 +164,10 @@ a:hover {
 }
 
 @media screen and (max-width: 700px){
+    .info {
+        flex-direction: column;
+        align-items: center;
+    }
     .personInfo {
         width: 80%;
     }
@@ -146,10 +189,7 @@ a:hover {
     .quests {
         width: 100%;
         margin: 10px;
-    }                
-}
-
-@media screen and (max-width: 500px) {
+    }
     .quest__description {
         flex-direction: column;
     }

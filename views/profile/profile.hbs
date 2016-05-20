@@ -1,5 +1,6 @@
 {{#extend "base"}}
     {{#content "css" mode="append"}}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
         {{#if isDev}}
             <link rel="stylesheet" href="/profile.css">
         {{else}}
@@ -27,7 +28,14 @@
             </div>
         </div>
         <div class="info">
-            <div class="descAvatar" style="background-image: url({{avatar}})"></div>
+            <div class="leftColumn">
+                <div class="descAvatar" style="background-image: url({{avatar}})"></div>
+                {{#if isCurrentUser}}
+                    <div class="editbtn">
+                        <a href="/editProfile" class="btn btn-success">Редактировать профиль</a>
+                    </div>
+                {{/if}}
+            </div>            
             <div class='quests'>
                 <h2>Квесты</h2>
                 <div class="tabInfo">
@@ -40,7 +48,10 @@
                                 <a data-toggle="tab" href="#passedQuests">Пройденные</a>
                             </li>
                             <li>
-                                <a data-toggle="tab" href="#wishList">В хотелках</a>
+                                <a data-toggle="tab" href="#activeQuests">Проходит сейчас</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#wishList">Хочется пройти</a>
                             </li>
                             <li>
                                 <a data-toggle="tab" href="#map">Отметки на карте</a>
@@ -86,6 +97,25 @@
                                 <h3>Ни один квест пока не пройден.</h3>
                             {{/if}}
                         </div>
+                         <div id="activeQuests" class="tab-pane fade">
+                            {{#if activeQuests.length}}
+                                {{#each activeQuests}}
+                                    <div class="quest">
+                                        <a href="/quest/{{questSlug}}"><h3>{{questName}}</a>
+                                        <div class="quest__description">
+                                            <div class="quest__description__photo">
+                                                <img src="{{questTitlePhoto}}">
+                                            </div>
+                                            <div class="quest__description__text">
+                                                <p>{{questDescription}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{/each}}
+                            {{else}}
+                                <h3>Ни один квест пока не начат.</h3>
+                            {{/if}}
+                        </div>
                         <div id="wishList" class="tab-pane fade">
                             {{#if wishList.length}}
                                 {{#each wishList}}
@@ -112,9 +142,18 @@
                 </div>
             </div>
         </div>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                {{#each photos}}
+                    <div class="swiper-slide" style="background-image:url({{this}})"></div>
+                {{/each}}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
     {{/content}}
     {{#content "js" mode="append"}}
         <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
         {{#if isDev}}
             <script src="/profile.js" type="text/javascript"></script>
         {{else}}

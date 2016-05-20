@@ -100,8 +100,29 @@ h2 {
 .progressTitle {
     text-align: center;
 }
-.foundBtn {
+.extraBtn {
     border-radius: 10px 0px 0px 10px;
+}
+.foundBtn {
+    border-radius: 0;
+    font-size: 18px;
+}
+.map {
+    width: 90%;
+    margin: auto;
+    height: 300px;
+}
+.modal-header {
+    padding: 10px;
+}
+.bootbox-body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+}
+.extraLabel {
+    margin-top: 15px;
 }
 .commentBtn {
     border-radius: 0px 10px 10px 0px;
@@ -112,7 +133,6 @@ h2 {
 .modal-body {
     width: 100%;
     display: flex;
-    padding: 0 10px;
 }
 .modal-photo {
     width: 65%;
@@ -214,7 +234,6 @@ h2 {
 }
 .modal-header {
     position: relative;
-    padding-top: 0;
 }
 .close {
     position: absolute;
@@ -225,8 +244,25 @@ h2 {
 .modal-header .close {
     margin-top: 0;
 }
+.bootbox-close-button {
+    margin-top: 5px !important;
+    margin-right: 10px;
+}
 a:hover {
     text-decoration: none;
+}
+span {
+    font-size: 20px;
+    vertical-align: top;
+}
+#likes:hover, #dislikes:hover {
+    color: #f01150;
+}
+.isChecked {
+    color: #f63e72;
+}
+.bootbox-body {
+    font-size: 20px;
 }
 @media screen and (max-width: 1000px){
     .modal.fade, .modal.fade.in {
