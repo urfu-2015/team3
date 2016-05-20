@@ -1,5 +1,6 @@
 {{#extend "base"}}
     {{#content "css" mode="append"}}
+        <link href='https://fonts.googleapis.com/css?family=Philosopher&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
         <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"/>
         {{#if isDev}}
@@ -9,15 +10,18 @@
         {{/if}}
     {{/content}}
     {{#content "content"}}
-        <form name="addQuestForm" method="post" enctype="multipart/form-data">
+        <div class="addQuestForm" data-slug="{{slug}}">
             <div class="main-info container">
                 <div class="row">
                     <div class="col-lg-4 col-sm-4 col-xs-4-500">
-                        <div class="upload-photo quest-preview-photo">
+                        <div class="upload-photo quest-preview-photo" {{#if preview}}style="
+                                background-image: url({{preview}});
+                                background-size: cover;"{{/if}}>
                             <div class="upload-photo-view">
-                                <span class="upload-photo-icon glyphicon glyphicon-camera"></span>
+                                <span class="upload-photo-icon glyphicon glyphicon-camera"
+                                {{#if preview}}style="opacity: 0"{{/if}}></span>
                             </div>
-                            <input type="file" size="1" name="preview" accept="image/*"
+                            <input type="file" size="1" id="preview" accept="image/*"
                                    class="upload-photo-input">
                         </div>
                     </div>
@@ -25,25 +29,26 @@
                         <div class="form-group">
                             <label for="quest-name">Мой квест</label>
                             <input type="text" class="form-control" id="quest-name"
-                                   name="quest-name" placeholder="введите название" required>
+                                   name="quest-name" placeholder="введите название"
+                                   required value="{{name}}">
                         </div>
                         <div class="form-group">
                             <label for="quest-city">Будет проходить в...</label>
                             <input type="text" class="form-control" id="quest-city"
-                                   name="quest-city" placeholder="город" required>
+                                   name="quest-city" placeholder="город" required value="{{city}}">
                         </div>
                         <div class="form-group">
                             <label for="quest-duration">Время прохождения</label>
                             <div class="input-group">
                                 <input type="number" class="form-control" id="quest-duration"
-                                       name="quest-duration">
+                                       name="quest-duration" value="{{duration}}">
                                 <div class="input-group-addon">часов</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="quest-tags">Тэги</label>
                             <input type="text" class="form-control" id="quest-tags"
-                                   name="quest-tags">
+                                   name="quest-tags" value="{{#each tags}}{{this}}, {{/each}}">
                         </div>
                     </div>
                 </div>
@@ -53,7 +58,7 @@
                             <label for="quest-description">Описание</label>
                             <textarea class="form-control" rows="6" id="quest-description"
                                       placeholder="Расскажите о своем классном квесте"
-                                      name="quest-description" required></textarea>
+                                      name="quest-description" required>{{description}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -61,9 +66,9 @@
                     <div class="col-lg-12">
                         <div class="upload-photo quest-photos">
                             <div class="upload-photo-view">
-                                <p class="upload-photo-text">Добавить фотографии квеста</p>
+                                <p class="upload-photo-text">Выбрать фотографии</p>
                             </div>
-                            <input type="file" name="photos" size="1" accept="image/*"
+                            <input type="file" id="photos" size="1" accept="image/*"
                                    class="upload-photo-input" multiple>
                         </div>
                     </div>
@@ -72,49 +77,53 @@
                     <div class="col-lg-12">
                         <div class="swiper">
                             <div class="swiper-container">
-                                <div class="swiper-wrapper"></div>
-                                <div class="swiper-pagination"></div>
-                                <!--<span class="upload-photo-text">Фотографии не выбраны</span>-->
+                                <div class="swiper-wrapper">
+                                    {{#each photos}}
+                                        <div class="swiper-slide" data-id="{{this.id}}"
+                                             data-geo-lat="{{this.geolocation.lat}}"
+                                             data-geo-lng="{{this.geolocation.lng}}"
+                                             data-title="{{this.title}}"
+                                             data-hint="{{this.hint}}"
+                                             data-url="{{this.url}}">
+                                            <div class="img-rounded swiper-quest-image"
+                                                 style="background: url({{this.url}}) 100% 100%;
+                                                         background-size: cover;">
+                                                <a class="openmodal btn btn-default editBtn"
+                                                   href="#{{this.id}}" data-toggle="modal" style="width: 100%">
+                                                    <i class="fa fa-lg fa-pencil-square-o"
+                                                       aria-hidden="true"></i>
+                                                </a>
+                                                {{#if canDelete}}
+                                                    <button class="btn btn-default deleteBtn"
+                                                            id="delete_{{this.id}}">
+                                                        <i class="fa fa-lg fa-trash-o"
+                                                           aria-hidden="true"></i>
+                                                    </button>
+                                                {{/if}}
+                                            </div>
+                                        </div>
+                                    {{/each}}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-5 col-lg-offset-7 col-md-6 col-md-offset-6 col-sm-7
-                            col-sm-offset-5 col-xs-12">
+                    <div class="col-lg-12">
                         <div class="pull-right">
-                            <button type="button" name="back" class="btn btn-default">Назад</button>
-                            <button type="reset" name="reset" class="btn btn-danger">Сбросить форму</button>
-                            <button type="submit" name="submit" class="btn btn-success">Создать квест</button>
+                            <button type="button" id="back" class="btn btn-default">Назад</button>
+                            <button type="reset" id="clear" class="btn btn-warning">Очистить форму</button>
+                            {{#if btnDel}}
+                                <button type="button" id="delete" class="btn btn-danger">{{btnDel}}</button>
+                            {{/if}}
+                            <button type="submit" id="submit" class="btn btn-success">{{btnOk}}</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
-        <!--<div class="progress progress-striped active" onclick="move()">-->
-            <!--<div class="progress-bar progress-bar-success" style="width: 10%">-->
-                <!--<div class="progress-bar-label">10%</div>-->
-            <!--</div>-->
-        <!--</div>-->
+        </div>
     {{/content}}
     {{#content "js" mode="append"}}
-        <!--<script>-->
-            <!--function move() {-->
-                <!--var elem = document.querySelector('.progress-bar');-->
-                <!--console.log(elem);-->
-                <!--var width = 10;-->
-                <!--var id = setInterval(frame, 100);-->
-                <!--function frame() {-->
-                    <!--if (width >= 100) {-->
-                        <!--clearInterval(id);-->
-                    <!--} else {-->
-                        <!--width++;-->
-                        <!--elem.style.width = width + '%';-->
-                        <!--document.querySelector('.progress-bar-label').innerHTML = width * 1  + '%';-->
-                    <!--}-->
-                <!--}-->
-            <!--}-->
-        <!--</script>-->
         <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>

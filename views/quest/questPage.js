@@ -1,4 +1,6 @@
 require('./questPage.styl');
+/* eslint-disable no-unused-expressions*/
+'use strict';
 var latitude;
 var longitude;
 var slug = document.getElementById('questName').getAttribute('data-slug');
@@ -113,10 +115,14 @@ function likeRequest(action, callback) {
     });
 }
 
-var wishBtn = document.getElementById('wish');
-if (wishBtn) {
-    wishBtn.addEventListener('click', function () {
-        addToWishList(slug);
+var questBtn = document.getElementById('wish');
+if (questBtn) {
+    questBtn.addEventListener('click', function () {
+        if ($(questBtn).text().trim() === 'Редактировать') {
+            window.location.pathname = '/quest/' + slug + '/edit';
+        } else {
+            addToWishList(slug);
+        }
     });
 }
 
