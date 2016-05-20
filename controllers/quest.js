@@ -42,8 +42,6 @@ var memoryStorage = multer.memoryStorage();
 const upload = multer({storage: memoryStorage});
 const Quest = require('../models/quest.js');
 const cloudinary = require('../lib/cloudinary-images/cloudinary-loader');
-const Datauri = require('datauri');
-const path = require('path');
 
 exports.addQuestPage = (req, res) => {
     var template = handlebars.compile(fs.readFileSync('./views/quest/addQuest.hbs', 'utf8'));
@@ -198,8 +196,6 @@ exports.deleteQuest = (req, res) => {
         }
     });
 };
-
-exports.loadPhoto = upload.fields(fields);
 
 exports.sendUserPhoto = (req, res, next) => {
     if (!req.isAuthenticated()) {
