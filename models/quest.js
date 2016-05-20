@@ -31,13 +31,13 @@ class quest {
                            // можно передавать любое количество полей в запрос
                        });
                  3) Удаление квестов:
-                      Quest.getQuests({
+                      Quest.deleteQuests({
                          cityName: "Ekaterinburg"
                       }, (err, result) => {
                           // удалятся все квесты у которых город Екатеринбург
                       });
                  4) Обновление квестов:
-                      Quest.getQuests(
+                      Quest.updateQuests(
                       {
                          cityName: "Moscow"
                       },
@@ -68,7 +68,7 @@ class quest {
         ];
     }
 
-    static deleteQuest(query, callback) {
+    static deleteQuests(query, callback) {
         var options = {
             database: dbName,
             collectionName: 'quests',
@@ -125,30 +125,51 @@ class quest {
         };
 
         for (k in opt.replacements) {
-            s = s.replace(RegExp(k, 'g'), opt.replacements[k]);
+            s = s.replace(new RegExp(k, 'g'), opt.replacements[k]);
         }
 
         if (opt.transliterate) {
             for (k in charMap) {
-                s = s.replace(RegExp(k, 'g'), charMap[k]);
+                s = s.replace(new RegExp(k, 'g'), charMap[k]);
             }
         }
 
-        var alnum = RegExp('[^a-z0-9]+', 'ig');
+        var alnum = /[^a-z0-9]+/ig;
         s = s.replace(alnum, opt.delimiter);
 
-        s = s.replace(RegExp('[' + opt.delimiter + ']{2,}', 'g'), opt.delimiter);
+        s = s.replace(new RegExp('[' + opt.delimiter + ']{2,}', 'g'), opt.delimiter);
 
         // Truncate slug to max. characters
         s = s.substring(0, opt.limit);
 
         // Remove delimiter from ends
-        s = s.replace(RegExp('(^' + opt.delimiter + '|' + opt.delimiter + '$)', 'g'), '');
+        s = s.replace(new RegExp('(^' + opt.delimiter + '|' + opt.delimiter + '$)', 'g'), '');
 
         return opt.lowercase ? s.toLowerCase() : s;
     }
 
-    static updateQuests(quest) {
+    updateQuests(data, query, callback) {
+        // проверяем что не хотят добавить лишнее поле
+        var error = false;
+        for (var key in data) {
+            if (this.fields.indexOf(key) == -1) {
+                callback('Unexpected field', []);
+            }
+        }
+        var options = {
+            database: dbName,
+            collectionName: 'quests',
+            data: data,
+            query: JSON.stringify(query)
+        };
+        if (!error) {
+            mLab.updateDocuments(options, (err, result) => {
+                callback(err, result);
+            });
+        }
+    }
+
+    static updateQuest(quest) {
         return new Promise((resolve, reject) => {
             var id = quest._id.$oid;
             mLab.updateDocument({

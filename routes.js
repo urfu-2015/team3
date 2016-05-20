@@ -77,14 +77,20 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    app.get('/addQuest', onlyForAuth, quest.addQuest);
+    app.get('/addQuest', onlyForAuth, quest.addQuestPage);
 
-    app.post('/addQuest', onlyForAuth, quest.createQuest, quest.questPage, quest.addToMyQuests);
+    app.post('/addQuest', onlyForAuth, quest.createQuest, quest.addToMyQuests);
+
+    app.get('/quest/:slug/edit', onlyForAuth, quest.editQuestPage);
+
+    app.put('/quest/:slug/edit', onlyForAuth, quest.editQuest);
+
+    app.delete('/quest/:slug/delete', onlyForAuth, quest.deleteQuest);
+
+    app.get('/quest/:slug', setLoggedFlag, quest.getQuest);
 
     app.get('/search/cities', pages.searchCities);
     app.get('/search/tags', pages.searchTags);
-
-    app.get('/quest/:slug', setLoggedFlag, quest.getQuest);
 
     app.get('/profile/:id', profile.getProfile);
 

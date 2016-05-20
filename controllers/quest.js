@@ -42,21 +42,160 @@ var memoryStorage = multer.memoryStorage();
 const upload = multer({storage: memoryStorage});
 const Quest = require('../models/quest.js');
 const cloudinary = require('../lib/cloudinary-images/cloudinary-loader');
-const Datauri = require('datauri');
-const path = require('path');
 
-let fields = [{name: 'preview', maxCount: 1}];
-for (let i = 0; i < 30; i++) {
-    const fieldName = 'photo' + i.toString();
-    fields.push({name: fieldName, maxCount: 1});
-}
-
-exports.addQuest = (req, res) => {
+exports.addQuestPage = (req, res) => {
     var template = handlebars.compile(fs.readFileSync('./views/quest/addQuest.hbs', 'utf8'));
-    res.send(template(Object.assign({title: 'Создание квеста'}, req.commonData)));
+    res.send(template(Object.assign({
+        btnOk: 'Создать квест',
+        title: 'Создание квеста'
+    }, req.commonData)));
 };
 
-exports.loadPhoto = upload.fields(fields);
+exports.editQuestPage = (req, res) => {
+    const slug = req.params.slug;
+    async.waterfall([
+        done => {
+            done(null, slug);
+        },
+        getQuest,
+        (quest, done) => {
+            if (quest.author === req.user) {
+                const data = Object.assign({
+                    name: quest.displayName,
+                    city: quest.cityName,
+                    preview: quest.titleImage,
+                    description: quest.description,
+                    tags: quest.tags,
+                    duration: quest.duration,
+                    photos: quest.photos,
+                    btnOk: 'Редактировать квест',
+                    btnDel: 'Удалить квест',
+                    slug
+                }, req.commonData);
+                var template = handlebars.compile(fs.readFileSync('./views/quest/addQuest.hbs',
+                    'utf8'));
+                res.send(template(data));
+                done(null);
+            } else {
+                res.redirect('/');
+                done(null);
+            }
+        }
+    ], err => {
+        if (err) {
+            console.error(err);
+        }
+    });
+};
+
+exports.editQuest = (req, res) => {
+    const slug = req.params.slug;
+    let promise = Promise.resolve();
+    const photoAttributes = req.body.photoAttributes;
+    if (req.body.preview) {
+        const preview = req.body.preview;
+
+        /* eslint-disable no-unused-vars*/
+        promise = new Promise((resolve, reject) => {
+            cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
+                resolve(imageURL);
+            });
+        });
+    }
+
+    promise
+        .then(previewUrl => {
+            const photoIndexes = req.body.photoIndexes;
+            const photosLength = photoIndexes.length;
+            let photos = [];
+            let loadedPhotos = [];
+            let reqPhotos = [];
+            if (photosLength > 0) {
+                photos = photoAttributes.slice(0, photoAttributes.length - photosLength);
+                // console.log('photoAttributes:');
+                // console.log(photoAttributes);
+                // console.log('photos old:');
+                // console.log(photos);
+                photoIndexes.forEach(index => {
+                    const fieldName = 'photo' + index.toString();
+                    reqPhotos.push(req.body[fieldName]);
+                });
+            }
+            if (reqPhotos) {
+                // console.log(reqPhotos);
+                loadedPhotos = reqPhotos.map((photo, index) => {
+                    /* eslint-disable no-unused-vars*/
+                    return new Promise((resolve, reject) => {
+                        cloudinary.uploadImage(photo, Date.now().toString(), imageURL => {
+                            resolve({
+                                url: imageURL,
+                                title: photoAttributes[index].title,
+                                geolocation: photoAttributes[index].geolocation,
+                                hint: photoAttributes[index].hint,
+                                id: photoAttributes[index].id
+                            });
+                        });
+                    });
+                });
+            }
+
+            Promise.all(loadedPhotos)
+                .then(loadedPhotos => {
+                    if (loadedPhotos) {
+                        loadedPhotos.forEach(photo => {
+                            photos.push(photo);
+                        });
+                    }
+                    // console.log('photos after');
+                    // console.log(photos);
+                    const tags = req.body['quest-tags'].split(', ').filter(tag => tag.length > 0);
+                    let data = {
+                        displayName: req.body['quest-name'],
+                        cityName: req.body['quest-city'],
+                        description: req.body['quest-description'],
+                        tags,
+                        duration: req.body['quest-duration']
+                    };
+                    if (previewUrl) {
+                        data.titleImage = previewUrl;
+                    }
+                    if (photos.length) {
+                        data.photos = photos;
+                    }
+                    // console.log(data);
+                    let quest = new Quest({});
+                    quest.updateQuests(data, {slug}, (error, result) => {
+                        if (error) {
+                            console.log('error in update');
+                            console.log(error);
+                            // res.redirect('/');
+                            res.send({error});
+                        } else {
+                            // res.redirect('/quest/' + result.slug);
+                            res.send(Object.assign({slug}, req.commonData));
+                        }
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        })
+        .catch(err => {
+            console.error(err);
+        });
+};
+
+exports.deleteQuest = (req, res) => {
+    const slug = req.params.slug;
+    Quest.deleteQuests({slug}, (error, result) => {
+        if (error) {
+            console.error(error);
+            res.send({error});
+        } else {
+            res.send({});
+        }
+    });
+};
 
 exports.sendUserPhoto = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -154,16 +293,13 @@ exports.loadUserPhoto = upload.fields([{name: 'fileToUpload', maxCount: 1}]);
 
 exports.createQuest = (req, res, next) => {
     let promise = Promise.resolve();
-    const photoAttributes = JSON.parse(req.body.photoAttributes);
-    // console.log(photoAttributes);
-    if (req.files.preview) {
-        const preview = req.files.preview[0];
-        const dataUri = new Datauri();
-        dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);
+    const photoAttributes = req.body.photoAttributes;
+    if (req.body.preview) {
+        const preview = req.body.preview;
 
         /* eslint-disable no-unused-vars*/
         promise = new Promise((resolve, reject) => {
-            cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
+            cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
                 resolve(imageURL);
             });
         });
@@ -179,23 +315,23 @@ exports.createQuest = (req, res, next) => {
             if (photosLength > 0) {
                 for (let i = 0; i < photosLength; i++) {
                     const fieldName = 'photo' + i.toString();
-                    reqPhotos.push(req.files[fieldName][0]);
+                    // console.log(fieldName);
+                    // console.log(req.files[fieldName][0]);
+                    reqPhotos.push(req.body[fieldName]);
                 }
             }
             if (reqPhotos) {
                 // console.log(reqPhotos);
                 photos = reqPhotos.map((photo, index) => {
-                    const dataUri = new Datauri();
-                    dataUri.format(path.extname(photo.originalname).toString(), photo.buffer);
-                    // const photoAlt = 'Фото ' + index;
                     /* eslint-disable no-unused-vars*/
                     return new Promise((resolve, reject) => {
-                        cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
+                        cloudinary.uploadImage(photo, Date.now().toString(), imageURL => {
                             resolve({
                                 url: imageURL,
                                 title: photoAttributes[index].title,
                                 geolocation: photoAttributes[index].geolocation,
-                                hint: photoAttributes[index].hint
+                                hint: photoAttributes[index].hint,
+                                id: photoAttributes[index].id
                             });
                         });
                     });
@@ -204,8 +340,9 @@ exports.createQuest = (req, res, next) => {
 
             Promise.all(photos)
                 .then(photos => {
+                    // console.log(photos);
                     const tags = req.body['quest-tags'].split(', ').filter(tag => tag.length > 0);
-                    var quest = new Quest({
+                    let quest = new Quest({
                         displayName: req.body['quest-name'],
                         salt: "",
                         cityName: req.body['quest-city'],
@@ -218,8 +355,7 @@ exports.createQuest = (req, res, next) => {
                         photos
                     });
 
-                    /* eslint-disable no-unused-vars */
-
+                    /* eslint-disable no-unused-vars*/
                     quest.save((err, message, result) => {
                         if (err) {
                             console.log(message);
@@ -244,14 +380,11 @@ exports.createQuest = (req, res, next) => {
                                 }
                             });
                         } else {
-                            // console.log('slug1');
-                            // console.log(result.slug);
                             req.slug = result.slug;
+                            // res.redirect('/quest/' + result.slug);
+                            next();
                         }
                     });
-                })
-                .then(() => {
-                    next();
                 })
                 .catch(err => {
                     console.error(err);
@@ -260,32 +393,6 @@ exports.createQuest = (req, res, next) => {
         .catch(err => {
             console.error(err);
         });
-    /*
-     Добавить:
-      - получение автора из данных авторизации
-     Не хватает в клиентском коде:
-      - alt, geolocation у photos
-      - тэги: прикрутить как в поиске
-     Вопросы:
-      - дата: формат?
-      14 мая 2016
-      зачем дата?
-     */
-};
-
-exports.questPage = (req, res, next) => {
-    // var template = handlebars.compile(fs.readFileSync('./views/quest/questPage.hbs', 'utf8'));
-    // var data = {title: 'Страница квеста', currentUserID: req.user};
-    // res.send(template(Object.assign(data, req.commonData)));
-    // console.log('slug2');
-    // console.log(req.slug);
-    if (req.slug) {
-        res.redirect('/quest/' + req.slug);
-    } else {
-        // ошибка?
-        res.redirect('/');
-    }
-    next();
 };
 
 exports.addToMyQuests = (req, res, next) => {
@@ -309,7 +416,7 @@ exports.addToMyQuests = (req, res, next) => {
                 userModel
                     .updateUserInfo(user)
                     .then(updatedUser => {
-                        return res.status(200).send({});
+                        return res.status(200).send({slug});
                     })
                     .catch(err => {
                         done(err);
@@ -321,11 +428,32 @@ exports.addToMyQuests = (req, res, next) => {
     }
 };
 
+function getQuest(slug, done) {
+    questModel.getQuests({slug}, (err, result) => {
+        if (err) {
+            done(err, null);
+        } else {
+            result.length ? done(null, result[0]) : done(null, result);
+        }
+    });
+}
+
+function getUsers(quest, done) {
+    userModel
+        .getUsers({})
+        .then(result => {
+            done(null, result, quest);
+        })
+        .catch(err => {
+            done(err);
+        });
+}
+
 exports.getQuest = (req, res, next) => {
     var slug = req.params.slug;
     async.waterfall([
         done => {
-            questModel.getQuests({slug: slug}, (err, result) => {
+            questModel.getQuests({slug}, (err, result) => {
                 if (err) {
                     done(err, null);
                 }
@@ -378,11 +506,15 @@ exports.getQuest = (req, res, next) => {
             done(null, getCurrentUser(users, req.user), quest);
         },
         (user, quest, done) => {
-            var btnData = {phrase: 'Хочу пройти', classStyle: 'btn-success'};
-            var phrase = 'Хочу пройти';
-            if (user && user.wishList && user.wishList.indexOf(slug) !== -1) {
-                btnData.phrase = 'Не хочу проходить';
-                btnData.classStyle = 'btn-danger';
+            var btnData = {classStyle: 'btn-success'};
+            if (user && user.myQuests && user.myQuests.indexOf(slug) !== -1) {
+                btnData.phrase = 'Редактировать';
+            } else {
+                btnData.phrase = 'Хочу пройти';
+                if (user && user.wishList && user.wishList.indexOf(slug) !== -1) {
+                    btnData.phrase = 'Не хочу проходить';
+                    btnData.classStyle = 'btn-danger';
+                }
             }
             quest = Object.assign(btnData, quest);
 

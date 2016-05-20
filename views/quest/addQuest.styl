@@ -23,14 +23,16 @@
   height: 100%;
   border-radius: 15px;
   padding: 20px;
+  $grColor = #bdc4cc;
   background: repeating-linear-gradient(
           -45deg,
           rgba(243, 255, 230, 0.19),
-          rgba(243, 255, 230, 0.19) 0.5%,
-          alpha($base-color, 0.25) 0.5%,
-          alpha($base-color, 0.25) 2%,
-          rgba(243, 255, 230, 0.19) 2%
+          rgba(243, 255, 230, 0.19) 3px,
+          alpha($grColor, 0.30) 3px,
+          alpha($grColor, 0.30) 12px,
+          rgba(243, 255, 230, 0.19) 12px
   );
+  border: 2px solid #dce4ec;
   overflow: hidden;
   cursor: pointer;
   display: flex;
@@ -60,7 +62,8 @@
     font-size: 24px;
   }
   .upload-photo-text {
-    font-size: 24px;
+    font: 36px 'Philosopher', sans-serif;
+    //font-size: 24px;
   }
 }
 
@@ -70,7 +73,8 @@
       font-size: 32px;
     }
     .upload-photo-text {
-      font-size: 32px;
+      //font-size: 32px;
+      font-size: 40px;
     }
   }
 }
@@ -121,6 +125,10 @@
     line-height: 1.5;
     border-radius: 3px;
   }
+}
+
+#quest-description {
+  resize: vertical;
 }
 
 //slider styles
