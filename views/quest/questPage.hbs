@@ -45,16 +45,17 @@
         <div class="photos">
             {{#each photos}}
                 <div class="photo">
-                    <div class="photo__img" style="
+                    <div class="photo__img" id="{{@index}}_photoImg" style="
                     {{#ifIn @index ../passedPhotos}}opacity: .4;{{/ifIn}}">
                         <img src="{{url}}" alt="{{title}}">
                     </div> 
                     <div class="photo__descr">
-                        <div class="photo__descr__hint" style="{{#ifIn @index ../passedPhotos}}opacity: .4;{{/ifIn}}" alt="{{alt}}">
+                        <div class="photo__descr__hint" id="{{@index}}_photoHint" style="{{#ifIn @index ../passedPhotos}}opacity: .4;{{/ifIn}}" alt="{{alt}}">
                             <p>{{hint}}</p>
                         </div>
                         <div class="photo__descr__button">
-                            <label class="btn btn-success foundBtn {{#ifIn @index ../passedPhotos}}disabled{{/ifIn}}" for="{{@index}}_my-file-selector">
+                            <label class="btn btn-success foundBtn {{#ifIn @index ../passedPhotos}}disabled{{/ifIn}}" id="{{@index}}_photoLabel"
+                            for="{{@index}}_my-file-selector">
                                 <input id="{{@index}}_my-file-selector" type="file" accept="image/*" capture="camera" data-bfi-disabled style="display:none;">
                                 {{#ifIn @index ../passedPhotos}}Фотография принята{{/ifIn}}
                                 {{#ifNotIn @index ../passedPhotos}}Сделать фото{{/ifNotIn}}
@@ -71,7 +72,7 @@
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content" id="back">
                                 <div class="modal-header">
-                                    <a class="btn btn-default close" data-dismiss="modal">
+                                    <a class="btn close" data-dismiss="modal">
                                         <i class="fa fa-lg fa-times" aria-hidden="true"></i>
                                     </a>
                                     <h2>Комментарии</h2>
@@ -163,15 +164,16 @@
         </div>
     {{/content}}
     {{#content "js" mode="append"}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
         <script src="http://wedgies.github.io/jquery-emoji-picker/js/jquery.emojipicker.js" type="text/javascript"></script>
         <script src="http://wedgies.github.io/jquery-emoji-picker/js/jquery.emojipicker.a.js"></script>
         <script src="http://one-signal.github.io/emoji-picker/lib/js/nanoscroller.min.js"></script>
-          <script src="http://one-signal.github.io/emoji-picker/lib/js/tether.min.js"></script>
-          <script src="http://one-signal.github.io/emoji-picker/lib/js/config.js"></script>
-          <script src="http://one-signal.github.io/emoji-picker/lib/js/util.js"></script>
-          <script src="http://one-signal.github.io/emoji-picker/lib/js/jquery.emojiarea.js"></script>
-          <script src="http://one-signal.github.io/emoji-picker/lib/js/emoji-picker.js"></script>
-           <script>
+        <script src="http://one-signal.github.io/emoji-picker/lib/js/tether.min.js"></script>
+        <script src="http://one-signal.github.io/emoji-picker/lib/js/config.js"></script>
+        <script src="http://one-signal.github.io/emoji-picker/lib/js/util.js"></script>
+        <script src="http://one-signal.github.io/emoji-picker/lib/js/jquery.emojiarea.js"></script>
+        <script src="http://one-signal.github.io/emoji-picker/lib/js/emoji-picker.js"></script>
+            <script>
                 $(function() {
                   // Initializes and creates emoji set from sprite sheet
                   window.emojiPicker = new EmojiPicker({
@@ -185,7 +187,7 @@
                   window.emojiPicker.discover();
                 });
               </script>
-              <script src="http://gregpike.net/demos/bootstrap-file-input/bootstrap.file-input.js"></script>
+        <script src="http://gregpike.net/demos/bootstrap-file-input/bootstrap.file-input.js"></script>
         {{#if isDev}}
             <script src="/questPage.js" type="text/javascript"></script>
         {{else}}

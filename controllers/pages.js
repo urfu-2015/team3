@@ -27,6 +27,7 @@ exports.error404 = (req, res) => {
         error: 'not found'
     };
     res.render('error', Object.assign(req.commonData, data));
+};
 
 exports.searchCities = (req, res) => {
     var cb = function (objects) {

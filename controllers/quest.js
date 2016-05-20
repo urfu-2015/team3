@@ -59,12 +59,9 @@ exports.addQuest = (req, res) => {
 exports.loadPhoto = upload.fields(fields);
 
 exports.sendUserPhoto = (req, res, next) => {
-    console.log(req.files.fileToUpload[0]); // сама фотка
-    console.log(req.body.id); // id фотки в модели quest
-    var parser = require('exif-parser').create(req.files.fileToUpload[0].buffer);
-    var result = parser.parse();
-    console.log(result);
-    console.log(req.body);
+    if (!req.isAuthenticated()) {
+        return res.send({message: 'Вы должны быть авторизованы, чтобы проходить квест'});
+    }
     questModel
         .getQuests({slug: req.body.slug}, (err, quest) => {
             if (err) {
@@ -85,13 +82,19 @@ exports.sendUserPhoto = (req, res, next) => {
                 if (distance <= maxDistance) {
                     var userID = req.user;
                     var newMarker = {lat: userLat, lng: userLng};
-                    var preview = req.files.fileToUpload[0];
-                    var dataUri = new Datauri();
-                    dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);
+                    var preview = req.body.fileToUpload;
+                    /* var dataUri = new Datauri();
+                    dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);*/
 
-                    /* eslint-disable no-unused-vars*/
-                    var promise = new Promise((resolve, reject) => {
+                    /* var promise = new Promise((resolve, reject) => {
                         cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
+                            resolve(imageURL);
+                        });
+                    });*/
+                    /* eslint-disable no-unused-vars */
+                    var promise = new Promise((resolve, reject) => {
+                        cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
+                            console.log(imageURL);
                             resolve(imageURL);
                         });
                     });
@@ -127,7 +130,11 @@ exports.sendUserPhoto = (req, res, next) => {
                                     userModel
                                         .updateUserInfo(user)
                                         .then(result => {
-                                            res.send('good photo');
+                                            var data = {
+                                                message: 'Фотография принята!',
+                                                isOk: true
+                                            };
+                                            res.send(data);
                                         })
                                         .catch(err => next(err));
                                 })
@@ -137,7 +144,7 @@ exports.sendUserPhoto = (req, res, next) => {
                             next(err);
                         });
                 } else {
-                    res.send('wrong photo');
+                    res.send({message: 'Фотография не принята: координаты неверные.'});
                 }
             }
         });

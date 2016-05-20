@@ -22,33 +22,48 @@ $(function () {
 });
 
 function uploadFile(idPhoto) {
-    var blobFile = $('#' + idPhoto + '_my-file-selector')[0].files[0];
-    console.log(blobFile);
-    var formData = new FormData();
+    loadBase64($('#' + idPhoto + '_my-file-selector')[0].files[0], function (res) {
+        var data = {
+            fileToUpload: res,
+            id: idPhoto,
+            latitude: latitude,
+            longitude: longitude,
+            slug: slug
+        };
 
-    formData.set("fileToUpload", blobFile);
-    formData.set("id", idPhoto);
-    formData.set("latitude", latitude);
-    formData.set("longitude", longitude);
-    formData.set("slug", slug);
-
-    $.ajax({
-        url: "/sendUserPhoto",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            console.log(response);
-            // если 'good photo', то надо
-            // добавить добавить стили к пройденной фотке и вывести сообщение "Фотография принята"
-
-            // если 'wrong photo', то надо вывести сообщение "Неверная фотография"
-        },
-        error: function (jqXHR, textStatus, errorMessage) {
-            console.log(errorMessage);
-        }
+        $.ajax({
+            url: "/sendUserPhoto",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                if (response.isOk) {
+                    console.log(idPhoto);
+                    var img = document.getElementById(idPhoto + '_photoImg');
+                    var hint = document.getElementById(idPhoto + '_photoHint');
+                    var label = document.getElementById(idPhoto + '_photoLabel');
+                    img.style.opacity = '.4';
+                    hint.style.opacity = '.4';
+                    label.disable = true;
+                    label.textContent = 'Фотография принята';
+                }
+                /* eslint-disable no-undef*/
+                bootbox.alert(response.message, function () {});
+            },
+            error: function (jqXHR, textStatus, errorMessage) {
+                console.log(errorMessage);
+            }
+        });
     });
+}
+
+function loadBase64(photo, callback) {
+    const reader = new FileReader();
+    reader.addEventListener('load', function () {
+        const base64 = reader.result.replace(/(\r\n|\n|\r)/gm, '');
+        callback(base64);
+    });
+    reader.readAsDataURL(photo);
 }
 
 var questCommentsBox = document.getElementById('questCommentsBox');
