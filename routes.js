@@ -100,7 +100,7 @@ module.exports = function (app, passport) {
 
     app.post('/sendUserPhoto', quest.loadUserPhoto, quest.sendUserPhoto);
 
-    app.get('/quests', pages.getQuests);
+    app.get('/quests', setLoggedFlag, pages.getQuests);
 
     app.all('*', pages.error404);
 
@@ -121,7 +121,7 @@ function canCreateQuest(req, res, next) {
     if (req.isAuthenticated()) {
         next();
     } else {
-        res.redirect('/');
+        res.redirect('/login');
     }
 }
 
