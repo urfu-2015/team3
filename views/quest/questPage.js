@@ -4,7 +4,7 @@ var longitude;
 var slug = document.getElementById('questName').getAttribute('data-slug');
 
 $(document).ready(function () {
-    $('.emoji-wysiwyg-editor').css('height', '44px');
+    $('.emoji-wysiwyg-editor').css('height', '43px');
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
             latitude = position.coords.latitude;
