@@ -55,6 +55,7 @@ class quest {
         this.questObject = questObject;
         this.fields = [
             'displayName',
+            'salt',
             'cityName',
             'author',
             'titleImage',
@@ -207,7 +208,8 @@ class quest {
                 return callback(true, "you can't set 'slug' field, it will generated automatically", []);
             }
         }
-
+        console.log(this.questObject.salt, this.questObject.displayName);
+        var salt = this.questObject.salt || "";
         var displayName = this.questObject.displayName;
         var cityName = this.questObject.cityName || "";
         var author = this.questObject.author || "";
@@ -219,7 +221,7 @@ class quest {
         var duration = this.questObject.duration || "";
         var date = this.questObject.date || "";
         var photos = this.questObject.photos || [];
-        var slug = this.slugify(this.questObject.displayName);
+        var slug = this.slugify(this.questObject.displayName) + "-" + salt;
 
         // Проверяем что slug уникальный, если true добавляем
 
@@ -233,6 +235,7 @@ class quest {
                         collectionName: 'quests',
                         documents: {
                             displayName,
+                            salt,
                             slug,
                             cityName,
                             author,
