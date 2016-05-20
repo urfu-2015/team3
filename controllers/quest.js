@@ -9,6 +9,9 @@ const CommentsModel = require('../models/comments');
 const async = require('async');
 const requestToDB = require('../lib/auth/requestToDB');
 const geolib = require('geolib');
+var compare = require('hamming-distance');
+const DEFAULT_QUEST_PHOTO = "https://yt3.ggpht.com/-KW2e6-Cfhao/" +
+    "AAAAAAAAAAI/AAAAAAAAAAA/OuOKv2IDEcE/s100-c-k-no/photo.jpg";
 
 handlebars.registerHelper('ifIn', function (elem, list, options) {
     if (!list) {
@@ -220,13 +223,34 @@ exports.sendUserPhoto = (req, res, next) => {
                     var preview = req.body.fileToUpload;
                     /* eslint-disable no-unused-vars */
                     var promise = new Promise((resolve, reject) => {
-                        cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
-                            resolve(imageURL);
-                        });
+                        cloudinary.uploadImage(dataUri.content, Date.now().toString(),
+                            (imageURL, pHashImage) => {
+                                resolve({imageURL, pHashImage});
+                            });
                     });
 
                     promise
-                        .then(previewUrl => {
+                        .then(resultObj => {
+                            var previewUrl = resultObj.imageURL;
+                            var pHashImage = resultObj.pHashImage;
+
+                            console.log(pHashImage); // только что пришедшая фотка
+
+                            console.log(quest[0].photos[id].phash); // фотка из базы
+
+                            var distance = compare(new Buffer(pHashImage, 'hex'),
+                                new Buffer(quest[0].photos[id].phash, 'hex'));
+
+                            console.log(1 - (distance / 64.0));
+
+                            if ((1 - (distance / 64.0)) <= 0.5) {
+                                var data = {
+                                    message: 'Фотография не принята: координаты неверные',
+                                    isOk: false
+                                };
+                                res.send(data);
+                            }
+
                             userModel
                                 .findUser(JSON.stringify({_id: {$oid: userID}}))
                                 .then(found => {
@@ -290,17 +314,27 @@ exports.createQuest = (req, res, next) => {
 
         /* eslint-disable no-unused-vars*/
         promise = new Promise((resolve, reject) => {
-            cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
-                resolve(imageURL);
-            });
+            cloudinary.uploadImage(preview, Date.now().toString(),
+                (imageURL, pHashImage) => {
+                    console.log(imageURL, pHashImage);
+                    resolve({imageURL, pHashImage});
+                });
         });
     }
 
     promise
-        .then(previewUrl => {
+        .then(resObj => {
+            var previewUrl;
+            if (resObj) {
+                previewUrl = resObj.imageURL;
+            } else {
+                previewUrl = DEFAULT_QUEST_PHOTO;
+            }
             const photosLength = req.body['photos-length'];
             let photos = [];
             let reqPhotos = [];
+            // console.log('photosLength:');
+            // console.log(photosLength);
             if (photosLength > 0) {
                 for (let i = 0; i < photosLength; i++) {
                     const fieldName = 'photo' + i.toString();
@@ -310,6 +344,7 @@ exports.createQuest = (req, res, next) => {
                 }
             }
             if (reqPhotos) {
+                // console.log(reqPhotos);
                 photos = reqPhotos.map((photo, index) => {
                     /* eslint-disable no-unused-vars*/
                     return new Promise((resolve, reject) => {
