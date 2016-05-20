@@ -23,18 +23,18 @@ $('#sort-button').click(function () {
         navigator.geolocation.getCurrentPosition(function (position) {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
+            $.ajax({
+                type: "GET",
+                url: "/quests",
+                data: {
+                    word: value,
+                    latitude: JSON.stringify(latitude),
+                    longitude: JSON.stringify(longitude)
+                },
+                success: function (data) {
+                    container.innerHTML = data;
+                }
+            });
         });
     }
-    $.ajax({
-        type: "GET",
-        url: "/quests",
-        data: {
-            word: value,
-            latitude: JSON.stringify(latitude),
-            longitude: JSON.stringify(longitude)
-        },
-        success: function (data) {
-            container.innerHTML = data;
-        }
-    });
 });
