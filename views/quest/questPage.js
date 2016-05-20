@@ -11,18 +11,26 @@ $(document).ready(function () {
             longitude = position.coords.longitude;
         });
     } else {
-        // view map
+        $("input[id$='_my-file-selector']").attr("disabled", true);
     }
+});
+
+var addPhotoBtn = document.getElementsByClassName('extraBtn');
+[].slice.call(addPhotoBtn).forEach(btn => {
+    btn.addEventListener('click', function () {
+        var id = this.id.split('_')[0];
+        showForm(id);
+    });
 });
 
 $(function () {
     $("input[id$='_my-file-selector']").change(function () {
-        uploadFile(this.id.slice(0, -17));
+        uploadFile(this.id.slice(0, -17), '_my-file-selector');
     });
 });
 
-function uploadFile(idPhoto) {
-    loadBase64($('#' + idPhoto + '_my-file-selector')[0].files[0], function (res) {
+function uploadFile(idPhoto, selector) {
+    loadBase64($('#' + idPhoto + selector)[0].files[0], function (res) {
         var data = {
             fileToUpload: res,
             id: idPhoto,
@@ -42,9 +50,10 @@ function uploadFile(idPhoto) {
                     var img = document.getElementById(idPhoto + '_photoImg');
                     var hint = document.getElementById(idPhoto + '_photoHint');
                     var label = document.getElementById(idPhoto + '_photoLabel');
+                    $("#" + idPhoto + "_my-file-selector").attr("disabled", true);
                     img.style.opacity = '.4';
                     hint.style.opacity = '.4';
-                    label.disable = true;
+                    label.setAttribute('disabled', true);
                     label.textContent = 'Фотография принята';
                 }
                 /* eslint-disable no-undef*/
@@ -262,4 +271,65 @@ function addToWishList(slug) {
             console.error(err);
         }
     });
+}
+
+var isChoosen = false;
+
+function showForm(id) {
+    bootbox.dialog({
+        title: "Вы нашли место на фото?",
+        message: '<p>Укажите ваше местоположение:</p>' +
+                '<div id="' + id + '_extraMap" class="map"></div>' +
+                '<label class="btn btn-success extraLabel" id="' + id + '_file" for="' +
+                id + '-fileInput">' +
+                '<input id="' + id + '-fileInput" type="file" accept="image/*" capture="camera"' +
+                ' data-bfi-disabled style="display:none;">' +
+                'Отправить фото',
+        buttons: {
+            success: {
+                label: 'Готово!',
+                className: "btn-success",
+                callback: function () {
+                    if (latitude && longitude && isChoosen) {
+                        uploadFile(id, '-fileInput');
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+    });
+    document.getElementById(id + '-fileInput').onchange = function () {
+        isChoosen = true;
+    };
+    /* eslint-disable no-undef*/
+    ymaps.ready(init);
+    function init() {
+        var placemark;
+        var map = new ymaps.Map(id + '_extraMap', {
+            center: [56.8575, 60.6125],
+            zoom: 4,
+            controls: ['zoomControl', 'fullscreenControl']
+        });
+        var search = new ymaps.control.SearchControl({options: {noPlacemark: true}});
+        map.controls.add(search);
+        map.events.add('click', function (event) {
+            var coords = event.get('coords');
+            if (placemark) {
+                placemark.geometry.setCoordinates(coords);
+            } else {
+                placemark = new ymaps.Placemark(coords, {}, {draggable: true});
+                map.geoObjects.add(placemark);
+                placemark.events.add('dragend', function () {
+                    setCoordinates(id, placemark.geometry.getCoordinates());
+                });
+            }
+            setCoordinates(id, coords);
+        });
+    }
+}
+
+function setCoordinates(id, coords) {
+    latitude = coords[0];
+    longitude = coords[1];
 }
