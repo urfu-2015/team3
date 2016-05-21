@@ -48,7 +48,7 @@ function uploadFile(idPhoto, selector) {
             contentType: 'application/json',
             success: function (response) {
                 if (response.isOk) {
-                    //console.log(idPhoto);
+                    // console.log(idPhoto);
                     var img = document.getElementById(idPhoto + '_photoImg');
                     var hint = document.getElementById(idPhoto + '_photoHint');
                     var label = document.getElementById(idPhoto + '_photoLabel');
