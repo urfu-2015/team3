@@ -14,7 +14,7 @@ describe.skip('GET /nonExistentPage', () => {
 
 describe('Registration and authorization', () => {
     describe('Log in', () => {
-        it('should get login page', done => {
+        it.skip('should get login page', done => {
             supertest(app)
                 .get('/login')
                 .expect(200)
