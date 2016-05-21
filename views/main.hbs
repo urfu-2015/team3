@@ -1,5 +1,5 @@
 {{#extend "base"}}
-	{{#content "css" mode="append"}}
+    {{#content "css" mode="append"}}
         <style>
             .vertical-center {
                 min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
@@ -10,10 +10,17 @@
                 }
 
             .pagination-centered{text-align:center;}
+            .invited {
+                text-align: center;
+                font-size: 17px;
+            }
+            .btn-lg {
+                padding: 18px;
+            }
         </style>
-	{{/content}}
+    {{/content}}
     {{#content "content"}}
-    	<div id="video-block" style="position:fixed;
+        <div id="video-block" style="position:fixed;
     padding:0;
     margin:0;
     top:60px;
@@ -21,13 +28,13 @@
     width: 100%;
     height: 100%;
     " class="vertical-center" data-vide-bg="http://savichev-loh.surge.sh/246568619.mp4">
-            <div class="container text-center" style="margin-bottom: 150px;">
+            <div class="container text-center no-video" style="margin-bottom: 150px;">
                 <div class="jumbotron" style="background: rgba(255, 255, 255, 0.6)">
                 <div class="row">
                     <div class="col-lg-12 pagination-centered">
                             <h1 style="color: rgba(0,0,0,1);" >PhotoQuest</h1>
                             <p style="color: rgba(0,0,0,1);" class="lead">Создавайте лучшие фотографии во время путешествий, проходя квесты!</p>
-                            <p><a class="btn btn-lg btn-success" href="/quests" role="button">Посмотреть лучшие квесты!</a></p>
+                            <p><a id="btn-a-invited" class="btn btn-lg btn-success invited" href="/quests" role="button">Посмотреть лучшие квесты!</a></p>
                     </div>
                     <!--<div class="col-lg-12 pagination-centered">-->
                         <!--<p class="lead"><span class="glyphicon glyphicon-ok"></span> Авторизация через любимые соц. сети</p>-->
@@ -44,12 +51,12 @@
     {{/content}}
     {{#content "js" mode="append"}}
         <script src="http://savichev-loh.surge.sh/device.js"></script>
-    	<script src="http://savichev-loh.surge.sh/jquery.vide.min.js"></script>
-    	<script src="http://savichev-loh.surge.sh/jquery.noty.packaged.min.js"></script>
+        <script src="http://savichev-loh.surge.sh/jquery.vide.min.js"></script>
+        <script src="http://savichev-loh.surge.sh/jquery.noty.packaged.min.js"></script>
         <script>
             $(document).ready(function() {
                 if (device.mobile() || screen.width < 692) {
-                    $(".container").unwrap();
+                    $(".no-video").unwrap();
                 }
             });
         </script>
