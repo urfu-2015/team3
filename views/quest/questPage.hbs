@@ -14,7 +14,7 @@
                 <h1 id="questName" data-slug="{{slug}}">{{displayName}}</h1>
                 <p class="city">г. {{cityName}}</p>
                 <p class="icons">
-                    <i class="fa fa-2x fa-heart {{likesClass}}" aria-hidden="true"
+                    <i class="fa fa-2x fa-thumbs-o-up {{likesClass}}" aria-hidden="true"
                     id="likes"></i> 
                     <span id="likesCount">{{rating.likes.length}}</span>
                     <i class="fa fa-2x fa-thumbs-down {{dislikesClass}}" aria-hidden="true"
@@ -22,6 +22,10 @@
                     <span id="dislikesCount">{{rating.dislikes.length}}</span>
                     <i class="fa fa-2x fa-comments-o fa-fw"></i> 
                     <span id="commentsCount"> {{questComments.length}}</span>
+                    {{#if duration.length}}
+                        <i class="fa fa-2x fa-hourglass-half" aria-hidden="true"></i>
+                        <span>{{duration}}</span>
+                    {{/if}}
                 </p>
                 {{#unless isNotLogged}}
                 <p class="questBtn">
