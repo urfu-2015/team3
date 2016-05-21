@@ -734,21 +734,21 @@ function getCurrentUser(users, id) {
 }
 
 function divideComments(allComments, quest, users) {
+    quest.questComments = quest.questComments || [];
     allComments.forEach(comment => {
         comment.authorID = comment.author;
         var authorInfo = getAuthorInfo(users, comment.author);
         if (authorInfo) {
             comment.author = authorInfo.author;
             comment.authorPhoto = authorInfo.authorPhoto;
-        }
+        }        
         if (comment.url) {
             var index = getPhotoIndex(comment.url, quest);
             if (index !== -1) {
                 quest.photos[index].comments = quest.photos[index].comments || [];
                 quest.photos[index].comments.push(comment);
             }
-        } else {
-            quest.questComments = quest.questComments || [];
+        } else {            
             quest.questComments.push(comment);
         }
     });
