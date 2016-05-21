@@ -148,7 +148,7 @@ class quest {
         return opt.lowercase ? s.toLowerCase() : s;
     }
 
-    static updateQuests(data, query, callback) {
+    updateQuests(data, query, callback) {
         // проверяем что не хотят добавить лишнее поле
         var error = false;
         for (var key in data) {
