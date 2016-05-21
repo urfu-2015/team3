@@ -14,7 +14,10 @@
                     <i class="glyphicon glyphicon-search"></i>
                 </button>
             </div>
-            <input type="button" class="btn btn_green" value="Ближайшие квесты" id="sort-button">
+            <input type="button" class="btn btn_green" value="Квесты рядом" id="sort-button">
+        </div>
+        <div class="load load_invisible">
+            <img class="load__img" src="/loading.gif">
         </div>
         <main class="container-fluid">
             {{#if quests.length}}
@@ -32,7 +35,7 @@
                     </figure>
                 {{/each}}
             {{^}}
-                <p class="no-quests">Quests not found!</p>
+                <p class="no-quests">Квесты не найдены!</p>
             {{/if}}
         </main>
     {{/content}}
