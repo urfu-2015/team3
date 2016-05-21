@@ -17,7 +17,11 @@
             <input type="button" class="btn btn_green" value="Квесты рядом" id="sort-button">
         </div>
         <div class="load load_invisible">
-            <img class="load__img" src="/loading.gif">
+            {{#if isDev}}
+                <img class="load__img" src="/loading.gif">
+            {{else}}
+                <img class="load__img" src="//kafkatist.surge.sh/loading.gif">
+            {{/if}}
         </div>
         <main class="container-fluid">
             {{#if quests.length}}
