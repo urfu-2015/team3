@@ -226,6 +226,16 @@ tr-time = .65s;
     background-size: cover;
 }
 
+.hint
+{
+    text-align: center;
+    font-size: 120%;
+    margin-top: 1%;
+    display:inline-block;
+    width: 95%;
+    color: #8d8b8b;
+}
+
 @media (max-width: screen-xs-max)
 {
     #sort-button
@@ -301,7 +311,6 @@ tr-time = .65s;
         -webkit-transition: 1s -webkit-filter linear;
         transition: 1s filter linear;
     }
-
 }
 
 
@@ -359,6 +368,11 @@ tr-time = .65s;
     {
         transition: transform tr-time;
         transform: translate3d(0, 100%, 0);
+    }
+    
+    .hint
+    {
+        display:none;
     }
 }
 
