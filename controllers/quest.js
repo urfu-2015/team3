@@ -218,7 +218,7 @@ exports.sendUserPhoto = (req, res, next) => {
                     {latitude: lat, longitude: lng},
                     {latitude: req.body.latitude, longitude: req.body.longitude}
                 );
-                var maxDistance = 500;
+                var maxDistance = 50000000;
                 console.log(distance);
                 console.log(quest[0].photos[id].geolocation);
                 if (distance <= maxDistance) {
@@ -227,7 +227,7 @@ exports.sendUserPhoto = (req, res, next) => {
                     var preview = req.body.fileToUpload;
                     /* eslint-disable no-unused-vars */
                     var promise = new Promise((resolve, reject) => {
-                        cloudinary.uploadImage(dataUri.content, Date.now().toString(),
+                        cloudinary.uploadImage(preview, Date.now().toString(),
                             (imageURL, pHashImage) => {
                                 resolve({imageURL, pHashImage});
                             });
@@ -245,8 +245,6 @@ exports.sendUserPhoto = (req, res, next) => {
                             var distance = compare(new Buffer(pHashImage, 'hex'),
                                 new Buffer(quest[0].photos[id].phash, 'hex'));
 
-                            console.log(1 - (distance / 64.0));
-
                             if ((1 - (distance / 64.0)) <= 0.5) {
                                 res.send({
                                     message: 'Фотография не принята: фотографии не совпадают.'
@@ -261,24 +259,20 @@ exports.sendUserPhoto = (req, res, next) => {
                                     var slug = quest[0].slug;
                                     var activeQuests = user.activeQuests;
 
-                                    if (!activeQuests[slug]) {
-                                        activeQuests[slug] = [];
-                                    }
-                                    activeQuests[slug].push(req.body.id);
+                                    console.log(slug, activeQuests);
 
-                                    var passed = activeQuests[slug].length;
+                                    if (!user.activeQuests[slug]) {
+                                        user.activeQuests[slug] = [];
+                                    }
+
+                                    user.activeQuests[slug].push(req.body.id);
+
+                                    var passed = user.activeQuests[slug].length;
                                     var mustbe = quest[0].photos.length;
                                     var isPassed = passed === mustbe;
-
                                     if (isPassed) {
-                                        var passedQuests = user.passedQuests;
-                                        passedQuests.push(slug);
-                                        user.passedQuests = passedQuests;
-                                        delete activeQuests[slug];
+                                        user.passedQuests.push(slug);
                                     }
-
-                                    user.activeQuests = activeQuests;
-
                                     user.markers.push(newMarker);
                                     user.photos = user.photos || [];
                                     user.photos.push(previewUrl);
