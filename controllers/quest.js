@@ -9,6 +9,9 @@ const CommentsModel = require('../models/comments');
 const async = require('async');
 const requestToDB = require('../lib/auth/requestToDB');
 const geolib = require('geolib');
+var compare = require('hamming-distance');
+const DEFAULT_QUEST_PHOTO = "https://yt3.ggpht.com/-KW2e6-Cfhao/" +
+    "AAAAAAAAAAI/AAAAAAAAAAA/OuOKv2IDEcE/s100-c-k-no/photo.jpg";
 
 handlebars.registerHelper('ifIn', function (elem, list, options) {
     if (!list) {
@@ -25,7 +28,9 @@ handlebars.registerHelper('ifNotIn', function (elem, list, options) {
     if (!list) {
         return options.fn(this);
     }
-    // console.log(elem, list);
+
+    console.log(elem, list);
+
     if (list.indexOf(elem.toString()) === -1) {
         return options.fn(this);
     }
@@ -213,20 +218,39 @@ exports.sendUserPhoto = (req, res, next) => {
                     {latitude: lat, longitude: lng},
                     {latitude: req.body.latitude, longitude: req.body.longitude}
                 );
-                var maxDistance = 500;
+                var maxDistance = 50000000;
+                console.log(distance);
+                console.log(quest[0].photos[id].geolocation);
                 if (distance <= maxDistance) {
                     var userID = req.user;
                     var newMarker = {lat: userLat, lng: userLng};
                     var preview = req.body.fileToUpload;
                     /* eslint-disable no-unused-vars */
                     var promise = new Promise((resolve, reject) => {
-                        cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
-                            resolve(imageURL);
-                        });
+                        cloudinary.uploadImage(preview, Date.now().toString(),
+                            (imageURL, pHashImage) => {
+                                resolve({imageURL, pHashImage});
+                            });
                     });
 
                     promise
-                        .then(previewUrl => {
+                        .then(resultObj => {
+                            var previewUrl = resultObj.imageURL;
+                            var pHashImage = resultObj.pHashImage;
+
+                            console.log(pHashImage); // только что пришедшая фотка
+
+                            console.log(quest[0].photos[id].phash); // фотка из базы
+
+                            var distance = compare(new Buffer(pHashImage, 'hex'),
+                                new Buffer(quest[0].photos[id].phash, 'hex'));
+
+                            if ((1 - (distance / 64.0)) <= 0.5) {
+                                res.send({
+                                    message: 'Фотография не принята: фотографии не совпадают.'
+                                });
+                            }
+
                             userModel
                                 .findUser(JSON.stringify({_id: {$oid: userID}}))
                                 .then(found => {
@@ -235,24 +259,20 @@ exports.sendUserPhoto = (req, res, next) => {
                                     var slug = quest[0].slug;
                                     var activeQuests = user.activeQuests;
 
-                                    if (!activeQuests[slug]) {
-                                        activeQuests[slug] = [];
-                                    }
-                                    activeQuests[slug].push(req.body.id);
+                                    console.log(slug, activeQuests);
 
-                                    var passed = activeQuests[slug].length;
+                                    if (!user.activeQuests[slug]) {
+                                        user.activeQuests[slug] = [];
+                                    }
+
+                                    user.activeQuests[slug].push(req.body.id);
+
+                                    var passed = user.activeQuests[slug].length;
                                     var mustbe = quest[0].photos.length;
                                     var isPassed = passed === mustbe;
-
                                     if (isPassed) {
-                                        var passedQuests = user.passedQuests;
-                                        passedQuests.push(slug);
-                                        user.passedQuests = passedQuests;
-                                        delete activeQuests[slug];
+                                        user.passedQuests.push(slug);
                                     }
-
-                                    user.activeQuests = activeQuests;
-
                                     user.markers.push(newMarker);
                                     user.photos = user.photos || [];
                                     user.photos.push(previewUrl);
@@ -290,17 +310,27 @@ exports.createQuest = (req, res, next) => {
 
         /* eslint-disable no-unused-vars*/
         promise = new Promise((resolve, reject) => {
-            cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
-                resolve(imageURL);
-            });
+            cloudinary.uploadImage(preview, Date.now().toString(),
+                (imageURL, pHashImage) => {
+                    console.log(imageURL, pHashImage);
+                    resolve({imageURL, pHashImage});
+                });
         });
     }
 
     promise
-        .then(previewUrl => {
+        .then(resObj => {
+            var previewUrl;
+            if (resObj) {
+                previewUrl = resObj.imageURL;
+            } else {
+                previewUrl = DEFAULT_QUEST_PHOTO;
+            }
             const photosLength = req.body['photos-length'];
             let photos = [];
             let reqPhotos = [];
+            // console.log('photosLength:');
+            // console.log(photosLength);
             if (photosLength > 0) {
                 for (let i = 0; i < photosLength; i++) {
                     const fieldName = 'photo' + i.toString();
@@ -310,15 +340,17 @@ exports.createQuest = (req, res, next) => {
                 }
             }
             if (reqPhotos) {
+                // console.log(reqPhotos);
                 photos = reqPhotos.map((photo, index) => {
                     /* eslint-disable no-unused-vars*/
                     return new Promise((resolve, reject) => {
-                        cloudinary.uploadImage(photo, Date.now().toString(), imageURL => {
+                        cloudinary.uploadImage(photo, Date.now().toString(), (imageURL, phash) => {
                             resolve({
                                 url: imageURL,
                                 title: photoAttributes[index].title,
                                 geolocation: photoAttributes[index].geolocation,
                                 hint: photoAttributes[index].hint,
+                                phash: phash,
                                 id: photoAttributes[index].id
                             });
                         });
@@ -353,6 +385,8 @@ exports.createQuest = (req, res, next) => {
                     /* eslint-disable no-unused-vars*/
                     quest.save((err, message, result) => {
                         if (err) {
+                            console.log(message);
+                            // сохраняем квест с солью
                             quest = new Quest({
                                 displayName: req.body['quest-name'],
                                 salt: Math.floor(Date.now() % 1000).toString(),
@@ -668,8 +702,9 @@ exports.likeAction = (req, res, next) => {
         },
         (quest, done) => {
             quest = action === 'like' ? likeHandler(quest, user) : dislikeHandler(quest, user);
+            console.log(quest);
             questModel
-                .updateQuests(quest)
+                .updateQuest(quest)
                 .then(result => {
                     return res.status(200).send(result);
                 })

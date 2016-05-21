@@ -155,7 +155,7 @@ function getUserObj(obj) {
     var login = obj.user.login;
     var password = obj.user.password;
     var nickname = obj.user.nickname || '';
-    var activeQuests = obj.user.activeQuests || [];
+    var activeQuests = obj.user.activeQuests || {};
     var passedQuests = obj.user.passedQuests || [];
     var myQuests = obj.user.myQuests || [];
     var wishList = obj.user.wishList || [];

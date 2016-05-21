@@ -42,7 +42,8 @@ exports.getProfile = (req, res, next) => {
                 });
         },
         (user, done) => {
-            var questLists = [user.myQuests, user.passedQuests, user.wishList, user.activeQuests];
+            var questLists = [user.myQuests, user.passedQuests, user.wishList,
+                Object.keys(user.activeQuests)];
             var promises = [];
             questLists.forEach(list => {
                 promises.push(questModel.getSomeQuests(list));
