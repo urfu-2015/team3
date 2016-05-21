@@ -25,9 +25,7 @@ handlebars.registerHelper('ifNotIn', function (elem, list, options) {
     if (!list) {
         return options.fn(this);
     }
-
-    console.log(elem, list);
-
+    // console.log(elem, list);
     if (list.indexOf(elem.toString()) === -1) {
         return options.fn(this);
     }
@@ -216,8 +214,8 @@ exports.sendUserPhoto = (req, res, next) => {
                     {latitude: req.body.latitude, longitude: req.body.longitude}
                 );
                 var maxDistance = 500;
-                console.log(distance);
-                console.log(quest[0].photos[id].geolocation);
+                // console.log(distance);
+                // console.log(quest[0].photos[id].geolocation);
                 if (distance <= maxDistance) {
                     var userID = req.user;
                     var newMarker = {lat: userLat, lng: userLng};
@@ -233,7 +231,7 @@ exports.sendUserPhoto = (req, res, next) => {
                     /* eslint-disable no-unused-vars */
                     var promise = new Promise((resolve, reject) => {
                         cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
-                            console.log(imageURL);
+                            // console.log(imageURL);
                             resolve(imageURL);
                         });
                     });
@@ -342,10 +340,17 @@ exports.createQuest = (req, res, next) => {
                 .then(photos => {
                     // console.log(photos);
                     const tags = req.body['quest-tags'].split(', ').filter(tag => tag.length > 0);
+                    const cityName = req.body['quest-city'];
+                    const displayName = req.body['quest-name'];
+                    tags.push(cityName);
+                    tags.push(displayName);
+                    if (!previewUrl) {
+                        previewUrl = photos[0].url;
+                    }
                     let quest = new Quest({
-                        displayName: req.body['quest-name'],
+                        displayName,
                         salt: "",
-                        cityName: req.body['quest-city'],
+                        cityName,
                         author: req.user,
                         titleImage: previewUrl,
                         description: req.body['quest-description'],
@@ -358,7 +363,7 @@ exports.createQuest = (req, res, next) => {
                     /* eslint-disable no-unused-vars*/
                     quest.save((err, message, result) => {
                         if (err) {
-                            console.log(message);
+                            // console.log(message);
                             // сохраняем квест с солью
                             quest = new Quest({
                                 displayName: req.body['quest-name'],
@@ -374,7 +379,7 @@ exports.createQuest = (req, res, next) => {
                             });
                             quest.save((err, message, result) => {
                                 if (err) {
-                                    console.log(err);
+                                    console.error(err);
                                 } else {
                                     req.slug = result.slug;
                                 }

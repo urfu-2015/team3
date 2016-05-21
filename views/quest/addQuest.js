@@ -177,6 +177,16 @@ if (btnDelete) {
 btnSubmit.addEventListener('click', function (event) {
     event.preventDefault();
 
+    if (!questName.value) {
+        showErrorMsg('Введите название квеста');
+        return;
+    }
+
+    if (!questCity.value) {
+        showErrorMsg('Введите место проведения квеста');
+        return;
+    }
+
     const photosLength = photosFileList.length;
     if (photosLength > 30) {
         showErrorMsg('Выберите не более 30 квестовых фото');

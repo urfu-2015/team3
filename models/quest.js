@@ -238,7 +238,12 @@ class quest {
         var duration = this.questObject.duration || "";
         var date = this.questObject.date || "";
         var photos = this.questObject.photos || [];
-        var slug = this.slugify(this.questObject.displayName) + "-" + salt;
+        var slug;
+        if (salt) {
+            slug = this.slugify(this.questObject.displayName) + "-" + salt;
+        } else {
+            slug = this.slugify(this.questObject.displayName);
+        }
 
         // Проверяем что slug уникальный, если true добавляем
 
