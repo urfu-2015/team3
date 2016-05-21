@@ -12,7 +12,7 @@ const geolib = require('geolib');
 
 handlebars.registerHelper('ifIn', function (elem, list, options) {
     if (!list) {
-        return ""; // если пользователь не вошел
+        return "";
     }
 
     if (list.indexOf(elem.toString()) > -1) {
@@ -214,24 +214,13 @@ exports.sendUserPhoto = (req, res, next) => {
                     {latitude: req.body.latitude, longitude: req.body.longitude}
                 );
                 var maxDistance = 500;
-                // console.log(distance);
-                // console.log(quest[0].photos[id].geolocation);
                 if (distance <= maxDistance) {
                     var userID = req.user;
                     var newMarker = {lat: userLat, lng: userLng};
                     var preview = req.body.fileToUpload;
-                    /* var dataUri = new Datauri();
-                    dataUri.format(path.extname(preview.originalname).toString(), preview.buffer);*/
-
-                    /* var promise = new Promise((resolve, reject) => {
-                        cloudinary.uploadImage(dataUri.content, Date.now().toString(), imageURL => {
-                            resolve(imageURL);
-                        });
-                    });*/
                     /* eslint-disable no-unused-vars */
                     var promise = new Promise((resolve, reject) => {
                         cloudinary.uploadImage(preview, Date.now().toString(), imageURL => {
-                            // console.log(imageURL);
                             resolve(imageURL);
                         });
                     });
@@ -243,22 +232,26 @@ exports.sendUserPhoto = (req, res, next) => {
                                 .then(found => {
                                     var user = found.user;
 
-                                    // надо добавить фото к пользователю в activeQuests
-                                    // и проверить, что если уже все фотки к квесту пройдены,
-                                    // то добавить квест в пройденное
+                                    var slug = quest[0].slug;
+                                    var activeQuests = user.activeQuests;
 
-                                    if (user.activeQuests[quest[0].slug] &&
-                                     quest[0].photos.length ===
-                                     user.activeQuests[quest[0].slug].length + 1) {
-                                        // если это была последняя фотка чтобы пройти квест
-                                        user.passedQuests.push(quest[0].slug);
+                                    if (!activeQuests[slug]) {
+                                        activeQuests[slug] = [];
                                     }
-                                    // добавляем фотографию в пройденные
+                                    activeQuests[slug].push(req.body.id);
 
-                                    if (!user.activeQuests[quest[0].slug]) {
-                                        user.activeQuests[quest[0].slug] = [];
+                                    var passed = activeQuests[slug].length;
+                                    var mustbe = quest[0].photos.length;
+                                    var isPassed = passed === mustbe;
+
+                                    if (isPassed) {
+                                        var passedQuests = user.passedQuests;
+                                        passedQuests.push(slug);
+                                        user.passedQuests = passedQuests;
+                                        delete activeQuests[slug];
                                     }
-                                    user.activeQuests[quest[0].slug].push(req.body.id);
+
+                                    user.activeQuests = activeQuests;
 
                                     user.markers.push(newMarker);
                                     user.photos = user.photos || [];
@@ -267,6 +260,7 @@ exports.sendUserPhoto = (req, res, next) => {
                                     userModel
                                         .updateUserInfo(user)
                                         .then(result => {
+                                            console.log(result);
                                             var data = {
                                                 message: 'Фотография принята!',
                                                 isOk: true
@@ -308,8 +302,6 @@ exports.createQuest = (req, res, next) => {
             const photosLength = req.body['photos-length'];
             let photos = [];
             let reqPhotos = [];
-            // console.log('photosLength:');
-            // console.log(photosLength);
             if (photosLength > 0) {
                 for (let i = 0; i < photosLength; i++) {
                     const fieldName = 'photo' + i.toString();
@@ -319,7 +311,6 @@ exports.createQuest = (req, res, next) => {
                 }
             }
             if (reqPhotos) {
-                // console.log(reqPhotos);
                 photos = reqPhotos.map((photo, index) => {
                     /* eslint-disable no-unused-vars*/
                     return new Promise((resolve, reject) => {
@@ -363,8 +354,6 @@ exports.createQuest = (req, res, next) => {
                     /* eslint-disable no-unused-vars*/
                     quest.save((err, message, result) => {
                         if (err) {
-                            // console.log(message);
-                            // сохраняем квест с солью
                             quest = new Quest({
                                 displayName: req.body['quest-name'],
                                 salt: Math.floor(Date.now() % 1000).toString(),
@@ -507,6 +496,7 @@ exports.getQuest = (req, res, next) => {
                 });
         },
         (users, quest, done) => {
+            quest.authorId = quest.author;
             quest.author = getCurrentUser(users, quest.author).nickname;
             done(null, getCurrentUser(users, req.user), quest);
         },

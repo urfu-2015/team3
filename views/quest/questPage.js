@@ -57,6 +57,7 @@ function uploadFile(idPhoto, selector) {
                     hint.style.opacity = '.4';
                     label.setAttribute('disabled', true);
                     label.textContent = 'Фотография принята';
+                    $("#" + idPhoto + "_extraPhoto").attr("disabled", true);
                 }
                 /* eslint-disable no-undef*/
                 bootbox.alert(response.message, function () {});

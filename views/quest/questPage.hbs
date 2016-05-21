@@ -38,7 +38,7 @@
             </div>
             <div class="description__text">
                 <p>{{description}}</p>
-                <p class="author">{{author}}</p>
+                <a class="author" href="/profile/{{authorId}}">{{author}}</a>
             </div>
         </div>
             
@@ -54,7 +54,9 @@
                             <p>{{hint}}</p>
                         </div>
                         <div class="photo__descr__button">
-                            <button class="btn btn-info extraBtn" id="{{@index}}_extraPhoto">
+                            <button class="btn btn-info extraBtn
+                            {{#ifIn @index ../passedPhotos}}disabled{{/ifIn}}"
+                            id="{{@index}}_extraPhoto">
                                 <i class="fa fa-2x fa-search-plus" aria-hidden="true"></i>
                             </button>                            
 
