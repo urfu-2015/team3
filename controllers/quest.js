@@ -28,7 +28,9 @@ handlebars.registerHelper('ifNotIn', function (elem, list, options) {
     if (!list) {
         return options.fn(this);
     }
-    // console.log(elem, list);
+
+    console.log(elem, list);
+
     if (list.indexOf(elem.toString()) === -1) {
         return options.fn(this);
     }
@@ -217,6 +219,8 @@ exports.sendUserPhoto = (req, res, next) => {
                     {latitude: req.body.latitude, longitude: req.body.longitude}
                 );
                 var maxDistance = 500;
+                console.log(distance);
+                console.log(quest[0].photos[id].geolocation);
                 if (distance <= maxDistance) {
                     var userID = req.user;
                     var newMarker = {lat: userLat, lng: userLng};
@@ -244,11 +248,9 @@ exports.sendUserPhoto = (req, res, next) => {
                             console.log(1 - (distance / 64.0));
 
                             if ((1 - (distance / 64.0)) <= 0.5) {
-                                var data = {
-                                    message: 'Фотография не принята: координаты неверные',
-                                    isOk: false
-                                };
-                                res.send(data);
+                                res.send({
+                                    message: 'Фотография не принята: фотографии не совпадают.'
+                                });
                             }
 
                             userModel
