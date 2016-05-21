@@ -58,5 +58,8 @@ function sendRequest() {
                 }
             });
         });
+    } else {
+        load.classList.add('load_invisible');
+        container.classList.remove('container-fluid_shift');
     }
 }
