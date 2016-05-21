@@ -348,12 +348,13 @@ exports.createQuest = (req, res, next) => {
                 photos = reqPhotos.map((photo, index) => {
                     /* eslint-disable no-unused-vars*/
                     return new Promise((resolve, reject) => {
-                        cloudinary.uploadImage(photo, Date.now().toString(), imageURL => {
+                        cloudinary.uploadImage(photo, Date.now().toString(), (imageURL, phash) => {
                             resolve({
                                 url: imageURL,
                                 title: photoAttributes[index].title,
                                 geolocation: photoAttributes[index].geolocation,
                                 hint: photoAttributes[index].hint,
+                                phash: phash,
                                 id: photoAttributes[index].id
                             });
                         });
@@ -388,6 +389,8 @@ exports.createQuest = (req, res, next) => {
                     /* eslint-disable no-unused-vars*/
                     quest.save((err, message, result) => {
                         if (err) {
+                            console.log(message);
+                            // сохраняем квест с солью
                             quest = new Quest({
                                 displayName: req.body['quest-name'],
                                 salt: Math.floor(Date.now() % 1000).toString(),
