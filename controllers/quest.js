@@ -741,14 +741,14 @@ function divideComments(allComments, quest, users) {
         if (authorInfo) {
             comment.author = authorInfo.author;
             comment.authorPhoto = authorInfo.authorPhoto;
-        }        
+        }
         if (comment.url) {
             var index = getPhotoIndex(comment.url, quest);
             if (index !== -1) {
                 quest.photos[index].comments = quest.photos[index].comments || [];
                 quest.photos[index].comments.push(comment);
             }
-        } else {            
+        } else {
             quest.questComments.push(comment);
         }
     });
