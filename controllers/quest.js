@@ -702,8 +702,9 @@ exports.likeAction = (req, res, next) => {
         },
         (quest, done) => {
             quest = action === 'like' ? likeHandler(quest, user) : dislikeHandler(quest, user);
+            console.log(quest);
             questModel
-                .updateQuests(quest)
+                .updateQuest(quest)
                 .then(result => {
                     return res.status(200).send(result);
                 })
