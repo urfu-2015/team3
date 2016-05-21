@@ -24,8 +24,13 @@ tr-time = .65s;
 
 .load__img
 {
+    background: url('loading.gif');
     margin-bottom: 10px;
     width: 40px;
+    height: 40px;
+    background-position: center center;
+    background-size: cover;
+    display: inline-block;
 }
 
 .load_invisible
@@ -89,6 +94,7 @@ tr-time = .65s;
         transition: tr-time;
         transform: top;
         background: rgba(40, 101, 108, .8);
+        cursor: pointer;
 
         &::after
         {
@@ -134,6 +140,7 @@ tr-time = .65s;
     color: #fff;
     opacity: 0;
     background: rgba(40, 101, 108, .8);
+    cursor: pointer;
 
     &__small
     {
@@ -198,6 +205,7 @@ tr-time = .65s;
     right: 0;
     bottom: 0;
     left: 0;
+    cursor: pointer;
 }
 
 .medium .blur 
