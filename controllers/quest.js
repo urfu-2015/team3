@@ -218,7 +218,7 @@ exports.sendUserPhoto = (req, res, next) => {
                     {latitude: lat, longitude: lng},
                     {latitude: req.body.latitude, longitude: req.body.longitude}
                 );
-                var maxDistance = 50000000;
+                var maxDistance = 500;
                 console.log(distance);
                 console.log(quest[0].photos[id].geolocation);
                 if (distance <= maxDistance) {
