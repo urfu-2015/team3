@@ -260,7 +260,6 @@ exports.sendUserPhoto = (req, res, next) => {
                                     userModel
                                         .updateUserInfo(user)
                                         .then(result => {
-                                            console.log(result);
                                             var data = {
                                                 message: 'Фотография принята!',
                                                 isOk: true
