@@ -12,7 +12,7 @@ class User {
         this.fields = [
             'login',
             'password',
-            'activeQuests', // квесты, которые сейчас проходятся {slug1: [3, 1], slug2: [0, 2]}
+            'activeQuests', // квесты, которые сейчас проходятся [slug1: [3, 1], slug2: [0, 2]]
             'passedQuests', // пройденные квесты
             'myQuests', // созданные квесты
             'wishList', // квесты которые я хочу пройти
@@ -155,7 +155,7 @@ function getUserObj(obj) {
     var login = obj.user.login;
     var password = obj.user.password;
     var nickname = obj.user.nickname || '';
-    var activeQuests = obj.user.activeQuests || {};
+    var activeQuests = obj.user.activeQuests || [];
     var passedQuests = obj.user.passedQuests || [];
     var myQuests = obj.user.myQuests || [];
     var wishList = obj.user.wishList || [];
@@ -208,10 +208,7 @@ function updateRequest(updatedUser) {
             id: id,
             updateObject: updatedUser
         }, (err, result) => {
-            if (err) {
-                reject(err);
-            }
-            resolve(result);
+            err ? reject(err) : resolve(result);
         });
     });
 }
